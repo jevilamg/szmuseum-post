@@ -311,14 +311,101 @@ tr:last-child td{border-bottom:none}
 <!-- TAB 4: 库存管理 -->
 <div class="panel" id="p4">
 <div class="card">
-  <div class="card-title"><span class="icon">📦</span>库存管理</div>
-  <div style="text-align:center;padding:60px 20px;color:var(--text3)">
-    <div style="font-size:48px;margin-bottom:16px">📋</div>
-    <div style="font-size:16px;font-weight:600;color:var(--text2);margin-bottom:8px">库存数据待录入</div>
-    <div style="font-size:13px;line-height:1.8">待获取库存明细后，将在此模块展示：<br>各品类库存数量 · 库存周转率 · 缺货预警 · 补货建议</div>
+  <div class="card-title"><span class="icon">📦</span>库存概览 <span style="font-size:12px;color:var(--text3);font-weight:400;margin-left:8px">数据截止：2026-08-06</span></div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-val" style="color:#6366f1">132</div><div class="kpi-label">商品SKU数</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#10b981">3,558</div><div class="kpi-label">总库存量</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#f59e0b">4</div><div class="kpi-label">商品品类</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#ef4444">9</div><div class="kpi-label">缺货商品</div></div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span>各品类库存分布</div>
+    <canvas id="invCatChart" height="220"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠️</span>缺货预警（9项）</div>
+    <div id="zeroStockList" style="max-height:240px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">📋</span>库存明细（共132种商品）</div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="inv-filter active" onclick="filterInv('all',this)">全部</button>
+    <button class="inv-filter" onclick="filterInv('明信片',this)">明信片</button>
+    <button class="inv-filter" onclick="filterInv('函件产品',this)">函件产品</button>
+    <button class="inv-filter" onclick="filterInv('集邮产品',this)">集邮产品</button>
+    <button class="inv-filter" onclick="filterInv('中邮文创',this)">中邮文创</button>
+    <input id="invSearch" placeholder="🔍搜索商品名称..." oninput="filterInv(null,null)" style="flex:1;min-width:180px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none">
+  </div>
+  <div style="overflow-x:auto">
+    <table class="detail-table" id="invTable">
+      <thead><tr><th>商品名称</th><th>品类</th><th>单位</th><th>库存量</th><th>状态</th></tr></thead>
+      <tbody id="invBody"></tbody>
+    </table>
   </div>
 </div>
 </div>
+
+<script>
+// Inventory data
+const invItems=[{"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "中国娃娃集戳本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《中国恐龙》本票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "中国恐龙", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《中国石窟》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《一起向未来》（国际吉祥版）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中华人民成立七十周年》邮册（全国）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《辉煌中国》庆祝改革开放四十周年邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《黑神话：悟空》联名邮品珍藏款三《行沾清味》", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（史迪奇）", "cat": "函件产品", "unit": "份", "stock": 2}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《亚洲文明》文化册（全国）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《中国剪纸 中国年》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《奇思天问》整版邮册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《中国年》票钞珍藏册(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《唯美之邑》环境日邮票邮册（邮票联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《静待花开》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《莫高窟》整版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "遂古之初邮册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "JY邮政大货车", "cat": "中邮文创", "unit": "个", "stock": 3}, {"name": "《西游记（四）》版票册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《精准扶贫》大版册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《不忘初心 牢记使命》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《文韵刘芳》邮册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "酷洛米明信片套装", "cat": "明信片", "unit": "套", "stock": 4}, {"name": "《中国现代文学家》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《黑神话：悟空》联名邮品珍藏款四《思虑成妄》", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "艰苦岁月长征手绘故事册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "川藏青藏公路建成通车65周年整版票册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《黑神话：悟空》联名邮品珍藏款二《徐声韵长》", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《黑神话：悟空》联名邮品珍藏款五《修制垢身》", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "邮筒积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 5}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品", "unit": "份", "stock": 5}, {"name": "深圳邮礼-深圳", "cat": "函件产品", "unit": "份", "stock": 5}, {"name": "“午阿哥勇骐”《丙午年》生肖邮票毛绒公仔", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《金石华彩》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《笔尖山水》邮册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "十二生肖互动冰箱贴", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《雪舞迎春》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "JY老邮筒", "cat": "中邮文创", "unit": "个", "stock": 5}, {"name": "《国家公园》版票册", "cat": "集邮产品", "unit": "套", "stock": 6}, {"name": "绿野寻踪明信片恰帕狗", "cat": "明信片", "unit": "套", "stock": 7}, {"name": "《卡皮巴拉》水果物语毛绒挂件盲盒", "cat": "函件产品", "unit": "份", "stock": 7}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（小熊维尼）", "cat": "函件产品", "unit": "份", "stock": 7}, {"name": "抗日战争暨世界反法西斯战争胜利80周年阅兵纪念", "cat": "集邮产品", "unit": "套", "stock": 7}, {"name": "《虎（文物）》整版票册（全国）", "cat": "集邮产品", "unit": "套", "stock": 7}, {"name": "《猛禽二》特种邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 7}, {"name": "十二花神（蜀葵）", "cat": "明信片", "unit": "套", "stock": 8}, {"name": "深圳有礼—荷兰小镇", "cat": "函件产品", "unit": "份", "stock": 8}, {"name": "《龙马精神》生肖邮票珍藏镜框（大尺寸）", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "瑞和满堂2026", "cat": "明信片", "unit": "份", "stock": 8}, {"name": "迎南而上明信片", "cat": "明信片", "unit": "份", "stock": 8}, {"name": "《外交为民》专题卡书", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "马上有钱摆件马横款", "cat": "函件产品", "unit": "份", "stock": 9}, {"name": "红楼梦四票封卡书", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《马肥家润》我不是胖虎非遗金箔春节礼盒", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《芍药》大版册", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《国家野生保护动物（I级）（三）》邮册", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "JY邮文创自行车", "cat": "中邮文创", "unit": "个", "stock": 9}, {"name": "B.Duck小黄鸭邮差明信片", "cat": "明信片", "unit": "套", "stock": 10}, {"name": "马上有钱钥匙扣", "cat": "函件产品", "unit": "份", "stock": 10}, {"name": "《八骏图》不二马大叔联名亚克力摇摇乐（邮政联名）", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天地有五岳》邮册", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《蓝卯卯》B款15cm(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "JY面包车", "cat": "中邮文创", "unit": "个", "stock": 11}, {"name": "《科技创新（二）》大版册", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "日进斗金", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "unit": "份", "stock": 13}, {"name": "《大耳狗20周年》限定版纪念邮折", "cat": "函件产品", "unit": "份", "stock": 13}, {"name": "JY邮政小飞机", "cat": "中邮文创", "unit": "个", "stock": 13}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡红", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "《中流砥柱》邮册", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "《天文现象》版票册", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "《世界自然遗产—中国南方喀斯特》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "JY邮筒模型", "cat": "中邮文创", "unit": "个", "stock": 14}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡蓝", "cat": "集邮产品", "unit": "套", "stock": 15}, {"name": "《昆虫（二）》邮票精装风琴折", "cat": "集邮产品", "unit": "套", "stock": 16}, {"name": "金榜题名镜框摆件", "cat": "函件产品", "unit": "份", "stock": 17}, {"name": "《哪吒之魔童闹海》排排坐迷你公仔", "cat": "函件产品", "unit": "份", "stock": 17}, {"name": "电影《哪吒之魔童闹海》特殊版式个性化邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《山水如画》版票册", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《丝绸之路文物（一）》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "JY三轮车", "cat": "中邮文创", "unit": "个", "stock": 18}, {"name": "中国神话传说", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "《三国的星空》水墨款明信片套装", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "《深圳旅游风光明信片套装盒》建筑之美", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "《深圳旅游风光明信片套装盒》湖光山色", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "一盅两件冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "邮政主题异形片", "cat": "函件产品", "unit": "份", "stock": 19}, {"name": "《太行山》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "《丝绸之路文物（二》版票册", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "唐宋八大家", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "果然幸运", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "端午传统民俗，节日", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "《三国的星空》人物款明信片套装", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "水滚茶靓冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "状元帽镜框摆件", "cat": "函件产品", "unit": "份", "stock": 20}, {"name": "早茶必点异形片套装", "cat": "函件产品", "unit": "份", "stock": 20}, {"name": "《哪吒之魔童闹海》电影票根冰箱贴套装", "cat": "函件产品", "unit": "份", "stock": 20}, {"name": "电影《哪吒之魔童闹海》个性化邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "《又见繁华》珍藏套装（社会联合）", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "十二生肖水晶", "cat": "集邮产品", "unit": "套", "stock": 21}, {"name": "《深圳旅游风光明信片套装盒》历史人文", "cat": "明信片", "unit": "套", "stock": 22}, {"name": "《深圳旅游风光明信片套装盒》碧海蓝天", "cat": "明信片", "unit": "套", "stock": 22}, {"name": "十二花神（荷花）", "cat": "明信片", "unit": "套", "stock": 24}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品", "unit": "份", "stock": 25}, {"name": "《姑苏繁华图》版票册", "cat": "集邮产品", "unit": "套", "stock": 27}, {"name": "《鸿雁寄相思》邮册", "cat": "集邮产品", "unit": "套", "stock": 28}, {"name": "《中国古镇（四）》大版册", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《中国篆刻》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《鸽》整版票折", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "经典时刻2025阅兵纪念风琴折", "cat": "集邮产品", "unit": "套", "stock": 30}, {"name": "《深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "unit": "套", "stock": 35}, {"name": "十二花神盖戳", "cat": "明信片", "unit": "套", "stock": 38}, {"name": "十二花神（桂花）", "cat": "明信片", "unit": "套", "stock": 44}, {"name": "十二花神（榴花）", "cat": "明信片", "unit": "套", "stock": 45}, {"name": "印章本（深圳漫游记）", "cat": "函件产品", "unit": "份", "stock": 45}, {"name": "邮票/散票1.2元", "cat": "集邮产品", "unit": "套", "stock": 83}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 97}, {"name": "《民族娃娃》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 105}, {"name": "《动物世界》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 110}, {"name": "《北京中轴线》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 124}, {"name": "《国宝日记》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 124}, {"name": "空白盖戳明信片", "cat": "明信片", "unit": "套", "stock": 305}, {"name": "深圳自然博物馆明信片/单枚", "cat": "明信片", "unit": "套", "stock": 1141}];
+const invCatStats={"明信片": {"count": 26, "stock": 1936}, "函件产品": {"count": 29, "stock": 827}, "集邮产品": {"count": 69, "stock": 722}, "中邮文创": {"count": 8, "stock": 73}};
+const invZero=[{"name": "邮局街景积木明信片套装（新）", "cat": "函件产品"}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品"}, {"name": "中国娃娃集戳本", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品"}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品"}, {"name": "《中国恐龙》本票册", "cat": "集邮产品"}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品"}, {"name": "中国恐龙", "cat": "中邮文创"}];
+const invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#10b981','中邮文创':'#ef4444'};
+
+// Category chart
+new Chart(document.getElementById('invCatChart'),{
+  type:'bar',
+  data:{
+    labels:Object.keys(invCatStats),
+    datasets:[
+      {label:'库存量',data:Object.values(invCatStats).map(v=>v.stock),backgroundColor:Object.keys(invCatStats).map(k=>invColors[k]||'#999'),borderRadius:6,barPercentage:0.6},
+      {label:'SKU数',data:Object.values(invCatStats).map(v=>v.count),backgroundColor:Object.keys(invCatStats).map(k=>invColors[k]+'66'),borderRadius:6,barPercentage:0.6}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{font:{size:11}}}},
+    scales:{y:{beginAtZero:true,ticks:{font:{size:11}}},x:{ticks:{font:{size:11}}}}
+  }
+});
+
+// Zero stock list
+let zhtml='';
+invZero.forEach(z=>{
+  zhtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">';
+  zhtml+='<span style="flex:1;overflow:hidden;text-overflow-ellipsis;white-space:nowrap">'+z.name+'</span>';
+  zhtml+='<span style="color:#ef4444;font-weight:600;margin-left:8px;white-space:nowrap">'+z.cat+'</span></div>';
+});
+document.getElementById('zeroStockList').innerHTML=zhtml||'<div style="color:var(--text3);text-align:center;padding:20px">暂无缺货商品</div>';
+
+// Inventory table
+let currentCat='all';
+function filterInv(cat,btn){
+  if(cat) currentCat=cat;
+  if(btn){
+    document.querySelectorAll('.inv-filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const q=(document.getElementById('invSearch').value||'').toLowerCase();
+  let html='';
+  invItems.forEach(it=>{
+    if(currentCat!=='all'&&it.cat!==currentCat) return;
+    if(q&&!it.name.toLowerCase().includes(q)) return;
+    const status=it.stock===0?'<span style="color:#ef4444;font-weight:600">缺货</span>':it.stock<=5?'<span style="color:#f59e0b;font-weight:600">低库存</span>':'<span style="color:#10b981">正常</span>';
+    const rowBg=it.stock===0?'background:#fef2f2':'';
+    html+='<tr style="'+rowBg+'"><td>'+it.name+'</td><td><span style="color:'+invColors[it.cat]+'">'+it.cat+'</span></td><td>'+it.unit+'</td><td style="font-weight:600">'+it.stock+'</td><td>'+status+'</td></tr>';
+  });
+  document.getElementById('invBody').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px">无匹配商品</td></tr>';
+}
+filterInv('all',null);
+// Set first filter active
+document.querySelector('.inv-filter').classList.add('active');
+</script>
 
 <!-- TAB 5: 经营建议 -->
 <div class="panel" id="p5">
