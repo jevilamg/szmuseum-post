@@ -226,9 +226,9 @@ tr:last-child td{border-bottom:none}
 <!-- TAB 1: 销售趋势 -->
 <div class="panel" id="p1">
 <div class="card">
-  <div class="card-title"><span class="icon">📈</span>最近7天销售额趋势</div>
+  <div class="card-title"><span class="icon">📈</span>过去14天销售额趋势</div>
   <div class="chart-box" style="height:320px"><canvas id="dailyRevChart"></canvas></div>
-  <div class="analysis"><strong>📊 趋势分析：</strong>最近7天（08/09-08/16，排除闭馆日）日均销售额¥3,214，整体在¥2,100-¥4,200区间波动。</div>
+  <div class="analysis"><strong>📊 趋势分析：</strong>过去14天（07/28-08/16，排除2天闭馆）日均销售额¥3,386，峰值¥5,665（07/29开业次日），整体波动区间¥2,119-¥5,665。</div>
 </div>
 
 <div class="card">
@@ -526,16 +526,16 @@ new Chart(document.getElementById('weekdayOrdChart'),{type:'bar',data:{labels:['
 
 // ====== TAB 1 ======
 
-// 每日销售额趋势 → 最近7天（排除闭馆日）
-const last7Idx=[12,14,15,16,17,18,19]; // 08/09,08/11-08/16
-const last7Labels=last7Idx.map(i=>D.daily.labels[i].replace('\n',''));
-const last7Rev=last7Idx.map(i=>D.daily.rev[i]);
-new Chart(document.getElementById('dailyRevChart'),{type:'line',data:{labels:last7Labels,datasets:[{label:'销售额',data:last7Rev,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.1)',fill:true,tension:.3,pointBackgroundColor:'#16a34a',pointRadius:6,pointHoverRadius:8}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}},datalabels:false},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v).toLocaleString()},beginAtZero:false}}},plugins:[{id:'revDataLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((pt,idx)=>{ctx.save();ctx.font='bold 11px PingFang SC';ctx.fillStyle='#16a34a';ctx.textAlign='center';ctx.fillText('¥'+Math.round(last7Rev[idx]).toLocaleString(),pt.x,pt.y-12);ctx.restore()})}}]});
+// 每日销售额趋势 → 过去14天
+const last14Idx=[0,1,2,3,4,5,7,8,9,10,11,12,14,15,16,17,18,19];
+const last14Labels=last14Idx.map(i=>D.daily.labels[i].replace('\n',''));
+const last14Rev=last14Idx.map(i=>D.daily.rev[i]);
+new Chart(document.getElementById('dailyRevChart'),{type:'line',data:{labels:last14Labels,datasets:[{label:'销售额',data:last14Rev,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.1)',fill:true,tension:.3,pointBackgroundColor:'#16a34a',pointRadius:5,pointHoverRadius:7}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}},datalabels:false},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v).toLocaleString()},beginAtZero:false}}},plugins:[{id:'revDataLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((pt,idx)=>{ctx.save();ctx.font='bold 10px PingFang SC';ctx.fillStyle='#16a34a';ctx.textAlign='center';ctx.fillText('¥'+Math.round(last14Rev[idx]).toLocaleString(),pt.x,pt.y-10);ctx.restore()})}}]});
 
-// 每日订单数(柱状) & 销量(曲线) - 最近7天双轴
-const last7Ord=last7Idx.map(i=>D.daily.ord[i]);
-const last7Qty=last7Idx.map(i=>D.daily.qty[i]);
-new Chart(document.getElementById('dailyOrdChart'),{type:'bar',data:{labels:last7Labels,datasets:[{label:'订单数',data:last7Ord,backgroundColor:'rgba(37,99,235,.6)',borderRadius:6,yAxisID:'y'},{label:'销量',type:'line',data:last7Qty,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.08)',fill:true,tension:.3,pointBackgroundColor:'#7c3aed',pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#f0f0f0'},title:{display:true,text:'订单数',font:{size:11}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'销量',font:{size:11}}}}}});
+// 每日订单数 & 销量 - 过去14天曲线图
+const last14Ord=last14Idx.map(i=>D.daily.ord[i]);
+const last14Qty=last14Idx.map(i=>D.daily.qty[i]);
+new Chart(document.getElementById('dailyOrdChart'),{type:'line',data:{labels:last14Labels,datasets:[{label:'订单数',data:last14Ord,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.3,pointBackgroundColor:'#2563eb',pointRadius:4,yAxisID:'y'},{label:'销量',data:last14Qty,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.06)',fill:true,tension:.3,pointBackgroundColor:'#7c3aed',pointRadius:4,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{position:'left',grid:{color:'#f0f0f0'},title:{display:true,text:'订单数',font:{size:11}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'销量',font:{size:11}}}}}});
 
 
 // 时段分布 → 百分比占比
