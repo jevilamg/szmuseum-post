@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📮 深圳自然博物馆主题邮局 · 数据看板 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f0f4f1;--card:#fff;--primary:#1a6b3c;--primary-light:#e0f2e9;--secondary:#2563eb;--accent:#d97706;--danger:#ef4444;--success:#16a34a;--text:#111827;--text2:#6b7280;--text3:#9ca3af;--border:#e5e7eb;--shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06);--shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);--shadow-lg:0 10px 25px rgba(0,0,0,.08),0 4px 10px rgba(0,0,0,.04);--radius:14px;--radius-sm:10px;--radius-xs:8px}
+body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,'Noto Sans SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.container{max-width:1160px;margin:0 auto;padding:20px 24px}
+.header{background:linear-gradient(135deg,#0d5a2e 0%,#1a6b3c 30%,#1e6b7a 70%,#1a5270 100%);color:#fff;padding:36px 32px;border-radius:20px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 8px 30px rgba(26,107,60,.25)}
+.header::before{content:'';position:absolute;top:-60%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
+.header::after{content:'🦕🌿🦋🐚';position:absolute;right:28px;top:50%;transform:translateY(-50%);font-size:40px;opacity:.12;letter-spacing:10px;filter:grayscale(.3)}
+.header h1{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:.5px}
+.header .sub{font-size:14px;opacity:.75;font-weight:400;letter-spacing:1px}
+.header .meta{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.header .badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.15);backdrop-filter:blur(4px);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;padding:4px 2px 8px}
+.tab{padding:10px 22px;border-radius:12px;background:var(--card);border:1.5px solid var(--border);cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;transition:all .25s;color:var(--text2);user-select:none;box-shadow:var(--shadow-sm)}
+.tab:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
+.tab.active{background:linear-gradient(135deg,#1a6b3c,#1e6b7a);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(26,107,60,.3)}
+.panel{display:none;animation:fadeUp .35s ease}.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.card-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;color:var(--text)}
+.card-title .icon{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);border-radius:10px}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi.green::before{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.kpi.blue::before{background:linear-gradient(90deg,#2563eb,#3b82f6)}
+.kpi.gold::before{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.kpi.teal::before{background:linear-gradient(90deg,#0d9488,#14b8a6)}
+.kpi.purple::before{background:linear-gradient(90deg,#7c3aed,#8b5cf6)}
+.kpi.red::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.kpi .label{font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:500;letter-spacing:.5px}
+.kpi .value{font-size:28px;font-weight:800;color:var(--text);line-height:1.2}
+.kpi .unit{font-size:14px;font-weight:500;color:var(--text2)}
+.kpi .note{font-size:11px;color:var(--text3);margin-top:4px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius-sm);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:linear-gradient(180deg,#f8faf8,#f1f5f0);padding:12px 10px;text-align:left;font-weight:700;color:var(--text2);border-bottom:2px solid var(--border);white-space:nowrap;font-size:12px}
+td{padding:11px 10px;border-bottom:1px solid #f3f4f6}
+tr:hover td{background:#f8fdf9}
+tr:last-child td{border-bottom:none}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:8px;font-size:11px;font-weight:800;color:#fff}
+.r1{background:linear-gradient(135deg,#f59e0b,#d97706)}.r2{background:linear-gradient(135deg,#94a3b8,#64748b)}.r3{background:linear-gradient(135deg,#cd7c2f,#b45309)}.r4{background:#cbd5e1;color:#475569}
+.chart-box{position:relative;margin:12px 0}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.tag-green{background:#dcfce7;color:#15803d}.tag-blue{background:#dbeafe;color:#1d4ed8}.tag-gold{background:#fef3c7;color:#b45309}.tag-red{background:#fee2e2;color:#dc2626}
+.analysis{background:linear-gradient(135deg,#f0faf3,#e8f5ec,#f0fdf4);border-left:4px solid var(--primary);padding:16px 20px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:14px 0;font-size:13px;line-height:1.9}
+.analysis strong{color:var(--primary)}
+.analysis-blue{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-left-color:var(--secondary)}
+.analysis-blue strong{color:var(--secondary)}
+.analysis-gold{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left-color:var(--accent)}
+.analysis-gold strong{color:var(--accent)}
+.insight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.insight-box{padding:18px;border-radius:var(--radius-sm);border:1px solid rgba(0,0,0,.04)}
+.insight-box h4{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.insight-box ul{font-size:13px;padding-left:18px;margin:0;line-height:2}
+.insight-box.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-left:4px solid var(--success)}
+.insight-box.amber{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:4px solid var(--accent)}
+.suggest{margin-bottom:20px;padding:18px;background:#fafafa;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.suggest-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.suggest-head strong{font-size:14px}
+.suggest-body{font-size:13px;color:var(--text2);line-height:1.9;padding-left:4px}
+.progress-bar-wrap{background:#f1f5f0;border-radius:10px;height:22px;overflow:hidden;position:relative;margin:8px 0}
+.progress-bar-fill{height:100%;border-radius:10px;transition:width .6s ease}
+.progress-label{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--text2)}
+.progress-target{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:18px}
+.progress-target-card{background:var(--card);border-radius:var(--radius-sm);padding:18px;border:1px solid var(--border);text-align:center}
+.progress-target-card .pt-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.progress-target-card .pt-value{font-size:22px;font-weight:800;color:var(--text)}
+.progress-target-card .pt-note{font-size:11px;color:var(--text3);margin-top:4px}
+.footer{text-align:center;padding:24px 0 16px;color:var(--text3);font-size:11px;border-top:1px solid var(--border);margin-top:24px;line-height:1.8}
+@media(max-width:768px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .chart-row{grid-template-columns:1fr}
+  .insight-grid{grid-template-columns:1fr}
+  .header{padding:20px 16px;border-radius:14px}
+  .header::after{display:none}
+  .header h1{font-size:17px}
+  .header .sub{font-size:12px}
+  .header .meta{gap:6px;margin-top:8px}
+  .header .badge{font-size:10px;padding:2px 8px}
+  .container{padding:10px 12px}
+  .card{padding:16px;margin-bottom:12px;border-radius:12px}
+  .kpi{padding:14px 10px}
+  .kpi .value{font-size:22px}
+  .kpi .label{font-size:11px}
+  .kpi .note{font-size:10px}
+  .tabs{gap:6px;margin-bottom:14px}
+  .tab{padding:8px 14px;font-size:12px;border-radius:10px}
+  .card-title{font-size:14px;margin-bottom:12px}
+  .card-title .icon{width:30px;height:30px;font-size:16px}
+  .analysis{padding:12px 14px;font-size:12px;line-height:1.8}
+  .suggest{padding:14px;margin-bottom:14px}
+  .suggest-head strong{font-size:13px}
+  .suggest-body{font-size:12px}
+  .progress-target{grid-template-columns:1fr 1fr;gap:10px}
+  .progress-target-card{padding:14px}
+  .progress-target-card .pt-value{font-size:18px}
+  .tbl-wrap{margin:0 -4px}
+  table{font-size:12px}
+  th,td{padding:9px 8px}
+  .chart-box{min-height:240px}
+  .footer{padding:18px 0 12px;font-size:10px}
+}
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi .value{font-size:20px}
+  .kpi .label{font-size:10px}
+  .kpi .note{font-size:9px}
+  .kpi{padding:12px 8px}
+  .header{padding:16px 14px;border-radius:12px}
+  .header h1{font-size:15px;letter-spacing:0}
+  .header .sub{font-size:11px;letter-spacing:0}
+  .header .badge{font-size:9px;padding:2px 6px}
+  .container{padding:8px 8px}
+  .card{padding:14px 12px;border-radius:10px}
+  .tabs{gap:5px}
+  .tab{padding:7px 11px;font-size:11px}
+  .card-title{font-size:13px;gap:8px;margin-bottom:10px}
+  .card-title .icon{width:28px;height:28px;font-size:14px;border-radius:8px}
+  .analysis{padding:10px 12px;font-size:11px;line-height:1.75;border-radius:0 8px 8px 0}
+  .suggest{padding:12px;border-radius:8px}
+  .suggest-head{gap:6px;margin-bottom:6px}
+  .suggest-head strong{font-size:12px}
+  .suggest-body{font-size:11px;line-height:1.75}
+  .progress-target{grid-template-columns:1fr;gap:8px}
+  .progress-target-card{padding:12px;border-radius:8px}
+  .progress-target-card .pt-value{font-size:17px}
+  .progress-target-card .pt-label{font-size:11px}
+  .progress-target-card .pt-note{font-size:10px}
+  .chart-box{min-height:220px}
+  table{font-size:11px}
+  th,td{padding:7px 5px}
+  th{font-size:11px}
+  .rank{width:20px;height:20px;font-size:10px;border-radius:6px}
+  .tag{font-size:10px;padding:2px 7px}
+  .insight-box{padding:14px;border-radius:8px}
+  .insight-box h4{font-size:13px}
+  .insight-box ul{font-size:12px;line-height:1.8}
+  .footer{font-size:9px;padding:14px 0 10px}
+  .progress-bar-wrap{height:18px}
+  .progress-label{font-size:10px}
+}
+@media(max-width:360px){
+  .header h1{font-size:14px}
+  .kpi .value{font-size:18px}
+  .tab{padding:6px 9px;font-size:10px}
+  .card{padding:12px 10px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+  <h1>📮 深圳自然博物馆主题邮局 · 数据看板 2026</h1>
+  <div class="sub">坪山局 · 主题邮局经营分析</div>
+  <div class="meta">
+    <div class="badge">📅 开业日期：2026年7月28日</div>
+    <div class="badge">📊 数据截止：2026年8月16日</div>
+    <div class="badge">📍 坪山区燕子湖片区</div>
+    <div class="badge">🗓️ 营业18天（闭馆2天）</div>
+  </div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="sw(0)">📊 总体概览</div>
+  <div class="tab" onclick="sw(1)">📅 销售趋势</div>
+  <div class="tab" onclick="sw(2)">📦 产品分析</div>
+  <div class="tab" onclick="sw(3)">📋 收入进度</div>
+  <div class="tab" onclick="sw(4)">📦 库存管理</div>
+  <div class="tab" onclick="sw(5)">💡 经营建议</div>
+</div>
+
+<!-- TAB 0: 总体概览 -->
+<div class="panel active" id="p0">
+<div class="kpi-grid">
+  <div class="kpi green"><div class="label">💰 累计销售额</div><div class="value">6.09<span class="unit">万元</span></div><div class="note">营业18天累计（退¥691）</div></div>
+  <div class="kpi blue"><div class="label">📅 当日销售额</div><div class="value">3,386<span class="unit">元</span></div><div class="note">日均 ¥3,386</div></div>
+  <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">107<span class="unit">单</span></div><div class="note">18天总1,934单</div></div>
+  <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">186<span class="unit">件</span></div><div class="note">18天总3,351件</div></div>
+  <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥31.51</div><div class="note">平均每单金额</div></div>
+  <div class="kpi red"><div class="label">⚖️ 件单比</div><div class="value">1.7<span class="unit">件/单</span></div><div class="note">平均每单件数</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">🏷️</span>品类销售分布</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>品类</th><th>销售额</th><th>销售额占比</th><th>销量</th><th>销量占比</th></tr></thead>
+    <tbody id="catSummaryTable"></tbody>
+    <tfoot id="catSummaryFoot"></tfoot>
+  </table></div>
+  <div class="analysis"><strong>📊 品类结构：</strong>「热销」类占销售额55.5%、销量73.1%，是绝对主力。集邮产品（18.3%）以件均价¥62贡献稳定利润，较前期占比持续提升。函件产品（9.7%）和中邮文创（9.1%）合计18.8%，明信片（7.3%）走量不走价，是典型引流品。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">💰</span>价格带分布</div>
+  <div class="chart-box"><canvas id="priceBar"></canvas></div>
+  <div class="analysis"><strong>💡 价格带洞察：</strong>¥20-50 区间占销售额58.5%，为核心消费区间，主力商品为立体笔记本和印章本。¥0-10 区间销量占比61.7%（明信片/盖章卡），是引流入口，可考虑设计「¥10 以下→¥20-50」的升级动线。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">⚡</span>工作日 vs 周末对比</div>
+  <div class="chart-row">
+    <div><div class="chart-box"><canvas id="weekdayCompare"></canvas></div></div>
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+      <div class="analysis" style="margin:0"><strong>🏢 工作日（12天）</strong><br>日均 ¥3,382 / 105单<br>工作日客流稳定，以文创选购和盖戳体验为主</div>
+      <div class="analysis analysis-blue" style="margin:0"><strong>🎯 周末（6天）</strong><br>日均 ¥3,395 / 113单<br>周末订单密度更高，家庭游客占比提升</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 1: 销售趋势 -->
+<div class="panel" id="p1">
+<div class="card">
+  <div class="card-title"><span class="icon">📈</span>每日销售额趋势</div>
+  <div class="chart-box" style="height:320px"><canvas id="dailyRevChart"></canvas></div>
+  <div class="analysis"><strong>📊 趋势分析：</strong>开业首日（7/28）因收款机问题部分现金交易未录入，数据偏低。7/29 迎来爆发日（¥5,665），此后进入平稳运营期。8/5 出现次高峰 ¥5,088。8月中旬起日均稳定在 ¥2,100-3,900 之间，整体热度回落但仍保持健康水位。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">📊</span>每日订单数 & 销量</div>
+  <div class="chart-box" style="height:320px"><canvas id="dailyOrdChart"></canvas></div>
+  <div class="analysis"><strong>📦 订单分析：</strong>7/31（周五）订单数最高达173单。进入8月后订单稳定在90-140单/天，8/15（周六）140单为近期高点。销量随订单同步波动，客单价整体趋稳。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">🕐</span>时段分布</div>
+  <div class="chart-row">
+    <div><div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">各时段销售额</div><div class="chart-box"><canvas id="timeRevChart"></canvas></div></div>
+    <div><div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">各时段销量</div><div class="chart-box"><canvas id="timeQtyChart"></canvas></div></div>
+  </div>
+  <div class="analysis"><strong>⏰ 时段洞察：</strong>14:00-16:00 为销售黄金时段，与博物馆下午客流高峰一致。09:00 和 18:00 为低谷，可考虑在开馆/闭馆前设置限时促销。</div>
+</div>
+</div>
+
+<!-- TAB 2: 产品分析 -->
+<div class="panel" id="p2">
+<div class="card">
+  <div class="card-title"><span class="icon">🏆</span>销售额 TOP 20 产品</div>
+  <div class="chart-box" style="height:520px"><canvas id="top20Chart"></canvas></div>
+  <div class="tbl-wrap" style="margin-top:16px"><table>
+    <thead><tr><th>排名</th><th>产品名称</th><th>品类</th><th>均价</th><th>销量</th><th>销售额</th><th>占比</th></tr></thead>
+    <tbody id="top20Table"></tbody>
+  </table></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">📋</span>品类详细数据</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>品类</th><th>销售额</th><th>销量</th><th>销售额占比</th><th>销量占比</th><th>件均价</th></tr></thead>
+    <tbody id="catDetailTable"></tbody>
+  </table></div>
+</div>
+</div>
+
+<!-- TAB 3: 验收进度 -->
+<div class="panel" id="p3">
+<div class="card">
+  <div class="card-title"><span class="icon">📋</span>收入进度跟踪</div>
+  
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px">
+    <div class="kpi green"><div class="label">📊 累计销售额</div><div class="value">¥60,947</div><div class="note">营业18天</div></div>
+    <div class="kpi blue"><div class="label">📅 日均销售额</div><div class="value">¥3,386</div><div class="note">18个营业日平均</div></div>
+  </div>
+
+  <div class="card" style="background:linear-gradient(135deg,#f0faf3,#e8f5ec);border:1px solid #bbf7d0;margin-bottom:18px">
+    <div class="card-title"><span class="icon">🎯</span>下半年目标倒推</div>
+    <div class="progress-target">
+      <div class="progress-target-card">
+        <div class="pt-label">下半年目标</div>
+        <div class="pt-value" style="color:var(--primary)">¥300,000</div>
+        <div class="pt-note">已完 ¥60,947（20.3%）</div>
+      </div>
+      <div class="progress-target-card">
+        <div class="pt-label">剩余目标</div>
+        <div class="pt-value" style="color:var(--accent)">¥239,053</div>
+        <div class="pt-note">8/17 - 12/31</div>
+      </div>
+      <div class="progress-target-card">
+        <div class="pt-label">倒推每日目标</div>
+        <div class="pt-value" style="color:var(--secondary)">¥1,756</div>
+        <div class="pt-note">按实际营业日（约136天）</div>
+      </div>
+      <div class="progress-target-card">
+        <div class="pt-label">8月当月预估收入</div>
+        <div class="pt-value" style="color:var(--primary)">¥88,036</div>
+        <div class="pt-note">按日均¥3,386 × 剩余8个营业日</div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" style="width:20.3%;background:linear-gradient(90deg,#16a34a,#22c55e)"></div>
+      <div class="progress-label">20.3%</div>
+    </div>
+    <div class="analysis" style="margin-top:12px"><strong>📈 达标分析：</strong>按当前日均 ¥3,386 远超倒推日目标 ¥1,756，如保持当前水平，预计9月中旬可完成下半年30万目标。但需注意热度衰减趋势，8月中旬日均已从开业初期¥3,500+回落至¥2,500-3,000。</div>
+  </div>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>日期</th><th>当日销售额</th><th>累计销售额</th><th>日均变化</th><th>趋势</th></tr></thead>
+    <tbody id="progressTable"></tbody>
+  </table></div>
+</div>
+</div>
+
+<!-- TAB 4: 库存管理 -->
+<div class="panel" id="p4">
+<div class="card">
+  <div class="card-title"><span class="icon">📦</span>库存管理</div>
+  <div style="text-align:center;padding:60px 20px;color:var(--text3)">
+    <div style="font-size:48px;margin-bottom:16px">📋</div>
+    <div style="font-size:16px;font-weight:600;color:var(--text2);margin-bottom:8px">库存数据待录入</div>
+    <div style="font-size:13px;line-height:1.8">待获取库存明细后，将在此模块展示：<br>各品类库存数量 · 库存周转率 · 缺货预警 · 补货建议</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 5: 经营建议 -->
+<div class="panel" id="p5">
+<div class="card">
+  <div class="card-title"><span class="icon">💡</span>经营建议</div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">🔥</span><strong>爆品策略：立体笔记本系列持续放大</strong></div>
+    <div class="suggest-body">「北京中轴线」「国宝日记」等立体笔记本系列稳居 TOP2，累计贡献超万元。建议：① 保持货架显眼位置；② 考虑推出「自然博物馆专属」立体笔记本；③ 搭配盖章体验提升附加值。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">📮</span><strong>引流升级：明信片→文创的转化动线</strong></div>
+    <div class="suggest-body">自然博物馆明信片/单枚持续走量（累计近1000枚），是最大引流品。建议：① 在明信片区旁设置「+¥15升级立体笔记本」提示；② 设计「明信片+印章本」组合套装（¥39.9）；③ 空白盖戳明信片可与印章本联动推荐。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">⏰</span><strong>时段优化：抓住14:00-16:00黄金档</strong></div>
+    <div class="suggest-body">下午时段贡献全天最大销售额，与博物馆下午客流高峰一致。建议：① 此时段安排最佳店员在岗；② 设置「下午限定」盖章活动吸引客流；③ 09:00和18:00低谷期可尝试「早鸟/闭馆前折扣」。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">🏢</span><strong>集邮产品：提升高客单价转化</strong></div>
+    <div class="suggest-body">集邮产品件均价¥62，远高于整体¥18.2，占比提升至18.3%，说明高价值客群在扩大。建议：① 设置独立集邮产品展柜；② 针对中年/老年游客主动推荐；③ 考虑推出「自然博物馆主题」集邮册。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">📊</span><strong>工作日 vs 周末趋于均衡</strong></div>
+    <div class="suggest-body">工作日日均¥3,382 vs 周末¥3,395，两者几乎持平。周末订单密度更高（113单 vs 105单），但客单价略低，家庭游客以低价商品为主。建议：① 周末增加亲子互动体验（如DIY明信片）提升客单价；② 工作日推出「工作日限定」盖章活动维持客流。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">📉</span><strong>热度回落应对策略</strong></div>
+    <div class="suggest-body">8月中旬日均从开业初期¥3,500+回落至¥2,500-3,000，属于正常热度衰减。建议：① 引入新品刺激复购（如季节限定明信片）；② 联合博物馆做主题活动引流；③ 建立常客社群，定期推送新品/活动信息。</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">🎯</span>下一步行动</div>
+  <div class="insight-grid">
+    <div class="insight-box green">
+      <h4>✅ 短期（本周）</h4>
+      <ul>
+        <li>优化14-16点黄金时段人员配置</li>
+        <li>设计「明信片+立体笔记本」组合推荐话术</li>
+        <li>补充空白盖戳明信片库存</li>
+      </ul>
+    </div>
+    <div class="insight-box amber">
+      <h4>🔜 中期（本月）</h4>
+      <ul>
+        <li>引入秋季限定新品刺激复购</li>
+        <li>设置集邮产品独立展示区</li>
+        <li>周末增加亲子DIY体验活动</li>
+        <li>建立常客微信社群运营</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  <div>📮 深圳自然博物馆主题邮局 · 数据看板 v6.0</div>
+  <div>数据范围：2026.07.28 - 2026.08.16 ｜ 营业时间 9:00-18:00（周一闭馆）</div>
+  <div>📍 坪山区燕子湖片区 ｜ 数据来源：POS系统</div>
+</div>
+</div>
+
+<script>
+const totalRev=60946.88;
+const totalQty=3351;
+const D={
+  daily:{labels:["07/28\n开业", "07/29", "07/30", "07/31", "08/01", "08/02", "08/03\n闭馆", "08/04", "08/05", "08/06", "08/07", "08/08", "08/09", "08/10\n闭馆", "08/11", "08/12", "08/13", "08/14", "08/15", "08/16"],rev:[1072.5, 5664.88, 3146.8, 5554.5, 3944.6, 2783.1, 0.0, 2827.4, 5087.9, 2977.8, 2747.4, 3369.2, 4243.4, 0.0, 2271.2, 2459.8, 3629.9, 3138.1, 3909.1, 2119.3],ord:[25, 89, 105, 173, 133, 104, 0, 97, 130, 109, 103, 108, 121, 0, 90, 113, 110, 114, 140, 70],qty:[97, 357, 289, 251, 261, 135, 0, 160, 217, 193, 155, 159, 161, 0, 141, 148, 173, 157, 186, 111]},
+  cat:{labels:["热销产品", "集邮产品", "函件产品", "中邮文创", "明信片"],rev:[33850.68, 11163.5, 5927.6, 5545.59, 4459.51],qty:[2450, 180, 195, 202, 324]},
+  price:{labels:["¥0-10", "¥10-20", "¥20-50", "¥50-100", "¥100-200", "¥200+"],rev:[10223.97, 2223.57, 35684.34, 6487.0, 5164.0, 1164.0],qty:[2069, 139, 1015, 95, 30, 3]},
+  time:{labels:["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],rev:[1046.8, 5158.6, 6866.0, 8872.4, 6995.4, 9413.8, 9180.5, 5814.9, 6390.9, 1207.58],qty:[49, 219, 386, 479, 440, 521, 434, 386, 357, 80]},
+  top20:[{"name": "《国宝日记》立体笔记本", "cat": "热销", "price": 39.9, "qty": 184, "rev": 7341.6, "pct": 12.0}, {"name": "《北京中轴线》立体笔记本", "cat": "热销", "price": 30.7, "qty": 226, "rev": 6948.54, "pct": 11.4}, {"name": "印章本（深圳漫游记）", "cat": "热销", "price": 36.0, "qty": 155, "rev": 5580.0, "pct": 9.2}, {"name": "深圳自然博物馆明信片/单枚", "cat": "热销", "price": 5.0, "qty": 977, "rev": 4885.0, "pct": 8.0}, {"name": "空白盖戳明信片", "cat": "热销", "price": 4.7, "qty": 770, "rev": 3589.34, "pct": 5.9}, {"name": "《动物世界》立体笔记本", "cat": "热销", "price": 39.9, "qty": 83, "rev": 3311.7, "pct": 5.4}, {"name": "《民族娃娃》立体笔记本", "cat": "热销", "price": 39.9, "qty": 55, "rev": 2194.5, "pct": 3.6}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "price": 198.0, "qty": 10, "rev": 1980.0, "pct": 3.2}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "price": 39.9, "qty": 45, "rev": 1795.5, "pct": 2.9}, {"name": "《2027深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "price": 16.4, "qty": 104, "rev": 1705.07, "pct": 2.8}, {"name": "JY邮政大货车", "cat": "中邮文创", "price": 68.0, "qty": 19, "rev": 1292.0, "pct": 2.1}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "price": 39.9, "qty": 32, "rev": 1276.8, "pct": 2.1}, {"name": "《天文现象》版票册", "cat": "集邮产品", "price": 188.0, "qty": 6, "rev": 1128.0, "pct": 1.9}, {"name": "JY邮政小飞机", "cat": "中邮文创", "price": 58.0, "qty": 19, "rev": 1102.0, "pct": 1.8}, {"name": "JY三轮车", "cat": "中邮文创", "price": 33.0, "qty": 33, "rev": 1089.0, "pct": 1.8}, {"name": "《寻龙赐福》集戳本（新）", "cat": "集邮产品", "price": 27.0, "qty": 30, "rev": 810.0, "pct": 1.3}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "price": 398.0, "qty": 2, "rev": 796.0, "pct": 1.3}, {"name": "JY邮文创自行车", "cat": "中邮文创", "price": 95.0, "qty": 8, "rev": 760.0, "pct": 1.2}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "price": 69.0, "qty": 10, "rev": 690.0, "pct": 1.1}, {"name": "十二花神（荷花）", "cat": "明信片", "price": 5.5, "qty": 116, "rev": 639.84, "pct": 1.0}]
+};
+
+const C={mix:['#16a34a','#2563eb','#d97706','#ef4444','#7c3aed','#0d9488']};
+
+function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',j===i)});document.querySelectorAll('.panel').forEach((p,j)=>{p.classList.toggle('active',j===i)});setTimeout(()=>window.dispatchEvent(new Event('resize')),50)}
+
+// ====== TAB 0 ======
+
+// 品类销售分布 → 表格
+let cstb=document.getElementById('catSummaryTable');
+let catTotalRev=0,catTotalQty=0;
+D.cat.labels.forEach((c,i)=>{catTotalRev+=D.cat.rev[i];catTotalQty+=D.cat.qty[i]});
+D.cat.labels.forEach((c,i)=>{
+  const rv=D.cat.rev[i],qt=D.cat.qty[i];
+  const rpct=(rv/totalRev*100).toFixed(1);
+  const qpct=(qt/totalQty*100).toFixed(1);
+  cstb.innerHTML+=`<tr><td><strong>${c}</strong></td><td>¥${Math.round(rv).toLocaleString()}</td><td>${rpct}%</td><td>${qt}件</td><td>${qpct}%</td></tr>`;
+});
+document.getElementById('catSummaryFoot').innerHTML=`<tr style="font-weight:700;background:#f0faf3"><td>合计</td><td>¥${Math.round(totalRev).toLocaleString()}</td><td>100%</td><td>${totalQty}件</td><td>100%</td></tr>`;
+
+// 价格带柱状图 - 带金额标签
+const priceBarPlugin={
+  id:'priceLabels',
+  afterDatasetsDraw(chart){
+    const ctx=chart.ctx;
+    chart.data.datasets.forEach((ds,di)=>{
+      const meta=chart.getDatasetMeta(di);
+      if(!meta.hidden){
+        meta.data.forEach((bar,idx)=>{
+          const val=ds.data[idx];
+          const label=di===0?'¥'+Math.round(val).toLocaleString():Math.round(val)+'件';
+          ctx.save();
+          ctx.font='bold 11px PingFang SC';
+          ctx.fillStyle=di===0?'#16a34a':'#2563eb';
+          ctx.textAlign='center';
+          ctx.fillText(label,bar.x,bar.y-6);
+          ctx.restore();
+        });
+      }
+    });
+  }
+};
+new Chart(document.getElementById('priceBar'),{type:'bar',data:{labels:D.price.labels,datasets:[{label:'销售额',data:D.price.rev,backgroundColor:'rgba(22,163,74,.7)',borderRadius:6,yAxisID:'y'},{label:'销量',data:D.price.qty,backgroundColor:'rgba(37,99,235,.7)',borderRadius:6,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label==='销售额'?'¥'+Math.round(c.parsed.y).toLocaleString():Math.round(c.parsed.y)+'件'}}},scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#f0f0f0'},ticks:{callback:v=>v>=1000?(v/1000)+'k':v}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'件'}}}}});
+
+// 工作日vs周末
+new Chart(document.getElementById('weekdayCompare'),{type:'bar',data:{labels:['日均销售额','日均订单数'],datasets:[{label:'工作日（12天）',data:[3381.52,104.8],backgroundColor:'rgba(22,163,74,.7)',borderRadius:8},{label:'周末（6天）',data:[3394.78,112.7],backgroundColor:'rgba(37,99,235,.7)',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0f0'}}}}});
+
+// ====== TAB 1 ======
+
+// 每日销售额趋势 → 折线图
+new Chart(document.getElementById('dailyRevChart'),{type:'line',data:{labels:D.daily.labels,datasets:[{label:'销售额',data:D.daily.rev,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.1)',fill:true,tension:.3,pointBackgroundColor:D.daily.rev.map(v=>v===0?'#9ca3af':'#16a34a'),pointRadius:D.daily.rev.map(v=>v===0?3:5),pointHoverRadius:7}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v/1000)+'k'}}}}});
+
+// 每日订单数 & 销量 - 柱状图
+new Chart(document.getElementById('dailyOrdChart'),{type:'bar',data:{labels:D.daily.labels,datasets:[{label:'订单数',data:D.daily.ord,backgroundColor:'rgba(37,99,235,.6)',borderRadius:6,yAxisID:'y'},{label:'销量',data:D.daily.qty,backgroundColor:'rgba(124,58,237,.4)',borderRadius:6,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#f0f0f0'}},y1:{position:'right',grid:{display:false}}}}});
+
+// 时段分布 - 带数值标签
+const timeLabelPlugin={
+  id:'timeLabels',
+  afterDatasetsDraw(chart){
+    const ctx=chart.ctx;
+    chart.data.datasets.forEach((ds,di)=>{
+      const meta=chart.getDatasetMeta(di);
+      if(!meta.hidden){
+        meta.data.forEach((bar,idx)=>{
+          const val=ds.data[idx];
+          let label;
+          if(di===0){
+            label=val>=10000?'¥'+Math.round(val/10000)+'万':'¥'+Math.round(val/1000)+'k';
+          }else{
+            label=val+'件';
+          }
+          ctx.save();
+          ctx.font='bold 10px PingFang SC';
+          ctx.fillStyle=di===0?'#1a6b3c':'#4338ca';
+          ctx.textAlign='center';
+          ctx.fillText(label,bar.x,bar.y-5);
+          ctx.restore();
+        });
+      }
+    });
+  }
+};
+new Chart(document.getElementById('timeRevChart'),{type:'bar',data:{labels:D.time.labels,datasets:[{data:D.time.rev,backgroundColor:D.time.rev.map(v=>v>5500?'rgba(239,68,68,.7)':v>4000?'rgba(22,163,74,.7)':'rgba(37,99,235,.5)'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v/1000)+'k'}}}},plugins:[timeLabelPlugin]});
+
+new Chart(document.getElementById('timeQtyChart'),{type:'bar',data:{labels:D.time.labels,datasets:[{data:D.time.qty,backgroundColor:D.time.qty.map(v=>v>300?'rgba(239,68,68,.7)':v>200?'rgba(22,163,74,.7)':'rgba(37,99,235,.5)'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'件'}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'}}}},plugins:[{id:'timeQtyLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((bar,idx)=>{ctx.save();ctx.font='bold 10px PingFang SC';ctx.fillStyle='#4338ca';ctx.textAlign='center';ctx.fillText(D.time.qty[idx]+'件',bar.x,bar.y-5);ctx.restore()})}}]});
+
+// ====== TAB 2 ======
+
+// TOP 20
+new Chart(document.getElementById('top20Chart'),{type:'bar',data:{labels:D.top20.map(d=>d.name.substring(0,12)),datasets:[{data:D.top20.map(d=>d.rev),backgroundColor:D.top20.map((_,i)=>i<3?'rgba(22,163,74,.8)':'rgba(37,99,235,.5)'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.x).toLocaleString()+' ('+D.top20[c.dataIndex].pct+'%)'}}},scales:{x:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v/1000)+'k'}},y:{grid:{display:false}}}}});
+
+let t20tb=document.getElementById('top20Table');
+D.top20.forEach((d,i)=>{
+  const rc=i<3?['r1','r2','r3'][i]:'r4';
+  const cc=d.cat==='热销'?'tag-green':d.cat==='集邮产品'?'tag-blue':d.cat==='函件产品'?'tag-red':d.cat==='明信片'?'tag-gold':'tag-blue';
+  t20tb.innerHTML+=`<tr><td><span class="rank ${rc}">${i+1}</span></td><td>${d.name}</td><td><span class="tag ${cc}">${d.cat}</span></td><td>¥${d.price}</td><td>${d.qty}</td><td>¥${Math.round(d.rev).toLocaleString()}</td><td>${d.pct}%</td></tr>`;
+});
+
+// 品类详细数据
+let cdtb=document.getElementById('catDetailTable');
+D.cat.labels.forEach((c,i)=>{
+  const rv=D.cat.rev[i],qt=D.cat.qty[i];
+  cdtb.innerHTML+=`<tr><td>${c}</td><td>¥${Math.round(rv).toLocaleString()}</td><td>${qt}件</td><td>${(rv/totalRev*100).toFixed(1)}%</td><td>${(qt/totalQty*100).toFixed(1)}%</td><td>¥${Math.round(rv/qt)}</td></tr>`;
+});
+
+// ====== TAB 3: 验收进度 ======
+let ptb=document.getElementById('progressTable');
+let psum=0;
+const dailyData=[{d:'07/28',wd:'周二',r:1072.5,o:25,q:97,n:'🎉开业首日'},
+{d:'07/29',wd:'周三',r:5664.88,o:89,q:357,n:'🔥销售额峰值'},
+{d:'07/30',wd:'周四',r:3146.8,o:105,q:289,n:''},
+{d:'07/31',wd:'周五',r:5554.5,o:173,q:251,n:'📦订单最高'},
+{d:'08/01',wd:'周六',r:3944.6,o:133,q:261,n:'周末'},
+{d:'08/02',wd:'周日',r:2783.1,o:104,q:135,n:'周末'},
+{d:'08/03',wd:'周一',r:0.0,o:0,q:0,n:'闭馆'},
+{d:'08/04',wd:'周二',r:2827.4,o:97,q:160,n:''},
+{d:'08/05',wd:'周三',r:5087.9,o:130,q:217,n:''},
+{d:'08/06',wd:'周四',r:2977.8,o:109,q:193,n:''},
+{d:'08/07',wd:'周五',r:2747.4,o:103,q:155,n:''},
+{d:'08/08',wd:'周六',r:3369.2,o:108,q:159,n:'周末'},
+{d:'08/09',wd:'周日',r:4243.4,o:121,q:161,n:'周末'},
+{d:'08/10',wd:'周一',r:0.0,o:0,q:0,n:'闭馆'},
+{d:'08/11',wd:'周二',r:2271.2,o:90,q:141,n:''},
+{d:'08/12',wd:'周三',r:2459.8,o:113,q:148,n:''},
+{d:'08/13',wd:'周四',r:3629.9,o:110,q:173,n:''},
+{d:'08/14',wd:'周五',r:3138.1,o:114,q:157,n:''},
+{d:'08/15',wd:'周六',r:3909.1,o:140,q:186,n:'周末'},
+{d:'08/16',wd:'周日',r:2119.3,o:70,q:111,n:'周末'}];
+
+dailyData.forEach((r,i)=>{
+  psum+=r.r;
+  const avg=Math.round(psum/(i+1));
+  const trend=r.r>avg?'📈':r.r===0?'--':'📉';
+  const cls=r.o===0?' style="background:#f3f4f6"':'';
+  ptb.innerHTML+=`<tr${cls}><td>${r.d} ${r.wd}</td><td>¥${Math.round(r.r).toLocaleString()}</td><td>¥${Math.round(psum).toLocaleString()}</td><td>¥${avg.toLocaleString()}</td><td>${trend}</td></tr>`;
+});
+</script>
+</body>
+</html>
