@@ -3,1219 +3,603 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>坪山局战略绩效KPI数据看板</title>
+<title>📮 深圳自然博物馆主题邮局 · 数据看板 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-document.documentElement.setAttribute('data-theme','dark');
-</script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-/* ===== Dark Theme (default: 18:00-06:00) ===== */
-:root {
-  --bg: #0f1923; --card: #1a2634; --card2: #1e2d3d;
-  --green: #00c853; --green2: #4caf50; --gold: #ffd700;
-  --red: #ff5252; --yellow: #ffc107; --blue: #42a5f5;
-  --text: #e0e0e0; --text2: #90a4ae; --border: #263238;
-  --ps-highlight: #00e676;
-  --chart-grid: #263238; --hover-bg: rgba(255,255,255,.03);
-  --card-shadow: none;
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f0f4f1;--card:#fff;--primary:#1a6b3c;--primary-light:#e0f2e9;--secondary:#2563eb;--accent:#d97706;--danger:#ef4444;--success:#16a34a;--text:#111827;--text2:#6b7280;--text3:#9ca3af;--border:#e5e7eb;--shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06);--shadow:0 4px 12px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);--shadow-lg:0 10px 25px rgba(0,0,0,.08),0 4px 10px rgba(0,0,0,.04);--radius:14px;--radius-sm:10px;--radius-xs:8px}
+body{font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,'Noto Sans SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.container{max-width:1160px;margin:0 auto;padding:20px 24px}
+.header{background:linear-gradient(135deg,#0d5a2e 0%,#1a6b3c 30%,#1e6b7a 70%,#1a5270 100%);color:#fff;padding:36px 32px;border-radius:20px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 8px 30px rgba(26,107,60,.25)}
+.header::before{content:'';position:absolute;top:-60%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
+.header::after{content:'🦕🌿🦋🐚';position:absolute;right:28px;top:50%;transform:translateY(-50%);font-size:40px;opacity:.12;letter-spacing:10px;filter:grayscale(.3)}
+.header h1{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:.5px}
+.header .sub{font-size:14px;opacity:.75;font-weight:400;letter-spacing:1px}
+.header .meta{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.header .badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.15);backdrop-filter:blur(4px);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;padding:4px 2px 8px}
+.tab{padding:10px 22px;border-radius:12px;background:var(--card);border:1.5px solid var(--border);cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;transition:all .25s;color:var(--text2);user-select:none;box-shadow:var(--shadow-sm)}
+.tab:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
+.tab.active{background:linear-gradient(135deg,#1a6b3c,#1e6b7a);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(26,107,60,.3)}
+.panel{display:none;animation:fadeUp .35s ease}.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.card-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;color:var(--text)}
+.card-title .icon{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);border-radius:10px}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi.green::before{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.kpi.blue::before{background:linear-gradient(90deg,#2563eb,#3b82f6)}
+.kpi.gold::before{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.kpi.teal::before{background:linear-gradient(90deg,#0d9488,#14b8a6)}
+.kpi.purple::before{background:linear-gradient(90deg,#7c3aed,#8b5cf6)}
+.kpi.red::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.kpi .label{font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:500;letter-spacing:.5px}
+.kpi .value{font-size:28px;font-weight:800;color:var(--text);line-height:1.2}
+.kpi .unit{font-size:14px;font-weight:500;color:var(--text2)}
+.kpi .note{font-size:11px;color:var(--text3);margin-top:4px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius-sm);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:linear-gradient(180deg,#f8faf8,#f1f5f0);padding:12px 10px;text-align:left;font-weight:700;color:var(--text2);border-bottom:2px solid var(--border);white-space:nowrap;font-size:12px}
+td{padding:11px 10px;border-bottom:1px solid #f3f4f6}
+tr:hover td{background:#f8fdf9}
+tr:last-child td{border-bottom:none}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:8px;font-size:11px;font-weight:800;color:#fff}
+.r1{background:linear-gradient(135deg,#f59e0b,#d97706)}.r2{background:linear-gradient(135deg,#94a3b8,#64748b)}.r3{background:linear-gradient(135deg,#cd7c2f,#b45309)}.r4{background:#cbd5e1;color:#475569}
+.chart-box{position:relative;margin:12px 0}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.tag-green{background:#dcfce7;color:#15803d}.tag-blue{background:#dbeafe;color:#1d4ed8}.tag-gold{background:#fef3c7;color:#b45309}.tag-red{background:#fee2e2;color:#dc2626}
+.analysis{background:linear-gradient(135deg,#f0faf3,#e8f5ec,#f0fdf4);border-left:4px solid var(--primary);padding:16px 20px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:14px 0;font-size:13px;line-height:1.9}
+.analysis strong{color:var(--primary)}
+.analysis-blue{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-left-color:var(--secondary)}
+.analysis-blue strong{color:var(--secondary)}
+.analysis-gold{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left-color:var(--accent)}
+.analysis-gold strong{color:var(--accent)}
+.insight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.insight-box{padding:18px;border-radius:var(--radius-sm);border:1px solid rgba(0,0,0,.04)}
+.insight-box h4{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.insight-box ul{font-size:13px;padding-left:18px;margin:0;line-height:2}
+.insight-box.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-left:4px solid var(--success)}
+.insight-box.amber{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:4px solid var(--accent)}
+.suggest{margin-bottom:20px;padding:18px;background:#fafafa;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.suggest-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.suggest-head strong{font-size:14px}
+.suggest-body{font-size:13px;color:var(--text2);line-height:1.9;padding-left:4px}
+.progress-bar-wrap{background:#f1f5f0;border-radius:10px;height:22px;overflow:hidden;position:relative;margin:8px 0}
+.progress-bar-fill{height:100%;border-radius:10px;transition:width .6s ease}
+.progress-label{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--text2)}
+.progress-target{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:18px}
+.progress-target-card{background:var(--card);border-radius:var(--radius-sm);padding:18px;border:1px solid var(--border);text-align:center}
+.progress-target-card .pt-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.progress-target-card .pt-value{font-size:22px;font-weight:800;color:var(--text)}
+.progress-target-card .pt-note{font-size:11px;color:var(--text3);margin-top:4px}
+.footer{text-align:center;padding:24px 0 16px;color:var(--text3);font-size:11px;border-top:1px solid var(--border);margin-top:24px;line-height:1.8}
+@media(max-width:768px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .chart-row{grid-template-columns:1fr}
+  .insight-grid{grid-template-columns:1fr}
+  .header{padding:20px 16px;border-radius:14px}
+  .header::after{display:none}
+  .header h1{font-size:17px}
+  .header .sub{font-size:12px}
+  .header .meta{gap:6px;margin-top:8px}
+  .header .badge{font-size:10px;padding:2px 8px}
+  .container{padding:10px 12px}
+  .card{padding:16px;margin-bottom:12px;border-radius:12px}
+  .kpi{padding:14px 10px}
+  .kpi .value{font-size:22px}
+  .kpi .label{font-size:11px}
+  .kpi .note{font-size:10px}
+  .tabs{gap:6px;margin-bottom:14px}
+  .tab{padding:8px 14px;font-size:12px;border-radius:10px}
+  .card-title{font-size:14px;margin-bottom:12px}
+  .card-title .icon{width:30px;height:30px;font-size:16px}
+  .analysis{padding:12px 14px;font-size:12px;line-height:1.8}
+  .suggest{padding:14px;margin-bottom:14px}
+  .suggest-head strong{font-size:13px}
+  .suggest-body{font-size:12px}
+  .progress-target{grid-template-columns:1fr 1fr;gap:10px}
+  .progress-target-card{padding:14px}
+  .progress-target-card .pt-value{font-size:18px}
+  .tbl-wrap{margin:0 -4px}
+  table{font-size:12px}
+  th,td{padding:9px 8px}
+  .chart-box{min-height:240px}
+  .footer{padding:18px 0 12px;font-size:10px}
 }
-
-/* ===== Light Theme (06:00-18:00) ===== */
-:root[data-theme="light"] {
-  --bg: #f5f7fa; --card: #ffffff; --card2: #f0f2f5;
-  --text: #1a1a2e; --text2: #606d7b; --border: #e2e6ea;
-  --chart-grid: #e2e6ea; --hover-bg: rgba(0,0,0,.03);
-  --ps-highlight: #00a651;
-  --card-shadow: 0 1px 3px rgba(0,0,0,.08);
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi .value{font-size:20px}
+  .kpi .label{font-size:10px}
+  .kpi .note{font-size:9px}
+  .kpi{padding:12px 8px}
+  .header{padding:16px 14px;border-radius:12px}
+  .header h1{font-size:15px;letter-spacing:0}
+  .header .sub{font-size:11px;letter-spacing:0}
+  .header .badge{font-size:9px;padding:2px 6px}
+  .container{padding:8px 8px}
+  .card{padding:14px 12px;border-radius:10px}
+  .tabs{gap:5px}
+  .tab{padding:7px 11px;font-size:11px}
+  .card-title{font-size:13px;gap:8px;margin-bottom:10px}
+  .card-title .icon{width:28px;height:28px;font-size:14px;border-radius:8px}
+  .analysis{padding:10px 12px;font-size:11px;line-height:1.75;border-radius:0 8px 8px 0}
+  .suggest{padding:12px;border-radius:8px}
+  .suggest-head{gap:6px;margin-bottom:6px}
+  .suggest-head strong{font-size:12px}
+  .suggest-body{font-size:11px;line-height:1.75}
+  .progress-target{grid-template-columns:1fr;gap:8px}
+  .progress-target-card{padding:12px;border-radius:8px}
+  .progress-target-card .pt-value{font-size:17px}
+  .progress-target-card .pt-label{font-size:11px}
+  .progress-target-card .pt-note{font-size:10px}
+  .chart-box{min-height:220px}
+  table{font-size:11px}
+  th,td{padding:7px 5px}
+  th{font-size:11px}
+  .rank{width:20px;height:20px;font-size:10px;border-radius:6px}
+  .tag{font-size:10px;padding:2px 7px}
+  .insight-box{padding:14px;border-radius:8px}
+  .insight-box h4{font-size:13px}
+  .insight-box ul{font-size:12px;line-height:1.8}
+  .footer{font-size:9px;padding:14px 0 10px}
+  .progress-bar-wrap{height:18px}
+  .progress-label{font-size:10px}
 }
-
-body { background: var(--bg); color: var(--text); font-family: 'SF Pro Display', -apple-system, 'PingFang SC', sans-serif; padding: 16px; transition: background .3s, color .3s; }
-
-/* Tab Navigation */
-.tab-nav { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; background: var(--card); border-radius: 12px; padding: 4px; box-shadow: var(--card-shadow); }
-.tab-btn { padding: 10px 16px; border: none; background: transparent; color: var(--text2); cursor: pointer; border-radius: 8px; font-size: 14px; font-weight: 500; white-space: nowrap; transition: all .2s; flex: 0 1 auto; }
-.tab-btn.active { background: var(--green); color: #000; font-weight: 600; }
-.tab-btn:hover:not(.active) { background: var(--card2); color: var(--text); }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* Cards */
-.card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); box-shadow: var(--card-shadow); transition: background .3s, border-color .3s; }
-.card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--text); display: flex; align-items: center; gap: 8px; }
-.card-title .icon { font-size: 20px; }
-
-/* KPI Cards Row */
-.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
-.kpi-card { background: var(--card); border-radius: 12px; padding: 16px; text-align: center; border: 1px solid var(--border); box-shadow: var(--card-shadow); transition: background .3s, border-color .3s; }
-.kpi-value { font-size: 28px; font-weight: 700; }
-.kpi-value.green { color: var(--green); }
-.kpi-value.gold { color: var(--gold); }
-.kpi-value.red { color: var(--red); }
-.kpi-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
-.kpi-trend { font-size: 11px; margin-top: 4px; }
-.kpi-trend.up { color: var(--green); }
-.kpi-trend.down { color: var(--red); }
-
-/* Board Rate Cards */
-.board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-.board-card { background: var(--card2); border-radius: 10px; padding: 14px; border-left: 4px solid var(--text2); transition: background .3s; }
-.board-card.rate-high { border-left-color: var(--green); }
-.board-card.rate-mid { border-left-color: var(--yellow); }
-.board-card.rate-low { border-left-color: var(--red); }
-.board-card .name { font-size: 13px; color: var(--text2); margin-bottom: 6px; }
-.board-card .score { font-size: 22px; font-weight: 700; }
-.board-card .detail { font-size: 11px; color: var(--text2); margin-top: 4px; }
-.board-card .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-top: 6px; }
-.badge-high { background: rgba(0,200,83,.15); color: var(--green); }
-.badge-mid { background: rgba(255,193,7,.15); color: var(--yellow); }
-.badge-low { background: rgba(255,82,82,.15); color: var(--red); }
-
-/* Table */
-.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.data-table th { background: var(--card2); padding: 10px 8px; text-align: left; font-weight: 600; color: var(--text2); border-bottom: 2px solid var(--border); white-space: nowrap; }
-.data-table td { padding: 8px; border-bottom: 1px solid var(--border); }
-.data-table tr:hover { background: var(--hover-bg); }
-.data-table .ps-row { background: rgba(0,230,118,.08); font-weight: 600; }
-:root[data-theme="light"] .data-table .ps-row { background: rgba(0,166,81,.06); }
-.data-table .ps-row td { color: var(--ps-highlight); }
-.change-up { color: var(--green); font-weight: 600; }
-.change-down { color: var(--red); font-weight: 600; }
-.rank-1 { color: var(--gold); font-weight: 700; }
-.rank-bottom { color: var(--red); }
-
-/* Heatmap */
-.heatmap { overflow-x: auto; }
-.heatmap table { border-collapse: collapse; min-width: 700px; }
-.heatmap th, .heatmap td { padding: 8px 10px; text-align: center; font-size: 12px; white-space: nowrap; }
-.heatmap th { background: var(--card2); color: var(--text2); position: sticky; top: 0; }
-.heatmap td:first-child { text-align: left; font-weight: 600; position: sticky; left: 0; background: var(--card); z-index: 1; }
-.heatmap th:first-child { position: sticky; left: 0; z-index: 2; }
-
-/* Section Headers */
-.section-header { font-size: 20px; font-weight: 700; margin: 24px 0 16px; padding-left: 12px; border-left: 4px solid var(--green); }
-
-/* Chart Container */
-.chart-container { position: relative; height: 300px; margin: 16px 0; }
-.chart-container.tall { height: 400px; }
-
-/* Insight Cards */
-.insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.insight-card { background: var(--card2); border-radius: 10px; padding: 14px; transition: background .3s; }
-.insight-card .title { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
-.insight-card .item { font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--hover-bg); display: flex; justify-content: space-between; }
-.insight-card .item:last-child { border: none; }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .insight-grid { grid-template-columns: 1fr; }
-  .kpi-row { grid-template-columns: repeat(2, 1fr); }
-  .board-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* Sub-tab */
-.sub-tab-nav { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
-.sub-tab-btn { padding: 6px 14px; border: 1px solid var(--border); background: transparent; color: var(--text2); cursor: pointer; border-radius: 6px; font-size: 12px; transition: all .2s; }
-.sub-tab-btn.active { background: var(--green); color: #000; border-color: var(--green); }
-.sub-tab-content { display: none; }
-.sub-tab-content.active { display: block; }
-
-/* ===== Responsive Design ===== */
-@media (max-width: 768px) {
-  body { padding: 8px; }
-  .tab-nav { gap: 2px; padding: 3px; }
-  .tab-btn { padding: 8px 12px; font-size: 12px; flex: 1 1 auto; text-align: center; min-width: 0; white-space: normal; }
-  .kpi-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .kpi-value { font-size: 22px; }
-  .board-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .board-card { padding: 10px; }
-  .board-card .score { font-size: 18px; }
-  .card { padding: 14px; margin-bottom: 12px; }
-  .card-title { font-size: 14px; }
-  .section-header { font-size: 17px; margin: 18px 0 12px; }
-  .chart-container { height: 220px; }
-  .data-table { font-size: 12px; }
-  .data-table th, .data-table td { padding: 6px 4px; }
-  .sub-tab-nav { gap: 3px; }
-  .sub-tab-btn { padding: 5px 10px; font-size: 11px; }
-}
-
-@media (max-width: 400px) {
-  .kpi-row { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .board-grid { grid-template-columns: 1fr 1fr; }
-  .tab-btn { padding: 7px 8px; font-size: 11px; }
+@media(max-width:360px){
+  .header h1{font-size:14px}
+  .kpi .value{font-size:18px}
+  .tab{padding:6px 9px;font-size:10px}
+  .card{padding:12px 10px}
 }
 </style>
 </head>
 <body>
-
-<div class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('overview')">📊 总体情况</button>
-  <button class="tab-btn" onclick="switchTab('indicators')">📋 指标详情</button>
-  <button class="tab-btn" onclick="switchTab('comparison')">🔍 横向对比</button>
-  <button class="tab-btn" onclick="switchTab('departments')">📌 各部门职责</button>
+<div class="container">
+<div class="header">
+  <h1>📮 深圳自然博物馆主题邮局 · 数据看板 2026</h1>
+  <div class="sub">坪山局 · 主题邮局经营分析</div>
+  <div class="meta">
+    <div class="badge">📅 开业日期：2026年7月28日</div>
+    <div class="badge">📊 数据截止：2026年8月18日</div>
+    <div class="badge">📍 坪山区燕子湖片区</div>
+    <div class="badge">🗓️ 累计¥68,161（含开业现金¥3,921）</div>
+  </div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="sw(0)">📊 总体概览</div>
+  <div class="tab" onclick="sw(1)">📅 销售趋势</div>
+  <div class="tab" onclick="sw(2)">📦 产品分析</div>
+  <div class="tab" onclick="sw(3)">📋 收入进度</div>
+  <div class="tab" onclick="sw(4)">📦 库存管理</div>
+  <div class="tab" onclick="sw(5)">💡 经营建议</div>
 </div>
 
-<!-- ==================== TAB 1: 总体情况 ==================== -->
-<div id="tab-overview" class="tab-content active">
-  <div class="section-header">坪山局战略绩效 · 总体情况</div>
+<!-- TAB 0: 总体概览 -->
+<div class="panel active" id="p0">
+<div class="kpi-grid">
+  <div class="kpi green"><div class="label">💰 累计销售额</div><div class="value">6.82<span class="unit">万元</span></div><div class="note">营业19天累计（含开业现金¥3,921）</div></div>
+  <div class="kpi blue"><div class="label">📅 日均销售额</div><div class="value">3,587<span class="unit">元</span></div><div class="note">日均 ¥3,587</div></div>
+  <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">110<span class="unit">单</span></div><div class="note">19天总2,083单</div></div>
+  <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">185<span class="unit">件</span></div><div class="note">19天总3,520件</div></div>
+  <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥32.72</div><div class="note">平均每单金额</div></div>
+  <div class="kpi red"><div class="label">⚖️ 件单比</div><div class="value">1.7<span class="unit">件/单</span></div><div class="note">平均每单件数</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">🏷️</span>品类销售分布</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>品类</th><th>销售额</th><th>销售额占比</th><th>销量</th><th>销量占比</th></tr></thead>
+    <tbody id="catSummaryTable"></tbody>
+    <tfoot id="catSummaryFoot"></tfoot>
+  </table></div>
+  <div class="analysis"><strong>📊 品类结构：</strong>「热销」类占销售额52.6%、销量73.6%，是绝对主力。集邮产品（17.4%）以件均价¥61贡献稳定利润，较前期占比持续提升。函件产品（9.3%）和中邮文创（8.2%）合计17.5%，明信片（6.8%）走量不走价，是典型引流品。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">💰</span>价格带分布</div>
+  <div class="chart-box"><canvas id="priceBar"></canvas></div>
+  <div class="analysis"><strong>💡 价格带洞察：</strong>¥30-40 区间占销售额46.6%，是绝对核心消费带，集中了全系列立体笔记本和印章本。¥0-10 区间销量占比61.6%（明信片/盖章卡），是引流入口。¥20-30 区间¥4,599（6.7%），可考虑设计「¥10 以下→¥30-40」的升级动线，填补中间价格带。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">⚡</span>工作日 vs 周末对比</div>
+  <div class="chart-row">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text2)">日均销售额</div>
+      <div class="chart-box" style="height:180px"><canvas id="weekdayRevChart"></canvas></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text2)">日均订单数</div>
+      <div class="chart-box" style="height:180px"><canvas id="weekdayOrdChart"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-row" style="margin-top:12px">
+    <div class="analysis" style="margin:0"><strong>🏢 工作日（13天）</strong><br>日均 ¥3,680 / 108单</div>
+    <div class="analysis analysis-blue" style="margin:0"><strong>🎯 周末（6天）</strong><br>日均 ¥3,386 / 113单</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 1: 销售趋势 -->
+<div class="panel" id="p1">
+<div class="card">
+  <div class="card-title"><span class="icon">📈</span>全部营业日销售额趋势</div>
+  <div class="chart-box" style="height:320px"><canvas id="dailyRevChart"></canvas></div>
+  <div class="analysis"><strong>📊 趋势分析：</strong>全部19个营业日（07/28-08/18，排除3天闭馆）日均销售额¥3,587，峰值¥5,566（07/29），整体波动区间¥2,119-¥5,566。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">📊</span>每日订单数 & 销量</div>
+  <div class="chart-box" style="height:320px"><canvas id="dailyOrdChart"></canvas></div>
+  <div class="analysis"><strong>📦 订单分析：</strong>7/31（周五）订单数最高达174单。进入8月后订单稳定在90-140单/天，8/15（周六）140单为近期高点。销量随订单同步波动，客单价整体趋稳。</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">🕐</span>时段分布</div>
+  <div class="chart-row">
+    <div><div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">各时段销售额占比</div><div class="chart-box"><canvas id="timeRevChart"></canvas></div></div>
+    <div><div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">各时段销量占比</div><div class="chart-box"><canvas id="timeQtyChart"></canvas></div></div>
+  </div>
+  <div class="analysis"><strong>⏰ 时段洞察：</strong>14:00-16:00 为销售黄金时段，与博物馆下午客流高峰一致。09:00 和 18:00 为低谷，可考虑在开馆/闭馆前设置限时促销。</div>
+</div>
+</div>
+
+<!-- TAB 2: 产品分析 -->
+<div class="panel" id="p2">
+<div class="card">
+  <div class="card-title"><span class="icon">🏆</span>销售额 TOP 20 产品</div>
+  <div class="chart-box" style="height:520px"><canvas id="top20Chart"></canvas></div>
+  <div class="tbl-wrap" style="margin-top:16px"><table>
+    <thead><tr><th>排名</th><th>产品名称</th><th>品类</th><th>均价</th><th>销量</th><th>销售额</th><th>占比</th></tr></thead>
+    <tbody id="top20Table"></tbody>
+  </table></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">📋</span>品类详细数据</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>品类</th><th>销售额</th><th>销量</th><th>销售额占比</th><th>销量占比</th><th>件均价</th></tr></thead>
+    <tbody id="catDetailTable"></tbody>
+  </table></div>
+</div>
+</div>
+
+<!-- TAB 3: 验收进度 -->
+<div class="panel" id="p3">
+<div class="card">
+  <div class="card-title"><span class="icon">📋</span>收入进度跟踪</div>
   
-  <div class="kpi-row">
-    <div class="kpi-card">
-      <div class="kpi-value green">77.89</div>
-      <div class="kpi-label">7月总分</div>
-      <div class="kpi-trend down">↓ 较4月 -0.39分</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-value" style="color:var(--yellow)">第4名</div>
-      <div class="kpi-label">7月排名（9区局）</div>
-      <div class="kpi-trend down">↓ 4月第3→7月第4</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-value green">+4.53</div>
-      <div class="kpi-label">领先全市均值</div>
-      <div class="kpi-trend up">均值73.71</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-value" style="color:var(--blue)">1/9</div>
-      <div class="kpi-label">板块排名第1</div>
-      <div class="kpi-trend up">速递经济效益</div>
-    </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px">
+    <div class="kpi green"><div class="label">📊 累计销售额</div><div class="value">¥68,161</div><div class="note">营业19天（含开业现金¥3,921）</div></div>
+    <div class="kpi blue"><div class="label">📅 日均销售额</div><div class="value">¥3,587</div><div class="note">19个营业日平均（含开业现金）</div></div>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">📈</span> 总分月度趋势</div>
-    <div class="chart-container"><canvas id="totalTrendChart"></canvas></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">🏆</span> 7月全市排名</div>
-    <div class="chart-container"><canvas id="rankingChart"></canvas></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">🧩</span> 坪山各板块得分构成</div>
-    <div style="overflow-x:auto">
-      <table class="data-table" id="boardCompositionTable">
-        <thead>
-          <tr><th>板块</th><th>基本分 + 加分</th><th>实际得分（7月）</th><th>得分率</th><th>占总分比</th></tr>
-        </thead>
-        <tbody id="boardCompBody"></tbody>
-      </table>
+  <div class="card" style="background:linear-gradient(135deg,#f0faf3,#e8f5ec);border:1px solid #bbf7d0;margin-bottom:18px">
+    <div class="card-title"><span class="icon">🎯</span>下半年目标倒推</div>
+    <div class="progress-target">
+      <div class="progress-target-card">
+        <div class="pt-label">下半年目标</div>
+        <div class="pt-value" style="color:var(--primary)">¥300,000</div>
+        <div class="pt-note">已完 ¥68,161（22.7%）</div>
+      </div>
+      <div class="progress-target-card">
+        <div class="pt-label">剩余目标</div>
+        <div class="pt-value" style="color:var(--accent)">¥231,839</div>
+        <div class="pt-note">8/19 - 12/31</div>
+      </div>
+      <div class="progress-target-card">
+        <div class="pt-label">倒推每日目标</div>
+        <div class="pt-value" style="color:var(--secondary)">¥1,999</div>
+        <div class="pt-note">按实际营业日（约116天）</div>
+      </div>
+      <div class="progress-target-card">
+        <div class="pt-label">8月当月预估收入</div>
+        <div class="pt-value" style="color:var(--primary)">¥43,049</div>
+        <div class="pt-note">按日均¥3,587 × 剩余12营业日</div>
+      </div>
     </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" style="width:22.7%;background:linear-gradient(90deg,#16a34a,#22c55e)"></div>
+      <div class="progress-label">22.7%</div>
+    </div>
+    <div class="analysis" style="margin-top:12px"><strong>📈 达标分析：</strong>按当前日均 ¥3,587（含开业现金¥3,921）远超倒推日目标 ¥1,999，如保持当前水平，预计9月上旬可完成下半年30万目标。但需注意热度衰减趋势，8月中旬日均已从开业初期回落至¥2,500-3,000。</div>
+  </div>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>日期</th><th>当日销售额</th><th>累计销售额</th><th>日均变化</th><th>趋势</th></tr></thead>
+    <tbody id="progressTable"></tbody>
+  </table></div>
+</div>
+</div>
+
+<!-- TAB 4: 库存管理 -->
+<div class="panel" id="p4">
+<div class="card">
+  <div class="card-title"><span class="icon">📦</span>库存概览 <span style="font-size:12px;color:var(--text3);font-weight:400;margin-left:8px">数据截止：2026-08-18</span></div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-val" style="color:#6366f1">137</div><div class="kpi-label">商品SKU数</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#10b981">2,466</div><div class="kpi-label">总库存量</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#f59e0b">4</div><div class="kpi-label">商品品类</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#ef4444">17</div><div class="kpi-label">缺货商品</div></div>
   </div>
 </div>
 
-<!-- ==================== TAB 2: 指标详情 ==================== -->
-<div id="tab-indicators" class="tab-content">
-  <div class="section-header">各项指标详情 · 自己跟自己比</div>
-
-  <div class="sub-tab-nav">
-    <button class="sub-tab-btn active" onclick="switchSubTab('board-rates')">板块得分率</button>
-    <button class="sub-tab-btn" onclick="switchSubTab('month-trace')">月度变化追踪</button>
-    <button class="sub-tab-btn" onclick="switchSubTab('highlights')">亮点与隐患</button>
-  </div>
-
-  <div id="sub-board-rates" class="sub-tab-content active">
-    <div class="card">
-      <div class="card-title"><span class="icon">🎯</span> 7月各板块得分率一览</div>
-      <div class="board-grid" id="boardRateGrid"></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="icon">📊</span> 板块得分率雷达图</div>
-      <div class="chart-container tall"><canvas id="radarChart"></canvas></div>
-    </div>
-  </div>
-
-  <div id="sub-month-trace" class="sub-tab-content">
-    <div class="card">
-      <div class="card-title"><span class="icon">📊</span> 各板块月度趋势</div>
-      <div style="overflow-x:auto"><table class="data-table" id="boardTrendTable">
-        <thead><tr><th>板块</th><th>满分</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>趋势</th><th>得分率</th></tr></thead>
-        <tbody id="boardTrendBody"></tbody>
-      </table></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="icon">📋</span> 坪山全量指标月度变化（4→5→7月）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="detailTable">
-          <thead>
-            <tr><th>指标</th><th>满分</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>6→7月变化</th><th>得分率</th></tr>
-          </thead>
-          <tbody id="detailTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div id="sub-highlights" class="sub-tab-content">
-    <div class="card" style="border-left: 3px solid var(--green);">
-      <div class="card-title"><span class="icon">🚀</span> 进步最大 TOP5（4月→7月）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="topImprovementsTable">
-          <thead><tr id="topImpHead"></tr></thead>
-          <tbody id="topImprovementsBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card" style="margin-top:12px; border-left: 3px solid var(--red);">
-      <div class="card-title"><span class="icon">⚠️</span> 退步最大 TOP5（4月→7月）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="topDeclinesTable">
-          <thead><tr id="topDecHead"></tr></thead>
-          <tbody id="topDeclinesBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card" style="margin-top:12px; border-left: 3px solid var(--yellow);">
-      <div class="card-title"><span class="icon">🔴</span> 持续零分/低分隐患指标</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="zeroIndicatorsTable">
-          <thead><tr id="zeroHead"></tr></thead>
-          <tbody id="zeroBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+<div class="card">
+  <div class="card-title"><span class="icon">⚠️</span>缺货预警（17项）</div>
+  <div id="zeroStockList" style="max-height:240px;overflow-y:auto"></div>
 </div>
 
-<!-- ==================== TAB 3: 横向对比 ==================== -->
-<div id="tab-comparison" class="tab-content">
-  <div class="section-header">横向对比 · 与兄弟单位比较</div>
-
-  <div class="sub-tab-nav">
-    <button class="sub-tab-btn active" onclick="switchSubTab2('board-compare')">板块对比</button>
-    <button class="sub-tab-btn" onclick="switchSubTab2('sub-compare')">二级指标对比</button>
-    <button class="sub-tab-btn" onclick="switchSubTab2('heatmap-view')">热力图</button>
-    <button class="sub-tab-btn" onclick="switchSubTab2('gap-analysis')">差距分析</button>
+<div class="card">
+  <div class="card-title"><span class="icon">📋</span>库存明细（共137种商品）</div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="inv-filter active" onclick="filterInv('all',this)">全部</button>
+    <button class="inv-filter" onclick="filterInv('明信片',this)">明信片</button>
+    <button class="inv-filter" onclick="filterInv('函件产品',this)">函件产品</button>
+    <button class="inv-filter" onclick="filterInv('集邮产品',this)">集邮产品</button>
+    <button class="inv-filter" onclick="filterInv('中邮文创',this)">中邮文创</button>
+    <input id="invSearch" placeholder="🔍搜索商品名称..." oninput="filterInv(null,null)" style="flex:1;min-width:180px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none">
   </div>
-
-  <div id="sub-board-compare" class="sub-tab-content active">
-    <div class="card">
-      <div class="card-title"><span class="icon">📊</span> 各板块横向对比（7月，不含深汕）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="compareTable">
-          <thead>
-            <tr><th>板块</th><th>满分</th><th>坪山</th><th>第1名</th><th>均值</th><th>坪山vs均值</th><th>排名</th><th>得分率</th></tr>
-          </thead>
-          <tbody id="compareTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span class="icon">📈</span> 各板块排名一览（7月）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="rankTable">
-          <thead>
-            <tr><th>板块</th><th>满分</th><th>坪山得分</th><th>排名</th><th>得分率</th></tr>
-          </thead>
-          <tbody id="rankTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div id="sub-sub-compare" class="sub-tab-content">
-    <div class="card">
-      <div class="card-title"><span class="icon">📊</span> 二级指标横向对比（7月）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="subCompareTable">
-          <thead>
-            <tr id="subCompareHead"></tr>
-          </thead>
-          <tbody id="subCompareBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div id="sub-heatmap-view" class="sub-tab-content">
-    <div class="card">
-      <div class="card-title"><span class="icon">🗺️</span> 板块得分热力图（7月）</div>
-      <div class="heatmap" id="heatmapContainer"></div>
-    </div>
-  </div>
-
-  <div id="sub-gap-analysis" class="sub-tab-content">
-    <div class="insight-grid">
-      <div class="insight-card" style="border-left: 3px solid var(--green);">
-        <div class="title">🏅 优势指标（坪山排名前3）</div>
-        <div id="advantageIndicators"></div>
-      </div>
-      <div class="insight-card" style="border-left: 3px solid var(--red);">
-        <div class="title">🎯 追赶指标（坪山排名后3）</div>
-        <div id="chaseIndicators"></div>
-      </div>
-    </div>
-    <div class="card" style="margin-top:12px; border-left: 3px solid var(--red);">
-      <div class="card-title"><span class="icon">🔻</span> 薄弱二级指标（7月得分率最低）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="weakSubTable">
-          <thead><tr id="weakSubHead"></tr></thead>
-          <tbody id="weakSubBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card" style="margin-top:16px;">
-      <div class="card-title"><span class="icon">📊</span> 各板块坪山与各区局分差（7月）</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="gapTable">
-          <thead>
-            <tr id="gapTableHead"></tr>
-          </thead>
-          <tbody id="gapTableBody"></tbody>
-        </table>
-      </div>
-    </div>
+  <div style="overflow-x:auto">
+    <table class="detail-table" id="invTable">
+      <thead><tr><th>商品名称</th><th>品类</th><th>单位</th><th>库存量</th><th>预计可售天数</th><th>状态</th></tr></thead>
+      <tbody id="invBody"></tbody>
+    </table>
   </div>
 </div>
-
-<!-- ==================== TAB 4: 各部门职责 ==================== -->
-<div id="tab-departments" class="tab-content">
-  <div class="section-header">各部门对口指标</div>
-  <div style="margin-bottom:16px;">
-    <div id="deptTagContainer" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-  </div>
-  <div id="deptDetailPanel">
-    <div class="card" id="deptOverviewCard">
-      <div class="card-title"><span class="icon">📋</span> 部门指标概览</div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;" id="deptSummaryCards"></div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="deptIndTable">
-          <thead><tr id="deptIndHead"></tr></thead>
-          <tbody id="deptIndBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
-// ===== THEME =====
-var cs = getComputedStyle(document.documentElement);
-var T = {
-  text: cs.getPropertyValue('--text').trim(),
-  text2: cs.getPropertyValue('--text2').trim(),
-  grid: cs.getPropertyValue('--chart-grid').trim(),
-  psGreen: cs.getPropertyValue('--ps-highlight').trim(),
-  gold: cs.getPropertyValue('--gold').trim(),
-  green: cs.getPropertyValue('--green').trim(),
-  red: cs.getPropertyValue('--red').trim(),
-  cardBg: cs.getPropertyValue('--card').trim()
+// Inventory data
+const invItems=[{"name": "酷洛米明信片套装", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "深圳邮礼-深圳", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "中国娃娃集戳本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮票/散票80分", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《中国恐龙》本票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "JY邮政大货车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "中国恐龙", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《黑神话：悟空》联名邮品珍藏款一《扰雾飞云》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "绿野寻踪明信片恰帕狗", "cat": "明信片", "unit": "套", "stock": 1}, {"name": "《卡皮巴拉》水果物语毛绒挂件盲盒", "cat": "函件产品", "unit": "份", "stock": 1}, {"name": "十二生肖互动冰箱贴", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "JY三轮车", "cat": "中邮文创", "unit": "个", "stock": 1}, {"name": "《中国石窟》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《一起向未来》（国际吉祥版）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中华人民成立七十周年》邮册（全国）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《辉煌中国》庆祝改革开放四十周年邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《黑神话：悟空》联名邮品珍藏款三《行沾清味》", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "unit": "份", "stock": 2}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（史迪奇）", "cat": "函件产品", "unit": "份", "stock": 2}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "十二生肖水晶", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《亚洲文明》文化册（全国）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "JY面包车", "cat": "中邮文创", "unit": "个", "stock": 2}, {"name": "《中国剪纸 中国年》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《奇思天问》整版邮册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《中国年》票钞珍藏册(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《唯美之邑》环境日邮票邮册（邮票联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《静待花开》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《莫高窟》整版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "十二花神（蜀葵）", "cat": "明信片", "unit": "套", "stock": 3}, {"name": "邮筒积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 3}, {"name": "马上有钱钥匙扣", "cat": "函件产品", "unit": "份", "stock": 3}, {"name": "《雪舞迎春》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "遂古之初邮册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "瑞和满堂2026", "cat": "明信片", "unit": "份", "stock": 3}, {"name": "迎南而上明信片", "cat": "明信片", "unit": "份", "stock": 3}, {"name": "《西游记（四）》版票册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《精准扶贫》大版册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《不忘初心 牢记使命》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《文韵刘芳》邮册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《黑神话：悟空》联名邮品珍藏款二《徐声韵长》", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《黑神话：悟空》联名邮品珍藏款五《修制垢身》", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（小熊维尼）", "cat": "函件产品", "unit": "份", "stock": 4}, {"name": "《中国现代文学家》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《金石华彩》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《猛禽二》特种邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《黑神话：悟空》联名邮品珍藏款四《思虑成妄》", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "艰苦岁月长征手绘故事册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "川藏青藏公路建成通车65周年整版票册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "“午阿哥勇骐”《丙午年》生肖邮票毛绒公仔", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《笔尖山水》邮册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "抗日战争暨世界反法西斯战争胜利80周年阅兵纪念", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《国家公园》版票册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "JY老邮筒", "cat": "中邮文创", "unit": "个", "stock": 5}, {"name": "JY邮文创自行车", "cat": "中邮文创", "unit": "个", "stock": 5}, {"name": "王者荣耀打工人", "cat": "集邮产品", "unit": "件", "stock": 5}, {"name": "《国家野生保护动物（I级）（三）》邮册", "cat": "集邮产品", "unit": "套", "stock": 6}, {"name": "《虎（文物）》整版票册（全国）", "cat": "集邮产品", "unit": "套", "stock": 7}, {"name": "B.Duck小黄鸭邮差明信片", "cat": "明信片", "unit": "套", "stock": 8}, {"name": "马上有钱摆件马横款", "cat": "函件产品", "unit": "份", "stock": 8}, {"name": "深圳有礼—荷兰小镇", "cat": "函件产品", "unit": "份", "stock": 8}, {"name": "《龙马精神》生肖邮票珍藏镜框（大尺寸）", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《外交为民》专题卡书", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《大耳狗20周年》限定版纪念邮折", "cat": "函件产品", "unit": "份", "stock": 9}, {"name": "红楼梦四票封卡书", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《马肥家润》我不是胖虎非遗金箔春节礼盒", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《芍药》大版册", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "JY邮筒模型", "cat": "中邮文创", "unit": "个", "stock": 9}, {"name": "财神到", "cat": "集邮产品", "unit": "件", "stock": 9}, {"name": "《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装", "cat": "明信片", "unit": "套", "stock": 10}, {"name": "《八骏图》不二马大叔联名亚克力摇摇乐（邮政联名）", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天文现象》版票册", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天地有五岳》邮册", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "日进斗金", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《蓝卯卯》B款15cm(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《深圳旅游风光明信片套装盒》碧海蓝天", "cat": "明信片", "unit": "套", "stock": 11}, {"name": "《中流砥柱》邮册", "cat": "集邮产品", "unit": "套", "stock": 11}, {"name": "《科技创新（二）》大版册", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "《深圳旅游风光明信片套装盒》建筑之美", "cat": "明信片", "unit": "套", "stock": 13}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡红", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "《世界自然遗产—中国南方喀斯特》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "金榜题名时集戳本（乙己吉祥年）", "cat": "集邮产品", "unit": "件", "stock": 14}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡蓝", "cat": "集邮产品", "unit": "套", "stock": 15}, {"name": "中国神话传说", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "《三国的星空》水墨款明信片套装", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "《深圳旅游风光明信片套装盒》湖光山色", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "金榜题名镜框摆件", "cat": "函件产品", "unit": "份", "stock": 16}, {"name": "《哪吒之魔童闹海》排排坐迷你公仔", "cat": "函件产品", "unit": "份", "stock": 16}, {"name": "《昆虫（二）》邮票精装风琴折", "cat": "集邮产品", "unit": "套", "stock": 16}, {"name": "十二花神（荷花）", "cat": "明信片", "unit": "套", "stock": 17}, {"name": "邮政主题异形片", "cat": "函件产品", "unit": "份", "stock": 17}, {"name": "印章本（深圳漫游记）", "cat": "函件产品", "unit": "份", "stock": 17}, {"name": "果然幸运", "cat": "明信片", "unit": "套", "stock": 18}, {"name": "一盅两件冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 18}, {"name": "状元帽镜框摆件", "cat": "函件产品", "unit": "份", "stock": 18}, {"name": "电影《哪吒之魔童闹海》特殊版式个性化邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《山水如画》版票册", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《丝绸之路文物（一）》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《三国的星空》人物款明信片套装", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "早茶必点异形片套装", "cat": "函件产品", "unit": "份", "stock": 19}, {"name": "《太行山》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "《丝绸之路文物（二》版票册", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "唐宋八大家", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "端午传统民俗，节日", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "《深圳旅游风光明信片套装盒》历史人文", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "水滚茶靓冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "《哪吒之魔童闹海》电影票根冰箱贴套装", "cat": "函件产品", "unit": "份", "stock": 20}, {"name": "电影《哪吒之魔童闹海》个性化邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "《又见繁华》珍藏套装（社会联合）", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "JY邮政小飞机", "cat": "中邮文创", "unit": "个", "stock": 22}, {"name": "《姑苏繁华图》版票册", "cat": "集邮产品", "unit": "套", "stock": 25}, {"name": "《鸿雁寄相思》邮册", "cat": "集邮产品", "unit": "套", "stock": 28}, {"name": "《中国古镇（四）》大版册", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《中国篆刻》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《鸽》整版票折", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "unit": "套", "stock": 30}, {"name": "经典时刻2025阅兵纪念风琴折", "cat": "集邮产品", "unit": "套", "stock": 30}, {"name": "十二花神（桂花）", "cat": "明信片", "unit": "套", "stock": 33}, {"name": "十二花神盖戳", "cat": "明信片", "unit": "套", "stock": 38}, {"name": "十二花神（榴花）", "cat": "明信片", "unit": "套", "stock": 38}, {"name": "《国宝日记》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 52}, {"name": "《民族娃娃》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 78}, {"name": "《北京中轴线》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 78}, {"name": "邮票/散票1.2元", "cat": "集邮产品", "unit": "套", "stock": 80}, {"name": "空白盖戳明信片", "cat": "明信片", "unit": "套", "stock": 88}, {"name": "《动物世界》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 93}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 114}, {"name": "深圳自然博物馆明信片/单枚", "cat": "明信片", "unit": "套", "stock": 675}];
+const invCatStats={"明信片": {"count": 26, "stock": 1154}, "函件产品": {"count": 29, "stock": 578}, "集邮产品": {"count": 74, "stock": 690}, "中邮文创": {"count": 8, "stock": 44}};
+const invZero=[{"name": "酷洛米明信片套装", "cat": "明信片"}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品"}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品"}, {"name": "深圳邮礼-深圳", "cat": "函件产品"}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品"}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品"}, {"name": "中国娃娃集戳本", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品"}, {"name": "邮票/散票80分", "cat": "集邮产品"}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品"}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品"}, {"name": "《中国恐龙》本票册", "cat": "集邮产品"}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品"}, {"name": "JY邮政大货车", "cat": "中邮文创"}, {"name": "中国恐龙", "cat": "中邮文创"}, {"name": "《黑神话：悟空》联名邮品珍藏款一《扰雾飞云》", "cat": "集邮产品"}];
+const invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#10b981','中邮文创':'#ef4444'};
+// 18天营业期各商品累计销量（来自销售数据）
+const salesQty={"《国宝日记》立体笔记本":197,"《北京中轴线》立体笔记本":228,"印章本（深圳漫游记）":166,"深圳自然博物馆明信片/单枚":1043,"空白盖戳明信片":809,"《动物世界》立体笔记本":91,"《民族娃娃》立体笔记本":57,"《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）":10,"《通关文牒》立体笔记本":51,"《2027深圳旅游风光明信片套装盒》公园之城":101,"JY邮政大货车":17,"唐宫夜宴集戳本":32,"《天文现象》版票册":6,"JY邮政小飞机":20,"JY三轮车":33,"《寻龙赐福》集戳本（新）":30,"《大美华夏 世界遗产》专题册":2,"JY邮文创自行车":8,"邮局街景积木明信片套装（新）":10,"十二花神（荷花）":114};
+const OPERATING_DAYS=19;
+
+// Zero stock list
+let zhtml='';
+invZero.forEach(z=>{
+  zhtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">';
+  zhtml+='<span style="flex:1;overflow:hidden;text-overflow-ellipsis;white-space:nowrap">'+z.name+'</span>';
+  zhtml+='<span style="color:#ef4444;font-weight:600;margin-left:8px;white-space:nowrap">'+z.cat+'</span></div>';
+});
+document.getElementById('zeroStockList').innerHTML=zhtml||'<div style="color:var(--text3);text-align:center;padding:20px">暂无缺货商品</div>';
+
+// Inventory table
+let currentCat='all';
+function filterInv(cat,btn){
+  if(cat) currentCat=cat;
+  if(btn){
+    document.querySelectorAll('.inv-filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const q=(document.getElementById('invSearch').value||'').toLowerCase();
+  let html='';
+  invItems.forEach(it=>{
+    if(currentCat!=='all'&&it.cat!==currentCat) return;
+    if(q&&!it.name.toLowerCase().includes(q)) return;
+    const dailySales=salesQty[it.name]?salesQty[it.name]/OPERATING_DAYS:0;
+    let daysText='—',daysStyle='color:#9ca3af';
+    if(it.stock===0){daysText='<span style="color:#ef4444;font-weight:600">已缺货</span>';}
+    else if(dailySales>0){const days=Math.floor(it.stock/dailySales);daysText=days+'天';if(days<=7)daysStyle='color:#ef4444;font-weight:600';else if(days<=30)daysStyle='color:#f59e0b;font-weight:600';else daysStyle='color:#10b981';}
+    else{daysText='<span style="color:#9ca3af">暂无销售</span>';}
+    const status=it.stock===0?'<span style="color:#ef4444;font-weight:600">缺货</span>':it.stock<=5?'<span style="color:#f59e0b;font-weight:600">低库存</span>':'<span style="color:#10b981">正常</span>';
+    const rowBg=it.stock===0?'background:#fef2f2':'';
+    html+='<tr style="'+rowBg+'"><td>'+it.name+'</td><td><span style="color:'+invColors[it.cat]+'">'+it.cat+'</span></td><td>'+it.unit+'</td><td style="font-weight:600">'+it.stock+'</td><td style="'+daysStyle+'">'+daysText+'</td><td>'+status+'</td></tr>';
+  });
+  document.getElementById('invBody').innerHTML=html||'<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:20px">无匹配商品</td></tr>';
+}
+filterInv('all',null);
+// Set first filter active
+document.querySelector('.inv-filter').classList.add('active');
+</script>
+
+<!-- TAB 5: 经营建议 -->
+<div class="panel" id="p5">
+<div class="card">
+  <div class="card-title"><span class="icon">💡</span>经营建议</div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">🔥</span><strong>爆品策略：立体笔记本系列持续放大</strong></div>
+    <div class="suggest-body">「北京中轴线」「国宝日记」等立体笔记本系列稳居 TOP2，累计贡献超万元。建议：① 保持货架显眼位置；② 考虑推出「自然博物馆专属」立体笔记本；③ 搭配盖章体验提升附加值。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">📮</span><strong>引流升级：明信片→文创的转化动线</strong></div>
+    <div class="suggest-body">自然博物馆明信片/单枚持续走量（累计近1000枚），是最大引流品。建议：① 在明信片区旁设置「+¥15升级立体笔记本」提示；② 设计「明信片+印章本」组合套装（¥39.9）；③ 空白盖戳明信片可与印章本联动推荐。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">⏰</span><strong>时段优化：抓住14:00-16:00黄金档</strong></div>
+    <div class="suggest-body">下午时段贡献全天最大销售额，与博物馆下午客流高峰一致。建议：① 此时段安排最佳店员在岗；② 设置「下午限定」盖章活动吸引客流；③ 09:00和18:00低谷期可尝试「早鸟/闭馆前折扣」。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">🏢</span><strong>集邮产品：提升高客单价转化</strong></div>
+    <div class="suggest-body">集邮产品件均价¥62，远高于整体¥18.2，占比提升至18.3%，说明高价值客群在扩大。建议：① 设置独立集邮产品展柜；② 针对中年/老年游客主动推荐；③ 考虑推出「自然博物馆主题」集邮册。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">📊</span><strong>工作日 vs 周末趋于均衡</strong></div>
+    <div class="suggest-body">工作日日均¥3,382 vs 周末¥3,395，两者几乎持平。周末订单密度更高（113单 vs 105单），但客单价略低，家庭游客以低价商品为主。建议：① 周末增加亲子互动体验（如DIY明信片）提升客单价；② 工作日推出「工作日限定」盖章活动维持客流。</div>
+  </div>
+
+  <div class="suggest">
+    <div class="suggest-head"><span style="font-size:20px">📉</span><strong>热度回落应对策略</strong></div>
+    <div class="suggest-body">8月中旬日均从开业初期¥3,500+回落至¥2,500-3,000，属于正常热度衰减。建议：① 引入新品刺激复购（如季节限定明信片）；② 联合博物馆做主题活动引流；③ 建立常客社群，定期推送新品/活动信息。</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="icon">🎯</span>下一步行动</div>
+  <div class="insight-grid">
+    <div class="insight-box green">
+      <h4>✅ 短期（本周）</h4>
+      <ul>
+        <li>优化14-16点黄金时段人员配置</li>
+        <li>设计「明信片+立体笔记本」组合推荐话术</li>
+        <li>补充空白盖戳明信片库存</li>
+      </ul>
+    </div>
+    <div class="insight-box amber">
+      <h4>🔜 中期（本月）</h4>
+      <ul>
+        <li>引入秋季限定新品刺激复购</li>
+        <li>设置集邮产品独立展示区</li>
+        <li>周末增加亲子DIY体验活动</li>
+        <li>建立常客微信社群运营</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  <div>📮 深圳自然博物馆主题邮局 · 数据看板 v6.0</div>
+  <div>数据范围：2026.07.28 - 2026.08.18 ｜ 营业时间 9:00-18:00（周一闭馆）</div>
+  <div>📍 坪山区燕子湖片区 ｜ 数据来源：POS系统</div>
+</div>
+</div>
+
+<script>
+const totalRev=68160.89;
+const totalQty=3520;
+const D={
+  daily:{labels:["07/28\n开业", "07/29", "07/30", "07/31", "08/01", "08/02", "08/03\n闭馆", "08/04", "08/05", "08/06", "08/07", "08/08", "08/09", "08/10\n闭馆", "08/11", "08/12", "08/13", "08/14", "08/15", "08/16", "08/17\n闭馆", "08/18"],rev:[4875.0, 5565.5, 3146.8, 5549.5, 3899.7, 2783.1, 0.0, 2706.5, 5087.9, 2898.0, 2747.4, 3364.2, 4243.4, 0.0, 2271.2, 2459.8, 3412.9, 3138.1, 3909.1, 2119.3, 0.0, 3983.5],ord:[28, 92, 105, 174, 135, 104, 0, 101, 130, 110, 103, 109, 121, 0, 90, 113, 111, 114, 140, 70, 0, 133],qty:[86, 350, 289, 250, 259, 135, 0, 149, 217, 191, 155, 158, 161, 0, 141, 148, 169, 157, 186, 111, 0, 208]},
+  cat:{labels:["热销产品", "集邮产品", "函件产品", "中邮文创", "明信片"],rev:[35887.78, 11861.5, 6315.8, 5570.11, 4604.21],qty:[2591, 193, 207, 200, 329]},
+  price:{labels:["¥0-10", "¥10-20", "¥20-30", "¥30-40", "¥40-50", "¥50-100", "¥100-200", "¥200+"],rev:[10788.69, 2288.89, 4599.42, 31770.2, 1650.2, 6616.0, 5362.0, 1164.0],qty:[2169, 143, 209, 832, 36, 97, 31, 3]},
+  time:{labels:["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],rev:[1046.8, 5158.6, 6866.0, 8872.4, 6995.4, 9413.8, 9180.5, 5814.9, 6390.9, 1207.58],qty:[49, 219, 386, 479, 440, 521, 434, 386, 357, 80]},
+  top20:[{"name": "《国宝日记》立体笔记本", "cat": "热销", "price": 39.9, "qty": 197, "rev": 7860.3, "pct": 12.2}, {"name": "《北京中轴线》立体笔记本", "cat": "热销", "price": 31.1, "qty": 228, "rev": 7086.12, "pct": 11.0}, {"name": "印章本（深圳漫游记）", "cat": "热销", "price": 36.0, "qty": 166, "rev": 5976.0, "pct": 9.3}, {"name": "深圳自然博物馆明信片/单枚", "cat": "热销", "price": 5.0, "qty": 1043, "rev": 5215.0, "pct": 8.1}, {"name": "空白盖戳明信片", "cat": "热销", "price": 4.8, "qty": 809, "rev": 3845.16, "pct": 6.0}, {"name": "《动物世界》立体笔记本", "cat": "热销", "price": 39.9, "qty": 91, "rev": 3630.9, "pct": 5.7}, {"name": "《民族娃娃》立体笔记本", "cat": "热销", "price": 39.9, "qty": 57, "rev": 2274.3, "pct": 3.5}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "price": 39.9, "qty": 51, "rev": 2034.9, "pct": 3.2}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "price": 198.0, "qty": 10, "rev": 1980.0, "pct": 3.1}, {"name": "《2027深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "price": 16.4, "qty": 101, "rev": 1655.39, "pct": 2.6}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "price": 39.9, "qty": 32, "rev": 1276.8, "pct": 2.0}, {"name": "JY邮政小飞机", "cat": "中邮文创", "price": 58.0, "qty": 20, "rev": 1160.0, "pct": 1.8}, {"name": "JY邮政大货车", "cat": "中邮文创", "price": 68.0, "qty": 17, "rev": 1156.0, "pct": 1.8}, {"name": "《天文现象》版票册", "cat": "集邮产品", "price": 188.0, "qty": 6, "rev": 1128.0, "pct": 1.8}, {"name": "JY三轮车", "cat": "中邮文创", "price": 33.0, "qty": 33, "rev": 1089.0, "pct": 1.7}, {"name": "《寻龙赐福》集戳本（新）", "cat": "集邮产品", "price": 27.0, "qty": 30, "rev": 810.0, "pct": 1.3}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "price": 398.0, "qty": 2, "rev": 796.0, "pct": 1.2}, {"name": "JY邮文创自行车", "cat": "中邮文创", "price": 95.0, "qty": 8, "rev": 760.0, "pct": 1.2}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "price": 69.0, "qty": 10, "rev": 690.0, "pct": 1.1}, {"name": "十二花神（荷花）", "cat": "明信片", "price": 5.6, "qty": 114, "rev": 634.42, "pct": 1.0}]
 };
 
-// ===== DATA INJECTION =====
-const DATA = {"board_max":[32.67,10.32,24.98,8.3,6.1,22.2,1.99,10.96,0,7],"units":["宝安","龙岗","龙华","坪山","罗湖","福田","南山","前海","深汕"],"boards":["邮政经济效益","普遍服务","代理金融","农村电商","协同","速递经济效益","成本管控","运营质量","市场发展","加扣分"],"months_trend":{"4月":{"宝安":{"total":0,"boards":{"邮政经济效益":0,"普遍服务":0,"代理金融":0,"农村电商":0,"协同":0,"速递经济效益":0,"成本管控":0,"运营质量":0,"市场发展":0,"加扣分":0}},"龙岗":{"total":67.33,"boards":{"邮政经济效益":17.93,"普遍服务":10.76,"代理金融":14.76,"农村电商":0,"协同":0,"速递经济效益":10.3,"成本管控":4,"运营质量":4.29,"市场发展":2,"加扣分":0}},"龙华":{"total":64.61,"boards":{"邮政经济效益":15.17,"普遍服务":10.94,"代理金融":16.04,"农村电商":0,"协同":0,"速递经济效益":6.8,"成本管控":4,"运营质量":4.29,"市场发展":4,"加扣分":0}},"坪山":{"total":74.89,"boards":{"邮政经济效益":16.94,"普遍服务":10.6,"代理金融":10.34,"农村电商":1,"协同":4.48,"速递经济效益":21.3,"成本管控":4,"运营质量":4.29,"市场发展":1.94,"加扣分":0}},"罗湖":{"total":69.99,"boards":{"邮政经济效益":17.05,"普遍服务":11.16,"代理金融":21.55,"农村电商":1,"协同":0,"速递经济效益":3.98,"成本管控":4,"运营质量":4.29,"市场发展":3.8,"加扣分":0}},"福田":{"total":63.28,"boards":{"邮政经济效益":17.46,"普遍服务":10.66,"代理金融":18.09,"农村电商":0,"协同":0,"速递经济效益":2,"成本管控":4,"运营质量":4.29,"市场发展":2.88,"加扣分":0}},"南山":{"total":77.84,"boards":{"邮政经济效益":16.93,"普遍服务":10.66,"代理金融":23.68,"农村电商":0,"协同":0,"速递经济效益":9.77,"成本管控":4,"运营质量":4.29,"市场发展":3.9,"加扣分":0}},"前海":{"total":68.01,"boards":{"邮政经济效益":17.75,"普遍服务":10.66,"代理金融":19.7,"农村电商":0,"协同":0,"速递经济效益":3.57,"成本管控":4,"运营质量":4.29,"市场发展":3.84,"加扣分":0}},"深汕":{"total":75.16,"boards":{"邮政经济效益":29.58,"普遍服务":13.41,"代理金融":17.37,"农村电商":1,"协同":0,"速递经济效益":0.81,"成本管控":4,"运营质量":4.29,"市场发展":0,"加扣分":0}}},"5月":{"宝安":{"total":0,"boards":{"邮政经济效益":0,"普遍服务":0,"代理金融":0,"农村电商":0,"协同":0,"速递经济效益":0,"成本管控":0,"运营质量":0,"市场发展":0,"加扣分":0}},"龙岗":{"total":74.92,"boards":{"邮政经济效益":22.35,"普遍服务":10.77,"代理金融":17.61,"农村电商":0,"协同":0,"速递经济效益":7.2,"成本管控":4,"运营质量":7.29,"市场发展":2,"加扣分":0}},"龙华":{"total":70.75,"boards":{"邮政经济效益":19.18,"普遍服务":7.82,"代理金融":16.76,"农村电商":0,"协同":0,"速递经济效益":7.2,"成本管控":4,"运营质量":9.09,"市场发展":4,"加扣分":0}},"坪山":{"total":82.29,"boards":{"邮政经济效益":20.5,"普遍服务":8.77,"代理金融":12.49,"农村电商":0,"协同":4.2,"速递经济效益":21.84,"成本管控":4,"运营质量":7.64,"市场发展":2.85,"加扣分":2.1}},"罗湖":{"total":67.07,"boards":{"邮政经济效益":19.4,"普遍服务":11.84,"代理金融":16.93,"农村电商":0,"协同":0,"速递经济效益":0.35,"成本管控":4,"运营质量":7.45,"市场发展":4,"加扣分":0}},"福田":{"total":69.79,"boards":{"邮政经济效益":22.43,"普遍服务":10.49,"代理金融":18.27,"农村电商":0,"协同":0,"速递经济效益":0,"成本管控":4,"运营质量":7.28,"市场发展":3.82,"加扣分":0}},"南山":{"total":77.31,"boards":{"邮政经济效益":22.1,"普遍服务":10.7,"代理金融":20.17,"农村电商":0,"协同":0,"速递经济效益":5.81,"成本管控":4,"运营质量":7.29,"市场发展":3.94,"加扣分":0}},"前海":{"total":70.38,"boards":{"邮政经济效益":19.58,"普遍服务":9.89,"代理金融":15.98,"农村电商":0,"协同":0,"速递经济效益":4.17,"成本管控":4,"运营质量":9.23,"市场发展":3.93,"加扣分":0}},"深汕":{"total":86.08,"boards":{"邮政经济效益":34.47,"普遍服务":10.72,"代理金融":18.63,"农村电商":2.66,"协同":0,"速递经济效益":0.46,"成本管控":4,"运营质量":9.44,"市场发展":0,"加扣分":0}}},"6月":{"宝安":{"total":73.56,"boards":{"邮政经济效益":19.57,"普遍服务":11.87,"代理金融":19.32,"农村电商":0,"协同":0,"速递经济效益":6.37,"成本管控":0,"运营质量":7.91,"市场发展":4,"加扣分":0}},"龙岗":{"total":73.09,"boards":{"邮政经济效益":20.08,"普遍服务":11.59,"代理金融":12.74,"农村电商":0,"协同":0,"速递经济效益":7.2,"成本管控":4.71,"运营质量":8.47,"市场发展":4,"加扣分":0}},"龙华":{"total":70.25,"boards":{"邮政经济效益":19.5,"普遍服务":9.82,"代理金融":17.83,"农村电商":0,"协同":0,"速递经济效益":7.2,"成本管控":0,"运营质量":8.2,"市场发展":4,"加扣分":0}},"坪山":{"total":86.38,"boards":{"邮政经济效益":20.39,"普遍服务":8.04,"代理金融":12.11,"农村电商":2,"协同":4.4,"速递经济效益":22.09,"成本管控":4.8,"运营质量":8.61,"市场发展":3.94,"加扣分":1.6}},"罗湖":{"total":65.48,"boards":{"邮政经济效益":19.16,"普遍服务":12.15,"代理金融":14.8,"农村电商":0,"协同":0,"速递经济效益":2.07,"成本管控":0,"运营质量":8.6,"市场发展":4,"加扣分":0}},"福田":{"total":62.29,"boards":{"邮政经济效益":19.7,"普遍服务":11.8,"代理金融":14.93,"农村电商":0,"协同":0,"速递经济效益":0,"成本管控":0,"运营质量":8.0,"市场发展":4,"加扣分":0}},"南山":{"total":73.78,"boards":{"邮政经济效益":19.95,"普遍服务":9.86,"代理金融":20.07,"农村电商":0,"协同":0,"速递经济效益":7.07,"成本管控":0,"运营质量":8.53,"市场发展":4,"加扣分":0}},"前海":{"total":70.66,"boards":{"邮政经济效益":20.35,"普遍服务":11.75,"代理金融":15.46,"农村电商":0,"协同":0,"速递经济效益":6.52,"成本管控":0,"运营质量":8.58,"市场发展":4,"加扣分":0}},"深汕":{"total":82.94,"boards":{"邮政经济效益":34.41,"普遍服务":8.41,"代理金融":18.09,"农村电商":2,"协同":0,"速递经济效益":0.49,"成本管控":4.8,"运营质量":9.34,"市场发展":0,"加扣分":0}}},"7月":{"宝安":{"total":74.1,"boards":{"邮政经济效益":17.02,"普遍服务":9.66,"代理金融":24.98,"农村电商":0,"协同":1.9325,"速递经济效益":7.85,"运营质量":10.94,"市场发展":-1.25,"成本管控":0.0,"加扣分":1.72}},"龙岗":{"total":85.28,"boards":{"邮政经济效益":19.22,"普遍服务":9.51,"代理金融":19.91,"农村电商":0,"协同":3.2,"速递经济效益":20.91,"运营质量":10.96,"市场发展":-0.44,"成本管控":0.01,"加扣分":1.56}},"龙华":{"total":62.77,"boards":{"邮政经济效益":7.52,"普遍服务":7.05,"代理金融":20.43,"农村电商":0,"协同":1.5738,"速递经济效益":16.2,"运营质量":10.9,"市场发展":-3.93,"成本管控":0.0,"加扣分":-0.9}},"坪山":{"total":77.89,"boards":{"邮政经济效益":18.79,"普遍服务":8.07,"代理金融":16.18,"农村电商":0,"协同":3.1854,"速递经济效益":22.2,"运营质量":10.41,"市场发展":0,"成本管控":0.05,"加扣分":-1}},"罗湖":{"total":60.52,"boards":{"邮政经济效益":18.87,"普遍服务":10.32,"代理金融":17.1,"农村电商":0,"协同":2.1737,"速递经济效益":2.1,"运营质量":10.96,"市场发展":-3.43,"成本管控":0.0,"加扣分":-1}},"福田":{"total":70.95,"boards":{"邮政经济效益":18.83,"普遍服务":9.96,"代理金融":22.68,"农村电商":0,"协同":2.3196,"速递经济效益":3.85,"运营质量":10.96,"市场发展":-0.58,"成本管控":0.05,"加扣分":2.3}},"南山":{"total":74.48,"boards":{"邮政经济效益":13.91,"普遍服务":7.93,"代理金融":22.35,"农村电商":0,"协同":2.7,"速递经济效益":15.64,"运营质量":10.96,"市场发展":-3,"成本管控":1.99,"加扣分":-1}},"前海":{"total":76.11,"boards":{"邮政经济效益":19.16,"普遍服务":10.27,"代理金融":17.37,"农村电商":0,"协同":2.8,"速递经济效益":16.2,"运营质量":10.96,"市场发展":-2.5,"成本管控":0.05,"加扣分":-0.7}},"深汕":{"total":82.64,"boards":{"邮政经济效益":32.67,"普遍服务":9.29,"代理金融":23.19,"农村电商":0,"协同":4.9,"速递经济效益":5.3,"运营质量":6.96,"市场发展":-1.2,"成本管控":0.33,"加扣分":0}}}},"board_comparison":[{"board":"邮政经济效益","pingshan":18.79,"max_possible":32.67,"top_unit":"深汕","top_score":32.67,"mean":18.4433,"diff_mean":0.3467,"rank":6,"all_scores":[{"unit":"深汕","score":32.67},{"unit":"龙岗","score":19.22},{"unit":"前海","score":19.16},{"unit":"罗湖","score":18.87},{"unit":"福田","score":18.83},{"unit":"坪山","score":18.79},{"unit":"宝安","score":17.02},{"unit":"南山","score":13.91},{"unit":"龙华","score":7.52}]},{"board":"普遍服务","pingshan":8.07,"max_possible":10.32,"top_unit":"罗湖","top_score":10.32,"mean":9.1178,"diff_mean":-1.0478,"rank":7,"all_scores":[{"unit":"罗湖","score":10.32},{"unit":"前海","score":10.27},{"unit":"福田","score":9.96},{"unit":"宝安","score":9.66},{"unit":"龙岗","score":9.51},{"unit":"深汕","score":9.29},{"unit":"坪山","score":8.07},{"unit":"南山","score":7.93},{"unit":"龙华","score":7.05}]},{"board":"代理金融","pingshan":16.18,"max_possible":24.98,"top_unit":"宝安","top_score":24.98,"mean":20.4656,"diff_mean":-4.2856,"rank":9,"all_scores":[{"unit":"宝安","score":24.98},{"unit":"深汕","score":23.19},{"unit":"福田","score":22.68},{"unit":"南山","score":22.35},{"unit":"龙华","score":20.43},{"unit":"龙岗","score":19.91},{"unit":"前海","score":17.37},{"unit":"罗湖","score":17.1},{"unit":"坪山","score":16.18}]},{"board":"农村电商","pingshan":0,"max_possible":8.3,"top_unit":"宝安","top_score":0,"mean":0.0,"diff_mean":0.0,"rank":4,"all_scores":[{"unit":"宝安","score":0},{"unit":"龙岗","score":0},{"unit":"龙华","score":0},{"unit":"坪山","score":0},{"unit":"罗湖","score":0},{"unit":"福田","score":0},{"unit":"南山","score":0},{"unit":"前海","score":0},{"unit":"深汕","score":0}]},{"board":"协同","pingshan":3.1854,"max_possible":4.9,"top_unit":"深汕","top_score":4.9,"mean":2.7539,"diff_mean":0.4315,"rank":3,"all_scores":[{"unit":"深汕","score":4.9},{"unit":"龙岗","score":3.2},{"unit":"坪山","score":3.1854},{"unit":"前海","score":2.8},{"unit":"南山","score":2.7},{"unit":"福田","score":2.3196},{"unit":"罗湖","score":2.1737},{"unit":"宝安","score":1.9325},{"unit":"龙华","score":1.5738}]},{"board":"速递经济效益","pingshan":22.2,"max_possible":22.2,"top_unit":"坪山","top_score":22.2,"mean":12.25,"diff_mean":9.95,"rank":1,"all_scores":[{"unit":"坪山","score":22.2},{"unit":"龙岗","score":20.91},{"unit":"龙华","score":16.2},{"unit":"前海","score":16.2},{"unit":"南山","score":15.64},{"unit":"宝安","score":7.85},{"unit":"深汕","score":5.3},{"unit":"福田","score":3.85},{"unit":"罗湖","score":2.1}]},{"board":"成本管控","pingshan":0.05,"max_possible":1.99,"top_unit":"南山","top_score":1.99,"mean":0.2756,"diff_mean":-0.2256,"rank":3,"all_scores":[{"unit":"南山","score":1.99},{"unit":"深汕","score":0.33},{"unit":"坪山","score":0.05},{"unit":"福田","score":0.05},{"unit":"前海","score":0.05},{"unit":"龙岗","score":0.01},{"unit":"宝安","score":0.0},{"unit":"龙华","score":0.0},{"unit":"罗湖","score":0.0}]},{"board":"运营质量","pingshan":10.41,"max_possible":10.96,"top_unit":"龙岗","top_score":10.96,"mean":10.4456,"diff_mean":-0.0356,"rank":8,"all_scores":[{"unit":"龙岗","score":10.96},{"unit":"罗湖","score":10.96},{"unit":"福田","score":10.96},{"unit":"南山","score":10.96},{"unit":"前海","score":10.96},{"unit":"宝安","score":10.94},{"unit":"龙华","score":10.9},{"unit":"坪山","score":10.41},{"unit":"深汕","score":6.96}]},{"board":"市场发展","pingshan":0,"max_possible":4.0,"top_unit":"坪山","top_score":0,"mean":-1.8144,"diff_mean":1.8144,"rank":1,"all_scores":[{"unit":"坪山","score":0},{"unit":"龙岗","score":-0.44},{"unit":"福田","score":-0.58},{"unit":"深汕","score":-1.2},{"unit":"宝安","score":-1.25},{"unit":"前海","score":-2.5},{"unit":"南山","score":-3},{"unit":"罗湖","score":-3.43},{"unit":"龙华","score":-3.93}]},{"board":"加扣分","pingshan":-1,"max_possible":7,"top_unit":"福田","top_score":2.3,"mean":0.1089,"diff_mean":-1.1089,"rank":7,"all_scores":[{"unit":"福田","score":2.3},{"unit":"宝安","score":1.72},{"unit":"龙岗","score":1.56},{"unit":"深汕","score":0},{"unit":"前海","score":-0.7},{"unit":"龙华","score":-0.9},{"unit":"坪山","score":-1},{"unit":"罗湖","score":-1},{"unit":"南山","score":-1}]}],"pingshan_changes":[{"key":"7","name":"1.2邮政分公司利润总额","v4":0,"v6":0,"v7":1.6,"change":1.6,"change67":1.6},{"key":"23","name":"5.1普服时限","v4":5.16,"v6":4.5,"v7":6,"change":1.5,"change67":1.5},{"key":"57","name":"11.财富金融和支付结算","v4":1.4817,"v6":4.276,"v7":5.6929,"change":1.4169,"change67":1.4169},{"key":"22","name":"5.普服时限和满意度","v4":6.16,"v6":5.166,"v7":6.518,"change":1.352,"change67":1.352},{"key":"131","name":"15.2速递物流公司利润总额","v4":0,"v6":0,"v7":1.2,"change":1.2,"change67":1.2},{"key":"68","name":"11.6邮证协同资管产品代销规模","v4":0,"v6":0,"v7":1,"change":1,"change67":1},{"key":"69","name":"11.6.1中邮证券资管产品销量","v4":0,"v6":0,"v7":1,"change":1,"change67":1},{"key":"112","name":"14.2邮银协同信用卡","v4":1,"v6":0,"v7":0.4,"change":0.4,"change67":0.4},{"key":"113","name":"14.2.1代理金融引荐信用卡新增有效客户目标","v4":0,"v6":0,"v7":0.4,"change":0.4,"change67":0.4},{"key":"158","name":"21.运营服务质量","v4":0,"v6":1.7411,"v7":2,"change":0.2589,"change67":0.2589},{"key":"44","name":"8.1网点转型“一点一策”建设运营方案目标完成率","v4":2,"v6":2.67,"v7":2.9,"change":0.23,"change67":0.23},{"key":"64","name":"11.4快捷支付","v4":1.0817,"v6":0.076,"v7":0.2912,"change":0.2152,"change67":0.2152},{"key":"62","name":"11.3商户净增总资产","v4":0,"v6":0,"v7":0.2016,"change":0.2016,"change67":0.2016},{"key":"29","name":"6.高效邮务业务发展","v4":2.44,"v6":-0.05,"v7":0.1,"change":0.15,"change67":0.15},{"key":"36","name":"6.4邮务客户流失率","v4":0.5,"v6":0.35,"v7":0.5,"change":0.15,"change67":0.15},{"key":"137","name":"18.特快时效件及电商标快收入","v4":5.5,"v6":5.89,"v7":6,"change":0.11,"change67":0.11},{"key":"144","name":"18.4电商标快奋斗目标","v4":0,"v6":0.39,"v7":0.5,"change":0.11,"change67":0.11},{"key":"12","name":"2.2邮政公司收入增幅","v4":0.6917,"v6":0.9106,"v7":0.9821,"change":0.0715,"change67":0.0715},{"key":"9","name":"2.邮政公司收入","v4":2.9719,"v6":8.2424,"v7":8.2949,"change":0.0525,"change67":0.0525},{"key":"156","name":"20.3特快超长逾限邮件占比","v4":0.9519,"v6":1.64,"v7":1.69,"change":0.05,"change67":0.05},{"key":"4","name":"1.邮政分公司利润总额","v4":10.5,"v6":10.5,"v7":10.5,"change":0.0,"change67":0.0},{"key":"5","name":"1.1邮政分公司利润总额","v4":10.5,"v6":10.5,"v7":10.5,"change":0.0,"change67":0.0},{"key":"14","name":"2.3金融奋斗目标","v4":0,"v6":2,"v7":2,"change":0,"change67":0},{"key":"16","name":"2.4金融拼搏目标","v4":0,"v6":2,"v7":2,"change":0,"change67":0},{"key":"18","name":"3.邮政公司用户欠费","v4":2,"v6":0,"v7":0,"change":0,"change67":0},{"key":"27","name":"5.3普服检查及质量扣分","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"30","name":"6.1高效邮务业务收入目标完成率","v4":1.84,"v6":0,"v7":0,"change":0,"change67":0},{"key":"32","name":"6.2集邮商品、集邮品毛利率","v4":-0.4,"v6":-0.4,"v7":-0.4,"change":0.0,"change67":0.0},{"key":"34","name":"6.3邮务活跃协议客户","v4":0.5,"v6":0,"v7":0,"change":0,"change67":0},{"key":"38","name":"7.三级物流体系建设及应用 （仅深汕）","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"39","name":"7.1三级物流体系建设","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"41","name":"7.2三级物流体系建设","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"48","name":"8.3中邮保险普惠保险新增保费","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"50","name":"9.新增储蓄存款","v4":-0.05,"v6":0,"v7":0,"change":0,"change67":0},{"key":"51","name":"9.1新增储蓄存款","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"53","name":"9.2每月存款偏离度","v4":-0.05,"v6":-0.05,"v7":-0.05,"change":0.0,"change67":0.0},{"key":"58","name":"11.1非存款AUM","v4":0,"v6":4.2,"v7":4.2,"change":0.0,"change67":0.0},{"key":"60","name":"11.2财险业务","v4":0.4,"v6":0,"v7":0,"change":0,"change67":0},{"key":"66","name":"11.5代理中邮保险长期期交","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"71","name":"11.6.2中邮证券资管产品保有量","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"73","name":"12.金融案件与风险合规","v4":5,"v6":5,"v7":5,"change":0,"change67":0},{"key":"74","name":"12.1金融案件或风险事件","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"76","name":"12.2风险合规问题","v4":2,"v6":2,"v7":2,"change":0,"change67":0},{"key":"78","name":"12.3代理金融风险等级评价","v4":3,"v6":3,"v7":3,"change":0,"change67":0},{"key":"80","name":"代理金融跨年营销活动","v4":2.639,"v6":2.639,"v7":2.639,"change":0.0,"change67":0.0},{"key":"81","name":"收入","v4":1.5,"v6":1.5,"v7":1.5,"change":0.0,"change67":0.0},{"key":"83","name":"AUM","v4":1.139,"v6":1.139,"v7":1.139,"change":0.0,"change67":0.0},{"key":"85","name":"重点客户","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"87","name":"生态金融转型","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"90","name":"13.1农产品交易额","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"91","name":"13.1.1农产品交易额","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"93","name":"13.1.2电商专业总收入目标完成率","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"95","name":"13.2大单品交易额","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"96","name":"13.2.1大单品交易额","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"99","name":"13.2.2广货大单品交易额","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"102","name":"13.3.1线上渠道交易额完成率","v4":1,"v6":0,"v7":0,"change":0,"change67":0},{"key":"110","name":"14.1.2新增邮银协同对公存款余额","v4":0.5,"v6":0,"v7":0,"change":0,"change67":0},{"key":"115","name":"14.2.2重点场景邮银协同信用卡发卡量目标","v4":1,"v6":0,"v7":0,"change":0,"change67":0},{"key":"117","name":"14.3邮银协同手机银行月活跃客户规模","v4":1.1,"v6":1.1,"v7":1.1,"change":0.0,"change67":0.0},{"key":"119","name":"14.4融资E年日均余额","v4":3,"v6":3,"v7":3,"change":0,"change67":0},{"key":"120","name":"14.4.1融资E年日均余额","v4":2,"v6":2,"v7":2,"change":0,"change67":0},{"key":"122","name":"14.4.2融资E年净增额目标","v4":1,"v6":1,"v7":1,"change":0,"change67":0},{"key":"128","name":"15.速递物流公司利润总额","v4":9,"v6":9,"v7":9,"change":0,"change67":0},{"key":"129","name":"15.1速递物流公司利润总额","v4":9,"v6":9,"v7":9,"change":0,"change67":0},{"key":"133","name":"16.速递物流公司收入","v4":4.8,"v6":4.8,"v7":4.8,"change":0.0,"change67":0.0},{"key":"135","name":"17.速递物流公司用户欠费","v4":2,"v6":2.4,"v7":2.4,"change":0.0,"change67":0.0},{"key":"138","name":"18.1特快时效件收入","v4":2,"v6":2,"v7":2,"change":0,"change67":0},{"key":"140","name":"18.2特快时效件收入奋斗目标","v4":1.5,"v6":1.5,"v7":1.5,"change":0.0,"change67":0.0},{"key":"142","name":"18.3特快时效件收入拼搏目标","v4":2,"v6":2,"v7":2,"change":0,"change67":0},{"key":"163","name":"22.1寄递活跃协议客户总数目标完成率","v4":0,"v6":2,"v7":2,"change":0,"change67":0},{"key":"169","name":"时限优化提升专项行动","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"171","name":"创新","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"173","name":"“平安邮政”","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"175","name":"房产效能","v4":0,"v6":0,"v7":0,"change":0,"change67":0},{"key":"10","name":"2.1邮政分公司收入","v4":2.2802,"v6":3.3318,"v7":3.3128,"change":-0.019,"change67":-0.019},{"key":"43","name":"8.网点“七责”目标完成率","v4":2,"v6":2.92,"v7":2.9,"change":-0.02,"change67":-0.02},{"key":"25","name":"5.2普服满意度","v4":1,"v6":0.666,"v7":0.518,"change":-0.148,"change67":-0.148},{"key":"154","name":"20.2省内互寄线路时限达成率","v4":1.7404,"v6":1.7786,"v7":1.62,"change":-0.1586,"change67":-0.1586},{"key":"107","name":"14.1邮银协同对公客户引荐与对公存款新增","v4":1,"v6":0.5,"v7":0.3166,"change":-0.1834,"change67":-0.1834},{"key":"108","name":"14.1.1邮银协同对公客户引荐","v4":0.5,"v6":0.5,"v7":0.3166,"change":-0.1834,"change67":-0.1834},{"key":"20","name":"4.全口径劳动生产率","v4":1.4713,"v6":1.6475,"v7":1.4519,"change":-0.1956,"change67":-0.1956},{"key":"55","name":"10.个人有效客户新增","v4":1.2698,"v6":0.1972,"v7":0,"change":-0.1972,"change67":-0.1972},{"key":"152","name":"20.1省际进/出口线路时限达成率","v4":1.5947,"v6":1.8571,"v7":1.65,"change":-0.2071,"change67":-0.2071},{"key":"46","name":"8.2网点“七责”考核","v4":0,"v6":0.25,"v7":0,"change":-0.25,"change67":-0.25},{"key":"177","name":"管理控制事项扣分","v4":0,"v6":-0.7,"v7":-1,"change":-0.3,"change67":-0.3},{"key":"151","name":"20.寄递产品时限","v4":4.2869,"v6":5.2757,"v7":4.96,"change":-0.3157,"change67":-0.3157},{"key":"162","name":"22.寄递活跃协议客户总数及流失","v4":1.94,"v6":3.94,"v7":3.45,"change":-0.49,"change67":-0.49},{"key":"165","name":"22.2客户流失率","v4":1.94,"v6":1.94,"v7":1.45,"change":-0.49,"change67":-0.49},{"key":"126","name":"全面质量管理年活动","v4":-2.62,"v6":-1.2,"v7":-1.6912,"change":-0.4912,"change67":-0.4912},{"key":"106","name":"14.“1+N”协同","v4":7.1,"v6":5.6,"v7":4.8766,"change":-0.7234,"change67":-0.7234},{"key":"124","name":"14.5总部战略客户收入","v4":1,"v6":1,"v7":0.06,"change":-0.94,"change67":-0.94},{"key":"89","name":"13.农村电商","v4":1,"v6":2,"v7":0,"change":-2,"change67":-2},{"key":"101","name":"13.3渠道协同","v4":1,"v6":2,"v7":0,"change":-2,"change67":-2},{"key":"104","name":"13.3.2常态化站点目标完成率","v4":0,"v6":2,"v7":0,"change":-2,"change67":-2},{"key":"167","name":"“产业集群市场+”重点商贸客户开发成效","v4":0,"v6":2.3,"v7":0,"change":-2.3,"change67":-2.3},{"key":"147","name":"年度总成本压降目标完成率","v4":2,"v6":2.4,"v7":0,"change":-2.4,"change67":-2.4},{"key":"149","name":"年度总成本同比压降率","v4":2,"v6":2.4,"v7":0,"change":-2.4,"change67":-2.4},{"key":"146","name":"19.寄递业务降本增效","v4":4,"v6":4.8,"v7":0,"change":-4.8,"change67":-4.8},{"key":"3","name":"合计","v4":74.8906,"v6":86.3849,"v7":77.892,"change":-8.4929,"change67":-8.4929}],"detail_all":{"3":{"name":"合计","max_score":100.0,"max_display":"100","data":{"4月":{"坪山":74.8906},"5月":{"坪山":82.2922},"6月":{"坪山":86.3849},"7月":{"宝安":74.0968,"龙岗":85.2795,"龙华":62.7701,"坪山":77.892,"罗湖":60.5182,"福田":70.9454,"南山":74.4802,"前海":76.1137,"深汕":82.6387}}},"4":{"name":"1.邮政分公司利润总额","max_score":13.0,"max_display":"7/13","data":{"4月":{"坪山":10.5},"5月":{"坪山":10.5},"6月":{"坪山":10.5},"7月":{"宝安":8.8952,"龙岗":10.5,"龙华":0,"坪山":10.5,"罗湖":10.5,"福田":10.5,"南山":5.8236,"前海":10.5,"深汕":19.5}}},"5":{"name":"1.1邮政分公司利润总额","max_score":13.0,"max_display":"7/13","data":{"4月":{"坪山":10.5},"5月":{"坪山":10.5},"6月":{"坪山":10.5},"7月":{"宝安":8.8952,"龙岗":10.5,"龙华":0,"坪山":10.5,"罗湖":10.5,"福田":10.5,"南山":5.8236,"前海":10.5,"深汕":19.5}}},"7":{"name":"1.2邮政分公司利润总额","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":2,"龙华":0,"坪山":1.6,"罗湖":1.2,"福田":0,"南山":0,"前海":0.8,"深汕":0}}},"9":{"name":"2.邮政公司收入","max_score":8.0,"max_display":"4/8","data":{"4月":{"坪山":2.9719},"5月":{"坪山":8.5207},"6月":{"坪山":8.2424},"7月":{"宝安":8.1202,"龙岗":8.7202,"龙华":7.5244,"坪山":8.2949,"罗湖":8.3739,"福田":8.3315,"南山":8.0828,"前海":8.6582,"深汕":13.1673}}},"10":{"name":"2.1邮政分公司收入","max_score":7.0,"max_display":"3/7","data":{"4月":{"坪山":2.2802},"5月":{"坪山":3.5149},"6月":{"坪山":3.3318},"7月":{"宝安":3.1549,"龙岗":3.5692,"龙华":3.0935,"坪山":3.3128,"罗湖":3.4242,"福田":3.4823,"南山":3.0281,"前海":3.6,"深汕":8.4}}},"12":{"name":"2.2邮政公司收入增幅","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0.6917},"5月":{"坪山":1.0058},"6月":{"坪山":0.9106},"7月":{"宝安":0.9653,"龙岗":1.151,"龙华":0.4308,"坪山":0.9821,"罗湖":0.9496,"福田":0.8493,"南山":1.0547,"前海":1.0582,"深汕":0.7673}}},"14":{"name":"2.3金融奋斗目标","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":2},"6月":{"坪山":2},"7月":{"宝安":2,"龙岗":2,"龙华":2,"坪山":2,"罗湖":2,"福田":2,"南山":2,"前海":2,"深汕":2}}},"16":{"name":"2.4金融拼搏目标","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":2},"6月":{"坪山":2},"7月":{"宝安":2,"龙岗":2,"龙华":2,"坪山":2,"罗湖":2,"福田":2,"南山":2,"前海":2,"深汕":2}}},"18":{"name":"3.邮政公司用户欠费","max_score":4.0,"max_display":"2/4","data":{"4月":{"坪山":2},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"20":{"name":"4.全口径劳动生产率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":1.4713},"5月":{"坪山":1.4808},"6月":{"坪山":1.6475},"7月":{"宝安":0.7944,"龙岗":0.8961,"龙华":0.5773,"坪山":1.4519,"罗湖":0.8015,"福田":0.9435,"南山":1.0335,"前海":1.755,"深汕":1.3429}}},"22":{"name":"5.普服时限和满意度","max_score":7.0,"max_display":"7","data":{"4月":{"坪山":6.16},"5月":{"坪山":6.666},"6月":{"坪山":5.166},"7月":{"宝安":6.518,"龙岗":6.518,"龙华":6.518,"坪山":6.518,"罗湖":6.518,"福田":6.518,"南山":6.518,"前海":6.518,"深汕":6.518}}},"23":{"name":"5.1普服时限","max_score":6.0,"max_display":"6","data":{"4月":{"坪山":5.16},"5月":{"坪山":6},"6月":{"坪山":4.5},"7月":{"宝安":6,"龙岗":6,"龙华":6,"坪山":6,"罗湖":6,"福田":6,"南山":6,"前海":6,"深汕":6}}},"25":{"name":"5.2普服满意度","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1},"5月":{"坪山":0.666},"6月":{"坪山":0.666},"7月":{"宝安":0.518,"龙岗":0.518,"龙华":0.518,"坪山":0.518,"罗湖":0.518,"福田":0.518,"南山":0.518,"前海":0.518,"深汕":0.518}}},"27":{"name":"5.3普服检查及质量扣分","max_score":0,"max_display":"-","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"29":{"name":"6.高效邮务业务发展","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":2.44},"5月":{"坪山":0.1},"6月":{"坪山":-0.05},"7月":{"宝安":2.35,"龙岗":2.1,"龙华":-0.05,"坪山":0.1,"罗湖":3,"福田":2.5,"南山":0.375,"前海":2,"深汕":1.427}}},"30":{"name":"6.1高效邮务业务收入目标完成率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":1.84},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":2,"龙岗":2,"龙华":0,"坪山":0,"罗湖":2,"福田":2,"南山":0,"前海":2,"深汕":0.777}}},"32":{"name":"6.2集邮商品、集邮品毛利率","max_score":0,"max_display":"扣分项","data":{"4月":{"坪山":-0.4},"5月":{"坪山":-0.4},"6月":{"坪山":-0.4},"7月":{"宝安":0,"龙岗":-0.4,"龙华":-0.5,"坪山":-0.4,"罗湖":0,"福田":-0.5,"南山":-0.5,"前海":-0.5,"深汕":0}}},"34":{"name":"6.3邮务活跃协议客户","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0.5},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0.5,"福田":0.5,"南山":0.375,"前海":0,"深汕":0.5}}},"36":{"name":"6.4邮务客户流失率","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0.5},"5月":{"坪山":0.5},"6月":{"坪山":0.35},"7月":{"宝安":0.35,"龙岗":0.5,"龙华":0.45,"坪山":0.5,"罗湖":0.5,"福田":0.5,"南山":0.5,"前海":0.5,"深汕":0.15}}},"38":{"name":"7.三级物流体系建设及应用 （仅深汕）","max_score":5.0,"max_display":"5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"39":{"name":"7.1三级物流体系建设","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"41":{"name":"7.2三级物流体系建设","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"43":{"name":"8.网点“七责”目标完成率","max_score":6.0,"max_display":"6","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2.92},"7月":{"宝安":3.84,"龙岗":3.9,"龙华":4.3,"坪山":2.9,"罗湖":3.4,"福田":4.8,"南山":2.9,"前海":2.9,"深汕":3.5}}},"44":{"name":"8.1网点转型“一点一策”建设运营方案目标完成率","max_score":4.0,"max_display":"4","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2.67},"7月":{"宝安":2.9,"龙岗":2.9,"龙华":3.3,"坪山":2.9,"罗湖":3.4,"福田":3.8,"南山":2.9,"前海":2.9,"深汕":2.5}}},"46":{"name":"8.2网点“七责”考核","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0.25},"7月":{"宝安":0.94,"龙岗":1,"龙华":1,"坪山":0,"罗湖":0,"福田":1,"南山":0,"前海":0,"深汕":1}}},"48":{"name":"8.3中邮保险普惠保险新增保费","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"50":{"name":"9.新增储蓄存款","max_score":5.0,"max_display":"5","data":{"4月":{"坪山":-0.05},"5月":{"坪山":-0.05},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":4.75}}},"51":{"name":"9.1新增储蓄存款","max_score":5.0,"max_display":"5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":4.8}}},"53":{"name":"9.2每月存款偏离度","max_score":0,"max_display":"扣分项","data":{"4月":{"坪山":-0.05},"5月":{"坪山":-0.05},"6月":{"坪山":-0.05},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":-0.05,"罗湖":0,"福田":-0.05,"南山":0,"前海":-0.05,"深汕":-0.05}}},"55":{"name":"10.个人有效客户新增","max_score":4.0,"max_display":"4","data":{"4月":{"坪山":1.2698},"5月":{"坪山":0.152},"6月":{"坪山":0.1972},"7月":{"宝安":4,"龙岗":2.1535,"龙华":4,"坪山":0,"罗湖":0.4278,"福田":4,"南山":3.3778,"前海":1.27,"深汕":0}}},"57":{"name":"11.财富金融和支付结算","max_score":11.0,"max_display":"11","data":{"4月":{"坪山":1.4817},"5月":{"坪山":4.7497},"6月":{"坪山":4.276},"7月":{"宝安":8.6,"龙岗":6.4,"龙华":6.2263,"坪山":5.6929,"罗湖":5.4058,"福田":6.2073,"南山":7.8926,"前海":5.6145,"深汕":6.2}}},"58":{"name":"11.1非存款AUM","max_score":5.0,"max_display":"5","data":{"4月":{"坪山":0},"5月":{"坪山":4.6},"6月":{"坪山":4.2},"7月":{"宝安":5.4,"龙岗":4.2,"龙华":4.2,"坪山":4.2,"罗湖":4.2,"福田":4.6,"南山":5,"前海":4.2,"深汕":4.2}}},"60":{"name":"11.2财险业务","max_score":0.4,"max_display":"0.4","data":{"4月":{"坪山":0.4},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"62":{"name":"11.3商户净增总资产","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0.2016,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"64":{"name":"11.4快捷支付","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1.0817},"5月":{"坪山":0.1497},"6月":{"坪山":0.076},"7月":{"宝安":1.2,"龙岗":1.2,"龙华":1.0263,"坪山":0.2912,"罗湖":0.2058,"福田":0.6073,"南山":0.8926,"前海":0.4145,"深汕":0}}},"66":{"name":"11.5代理中邮保险长期期交","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"68":{"name":"11.6邮证协同资管产品代销规模","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":2,"龙岗":1,"龙华":1,"坪山":1,"罗湖":1,"福田":1,"南山":2,"前海":1,"深汕":2}}},"69":{"name":"11.6.1中邮证券资管产品销量","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":1,"龙岗":1,"龙华":1,"坪山":1,"罗湖":1,"福田":1,"南山":1,"前海":1,"深汕":1}}},"71":{"name":"11.6.2中邮证券资管产品保有量","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":1,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":1,"前海":0,"深汕":1}}},"73":{"name":"12.金融案件与风险合规","max_score":5.0,"max_display":"5","data":{"4月":{"坪山":5},"5月":{"坪山":5},"6月":{"坪山":5},"7月":{"宝安":5,"龙岗":5,"龙华":5,"坪山":5,"罗湖":5,"福田":5,"南山":5,"前海":5,"深汕":5}}},"74":{"name":"12.1金融案件或风险事件","max_score":0,"max_display":"扣5分","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}},"deduction_max":5.0},"76":{"name":"12.2风险合规问题","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2},"7月":{"宝安":2,"龙岗":2,"龙华":2,"坪山":2,"罗湖":2,"福田":2,"南山":2,"前海":2,"深汕":2}}},"78":{"name":"12.3代理金融风险等级评价","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":3},"5月":{"坪山":3},"6月":{"坪山":3},"7月":{"宝安":3,"龙岗":3,"龙华":3,"坪山":3,"罗湖":3,"福田":3,"南山":3,"前海":3,"深汕":3}}},"80":{"name":"代理金融跨年营销活动","max_score":5.0,"max_display":"5","data":{"4月":{"坪山":2.639},"5月":{"坪山":2.639},"6月":{"坪山":2.639},"7月":{"宝安":3.5351,"龙岗":2.4609,"龙华":0.9041,"坪山":2.639,"罗湖":2.8621,"福田":2.7204,"南山":3.1822,"前海":2.638,"深汕":3.7405}}},"81":{"name":"收入","max_score":1.5,"max_display":"1.5","data":{"4月":{"坪山":1.5},"5月":{"坪山":1.5},"6月":{"坪山":1.5},"7月":{"宝安":1.5,"龙岗":1.5,"龙华":0,"坪山":1.5,"罗湖":1.5,"福田":1.5,"南山":1.5,"前海":1.5,"深汕":1.5}}},"83":{"name":"AUM","max_score":2.5,"max_display":"2.5","data":{"4月":{"坪山":1.139},"5月":{"坪山":1.139},"6月":{"坪山":1.139},"7月":{"宝安":2.0351,"龙岗":0.9609,"龙华":0.9041,"坪山":1.139,"罗湖":1.3621,"福田":1.2204,"南山":1.6822,"前海":1.138,"深汕":2.2405}}},"85":{"name":"重点客户","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"87":{"name":"生态金融转型","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"89":{"name":"13.农村电商","max_score":7.0,"max_display":"7","data":{"4月":{"坪山":1},"5月":{"坪山":0},"6月":{"坪山":2},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":2,"前海":0,"深汕":0.333}}},"90":{"name":"13.1农产品交易额","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"91":{"name":"13.1.1农产品交易额","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"93":{"name":"13.1.2电商专业总收入目标完成率","max_score":0,"max_display":"扣1分","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}},"deduction_max":1.0},"95":{"name":"13.2大单品交易额","max_score":0,"max_display":"-","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"96":{"name":"13.2.1大单品交易额","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"99":{"name":"13.2.2广货大单品交易额","max_score":0.3,"max_display":"+0.3","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"101":{"name":"13.3渠道协同","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":1},"5月":{"坪山":0},"6月":{"坪山":2},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":2,"前海":0,"深汕":0.333}}},"102":{"name":"13.3.1线上渠道交易额完成率","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"104":{"name":"13.3.2常态化站点目标完成率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":2},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":2,"前海":0,"深汕":0.333}}},"106":{"name":"14.“1+N”协同","max_score":1.3,"max_display":"1.3","data":{"4月":{"坪山":7.1},"5月":{"坪山":5.6},"6月":{"坪山":5.6},"7月":{"宝安":4.9008,"龙岗":5.2,"龙华":4.6,"坪山":4.8766,"罗湖":4.6,"福田":5.2,"南山":4.7,"前海":4.6,"深汕":6.1}}},"107":{"name":"14.1邮银协同对公客户引荐与对公存款新增","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1},"5月":{"坪山":0.5},"6月":{"坪山":0.5},"7月":{"宝安":0.8008,"龙岗":1.1,"龙华":0.5,"坪山":0.3166,"罗湖":0.5,"福田":1.1,"南山":0.6,"前海":0.5,"深汕":0}}},"108":{"name":"14.1.1邮银协同对公客户引荐","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0.5},"5月":{"坪山":0},"6月":{"坪山":0.5},"7月":{"宝安":0.2008,"龙岗":0.5,"龙华":0.5,"坪山":0.3166,"罗湖":0.5,"福田":0.5,"南山":0,"前海":0.5,"深汕":0}}},"110":{"name":"14.1.2新增邮银协同对公存款余额","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0.5},"5月":{"坪山":0.5},"6月":{"坪山":0},"7月":{"宝安":0.6,"龙岗":0.6,"龙华":0,"坪山":0,"罗湖":0,"福田":0.6,"南山":0.6,"前海":0,"深汕":0}}},"112":{"name":"14.2邮银协同信用卡","max_score":2.5,"max_display":"2/2.5","data":{"4月":{"坪山":1},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0.4,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":1.5}}},"113":{"name":"14.2.1代理金融引荐信用卡新增有效客户目标","max_score":1.5,"max_display":"1/1.5","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0.4,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":1.5}}},"115":{"name":"14.2.2重点场景邮银协同信用卡发卡量目标","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"117":{"name":"14.3邮银协同手机银行月活跃客户规模","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1.1},"5月":{"坪山":1.1},"6月":{"坪山":1.1},"7月":{"宝安":1.1,"龙岗":1.1,"龙华":1.1,"坪山":1.1,"罗湖":1.1,"福田":1.1,"南山":1.1,"前海":1.1,"深汕":1.1}}},"119":{"name":"14.4融资E年日均余额","max_score":2.5,"max_display":"2/2.5","data":{"4月":{"坪山":3},"5月":{"坪山":3},"6月":{"坪山":3},"7月":{"宝安":3,"龙岗":3,"龙华":3,"坪山":3,"罗湖":3,"福田":3,"南山":3,"前海":3,"深汕":3.5}}},"120":{"name":"14.4.1融资E年日均余额","max_score":2.5,"max_display":"2/2.5","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2},"7月":{"宝安":2,"龙岗":2,"龙华":2,"坪山":2,"罗湖":2,"福田":2,"南山":2,"前海":2,"深汕":2.5}}},"122":{"name":"14.4.2融资E年净增额目标","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1},"5月":{"坪山":1},"6月":{"坪山":1},"7月":{"宝安":1,"龙岗":1,"龙华":1,"坪山":1,"罗湖":1,"福田":1,"南山":1,"前海":1,"深汕":1}}},"124":{"name":"14.5总部战略客户收入","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":1},"5月":{"坪山":1},"6月":{"坪山":1},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0.06,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"126":{"name":"全面质量管理年活动","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":-2.62},"5月":{"坪山":-1.4},"6月":{"坪山":-1.2},"7月":{"宝安":-2.9683,"龙岗":-2,"龙华":-3.0262,"坪山":-1.6912,"罗湖":-2.4263,"福田":-2.8804,"南山":-2,"前海":-1.8,"深汕":-1.2}}},"128":{"name":"15.速递物流公司利润总额","max_score":6.0,"max_display":"6","data":{"4月":{"坪山":9},"5月":{"坪山":9},"6月":{"坪山":9},"7月":{"宝安":0,"龙岗":9,"龙华":9,"坪山":9,"罗湖":0,"福田":3.8451,"南山":9,"前海":9,"深汕":0}}},"129":{"name":"15.1速递物流公司利润总额","max_score":6.0,"max_display":"6","data":{"4月":{"坪山":9},"5月":{"坪山":9},"6月":{"坪山":9},"7月":{"宝安":0,"龙岗":9,"龙华":9,"坪山":9,"罗湖":0,"福田":3.8451,"南山":9,"前海":9,"深汕":0}}},"131":{"name":"15.2速递物流公司利润总额","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":2,"龙华":1.6,"坪山":1.2,"罗湖":0,"福田":0,"南山":0.8,"前海":0,"深汕":0}}},"133":{"name":"16.速递物流公司收入","max_score":4.0,"max_display":"4","data":{"4月":{"坪山":4.8},"5月":{"坪山":4.8},"6月":{"坪山":4.8},"7月":{"宝安":4.4777,"龙岗":4.8,"龙华":4.8,"坪山":4.8,"罗湖":2.0955,"福田":0,"南山":4.8,"前海":4.8,"深汕":0}}},"135":{"name":"17.速递物流公司用户欠费","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":2},"5月":{"坪山":2.4},"6月":{"坪山":2.4},"7月":{"宝安":2.4,"龙岗":2.4,"龙华":2.4,"坪山":2.4,"罗湖":0,"福田":0,"南山":1.8356,"前海":2.4,"深汕":0}}},"137":{"name":"18.特快时效件及电商标快收入","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":5.5},"5月":{"坪山":5.64},"6月":{"坪山":5.89},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":6,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0.5}}},"138":{"name":"18.1特快时效件收入","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":2,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"140":{"name":"18.2特快时效件收入奋斗目标","max_score":1.5,"max_display":"1.5","data":{"4月":{"坪山":1.5},"5月":{"坪山":1.5},"6月":{"坪山":1.5},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":1.5,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0.1875}}},"142":{"name":"18.3特快时效件收入拼搏目标","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":2,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0.25}}},"144":{"name":"18.4电商标快奋斗目标","max_score":0.5,"max_display":"0.5","data":{"4月":{"坪山":0},"5月":{"坪山":0.14},"6月":{"坪山":0.39},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0.5,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0.0625}}},"146":{"name":"19.寄递业务降本增效","max_score":4.0,"max_display":"4","data":{"4月":{"坪山":4},"5月":{"坪山":4},"6月":{"坪山":4.8},"7月":{"宝安":0.9713,"龙岗":4.7107,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":4.8}}},"147":{"name":"年度总成本压降目标完成率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2.4},"7月":{"宝安":0.162,"龙岗":2.3107,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":2.4}}},"149":{"name":"年度总成本同比压降率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":2},"5月":{"坪山":2},"6月":{"坪山":2.4},"7月":{"宝安":0.8092,"龙岗":2.4,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":2.4}}},"151":{"name":"20.寄递产品时限","max_score":6.0,"max_display":"6","data":{"4月":{"坪山":4.2869},"5月":{"坪山":5.19},"6月":{"坪山":5.2757},"7月":{"宝安":4.96,"龙岗":4.96,"龙华":4.96,"坪山":4.96,"罗湖":4.96,"福田":4.96,"南山":4.96,"前海":4.96,"深汕":4.96}}},"152":{"name":"20.1省际进/出口线路时限达成率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":1.5947},"5月":{"坪山":1.82},"6月":{"坪山":1.8571},"7月":{"宝安":1.65,"龙岗":1.65,"龙华":1.65,"坪山":1.65,"罗湖":1.65,"福田":1.65,"南山":1.65,"前海":1.65,"深汕":1.65}}},"154":{"name":"20.2省内互寄线路时限达成率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":1.7404},"5月":{"坪山":1.81},"6月":{"坪山":1.7786},"7月":{"宝安":1.62,"龙岗":1.62,"龙华":1.62,"坪山":1.62,"罗湖":1.62,"福田":1.62,"南山":1.62,"前海":1.62,"深汕":1.62}}},"156":{"name":"20.3特快超长逾限邮件占比","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0.9519},"5月":{"坪山":1.56},"6月":{"坪山":1.64},"7月":{"宝安":1.69,"龙岗":1.69,"龙华":1.69,"坪山":1.69,"罗湖":1.69,"福田":1.69,"南山":1.69,"前海":1.69,"深汕":1.69}}},"158":{"name":"21.运营服务质量","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0.354},"6月":{"坪山":1.7411},"7月":{"宝安":1.9823,"龙岗":2,"龙华":1.9863,"坪山":2,"罗湖":2,"福田":2,"南山":1.9991,"前海":2,"深汕":2}}},"162":{"name":"22.寄递活跃协议客户总数及流失","max_score":4.0,"max_display":"4","data":{"4月":{"坪山":1.94},"5月":{"坪山":2.85},"6月":{"坪山":3.94},"7月":{"宝安":4,"龙岗":4,"龙华":3.95,"坪山":3.45,"罗湖":4,"福田":4,"南山":4,"前海":4,"深汕":0}}},"163":{"name":"22.1寄递活跃协议客户总数目标完成率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":0},"5月":{"坪山":0.85},"6月":{"坪山":2},"7月":{"宝安":2,"龙岗":2,"龙华":2,"坪山":2,"罗湖":2,"福田":2,"南山":2,"前海":2,"深汕":0}}},"165":{"name":"22.2客户流失率","max_score":2.0,"max_display":"2","data":{"4月":{"坪山":1.94},"5月":{"坪山":2},"6月":{"坪山":1.94},"7月":{"宝安":2,"龙岗":2,"龙华":1.95,"坪山":1.45,"罗湖":2,"福田":2,"南山":2,"前海":2,"深汕":0}}},"167":{"name":"“产业集群市场+”重点商贸客户开发成效","max_score":3.0,"max_display":"3","data":{"4月":{"坪山":0},"5月":{"坪山":2.3},"6月":{"坪山":2.3},"7月":{"宝安":2.52,"龙岗":2.56,"龙华":0,"坪山":0,"罗湖":0,"福田":3,"南山":0,"前海":0,"深汕":0}}},"169":{"name":"时限优化提升专项行动","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"171":{"name":"创新","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"173":{"name":"“平安邮政”","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"175":{"name":"房产效能","max_score":1.0,"max_display":"1","data":{"4月":{"坪山":0},"5月":{"坪山":0},"6月":{"坪山":0},"7月":{"宝安":0,"龙岗":0,"龙华":0,"坪山":0,"罗湖":0,"福田":0,"南山":0,"前海":0,"深汕":0}}},"177":{"name":"管理控制事项扣分","max_score":0,"max_display":"-","data":{"4月":{"坪山":0},"5月":{"坪山":-0.2},"6月":{"坪山":-0.7},"7月":{"宝安":-0.8,"龙岗":-1,"龙华":-0.9,"坪山":-1,"罗湖":-1,"福田":-0.7,"南山":-1,"前海":-0.7,"深汕":0}}}},"dept_mapping":{"财务组":["5","18","129","131","147","149","4","7"],"市场部":["9","10","12","44","46","48","53","90","91","93","95","96","99","101","102","104","106","124","126","167","171"],"金融部":["14","16","50","51","55","58","60","62","64","66","68","69","71","73","74","76","78","80","81","83","85","87","107","108","110","112","113","115","117","119","120","122","43","57"],"邮务部":["23","25","27","30","32","34","36","22","29","38"],"运管部":["39","41","151","152","154","156","158","162","165","169","89"],"寄递部":["133","137","138","140","142","144","163","128","135","146"],"综合办":["20","173","175","177"]}};
+const C={mix:['#16a34a','#2563eb','#d97706','#ef4444','#7c3aed','#0d9488']};
 
-const boardMax = DATA.board_max;
-const units = DATA.units;
-const boards = DATA.boards;
-const monthsTrend = DATA.months_trend;
-const boardComp = DATA.board_comparison;
-const changes = DATA.pingshan_changes;
-const deptMapping = DATA.dept_mapping || {};
-// Build reverse mapping: indicator key -> department name
-const keyToDept = {};
-Object.entries(deptMapping).forEach(([dept, keys]) => {
-  keys.forEach(k => { keyToDept[k] = dept; });
+function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',j===i)});document.querySelectorAll('.panel').forEach((p,j)=>{p.classList.toggle('active',j===i)});setTimeout(()=>window.dispatchEvent(new Event('resize')),50)}
+
+// ====== TAB 0 ======
+
+// 品类销售分布 → 表格
+let cstb=document.getElementById('catSummaryTable');
+let catTotalRev=0,catTotalQty=0;
+D.cat.labels.forEach((c,i)=>{catTotalRev+=D.cat.rev[i];catTotalQty+=D.cat.qty[i]});
+D.cat.labels.forEach((c,i)=>{
+  const rv=D.cat.rev[i],qt=D.cat.qty[i];
+  const rpct=(rv/totalRev*100).toFixed(1);
+  const qpct=(qt/totalQty*100).toFixed(1);
+  cstb.innerHTML+=`<tr><td><strong>${c}</strong></td><td>¥${Math.round(rv).toLocaleString()}</td><td>${rpct}%</td><td>${qt}件</td><td>${qpct}%</td></tr>`;
 });
-const deptColorsWeak = {
-  '市场部':'#3b82f6','金融部':'#ef4444','邮务部':'#8b5cf6',
-  '运管部':'#06b6d4','寄递部':'#10b981','财务组':'#f59e0b','综合办':'#ec4899'
-};
+document.getElementById('catSummaryFoot').innerHTML=`<tr style="font-weight:700;background:#f0faf3"><td>合计</td><td>¥${Math.round(totalRev).toLocaleString()}</td><td>100%</td><td>${totalQty}件</td><td>100%</td></tr>`;
 
-// ===== TAB SWITCHING =====
-function switchTab(id) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  event.target.classList.add('active');
-}
-function switchSubTab(id) {
-  document.querySelectorAll('#tab-indicators .sub-tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('#tab-indicators .sub-tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sub-' + id).classList.add('active');
-  event.target.classList.add('active');
-}
-function switchSubTab2(id) {
-  document.querySelectorAll('#tab-comparison .sub-tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('#tab-comparison .sub-tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sub-' + id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// ===== CHART: Total Trend (坪山 only, bar chart) =====
-const psTotals = ['4月','5月','6月','7月'].map(m => monthsTrend[m]['坪山'].total);
-const psRanks = ['4月','5月','6月','7月'].map(m => {
-  const allTotals = units.map(u => ({unit: u, total: monthsTrend[m][u].total})).sort((a,b) => b.total - a.total);
-  return allTotals.findIndex(d => d.unit === '坪山') + 1;
-});
-new Chart(document.getElementById('totalTrendChart'), {
-  type: 'bar',
-  data: {
-    labels: ['4月', '5月', '6月', '7月'],
-    datasets: [{
-      data: psTotals,
-      backgroundColor: ['#42a5f5', '#ffa726', '#00e676', '#ab47bc'],
-      borderRadius: 8,
-      barPercentage: 0.5
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false }
-    },
-    scales: {
-      x: { ticks: { color: T.text2, font: { size: 13 } }, grid: { display: false } },
-      y: { ticks: { color: T.text2 }, grid: { color: T.grid }, min: 55, max: 95 }
-    },
-    animation: {
-      onComplete: function() {
-        const chart = this;
-        const ctx = chart.ctx;
-        ctx.font = '600 16px SF Pro Display, sans-serif';
-        ctx.textAlign = 'center';
-        chart.data.datasets[0].data.forEach((val, i) => {
-          const meta = chart.getDatasetMeta(0).data[i];
-          const x = meta.x;
-          const y = meta.y;
-          ctx.fillStyle = T.text;
-          ctx.font = '700 18px SF Pro Display, sans-serif';
-          ctx.fillText(val.toFixed(1), x, y - 28);
-          if (i > 0) {
-            const diff = val - psTotals[i-1];
-            ctx.fillStyle = diff > 0 ? T.green : T.red;
-            ctx.font = '600 13px SF Pro Display, sans-serif';
-            ctx.fillText((diff > 0 ? '↑+' : '↓') + diff.toFixed(2), x, y - 10);
-          } else {
-            ctx.fillStyle = T.text2;
-            ctx.font = '500 12px SF Pro Display, sans-serif';
-            ctx.fillText('—', x, y - 10);
-          }
-          ctx.fillStyle = psRanks[i] === 1 ? T.gold : T.text2;
-          ctx.font = '600 13px SF Pro Display, sans-serif';
-          ctx.fillText('第' + psRanks[i] + '名', x, meta.base + 20);
+// 价格带柱状图 - 带金额标签
+const priceBarPlugin={
+  id:'priceLabels',
+  afterDatasetsDraw(chart){
+    const ctx=chart.ctx;
+    chart.data.datasets.forEach((ds,di)=>{
+      const meta=chart.getDatasetMeta(di);
+      if(!meta.hidden){
+        meta.data.forEach((bar,idx)=>{
+          const val=ds.data[idx];
+          const label=di===0?'¥'+Math.round(val).toLocaleString():Math.round(val)+'件';
+          ctx.save();
+          ctx.font='bold 11px PingFang SC';
+          ctx.fillStyle=di===0?'#16a34a':'#2563eb';
+          ctx.textAlign='center';
+          ctx.fillText(label,bar.x,bar.y-6);
+          ctx.restore();
         });
-      }
-    }
-  }
-});
-
-// ===== CHART: Ranking Bar (with score labels) =====
-const julyTotals = units.map(u => ({ unit: u, total: monthsTrend['7月'][u].total })).sort((a, b) => b.total - a.total);
-new Chart(document.getElementById('rankingChart'), {
-  type: 'bar',
-  data: {
-    labels: julyTotals.map(d => d.unit),
-    datasets: [{
-      data: julyTotals.map(d => d.total),
-      backgroundColor: julyTotals.map(d => d.unit === '坪山' ? '#00e676' : '#37474f'),
-      borderRadius: 6
-    }]
-  },
-  options: {
-    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { enabled: false } },
-    scales: {
-      x: { ticks: { color: T.text2 }, grid: { color: T.grid }, min: 55, max: 95 },
-      y: { ticks: { color: T.text, font: { weight: 'bold' } }, grid: { display: false } }
-    },
-    animation: {
-      onComplete: function() {
-        const chart = this;
-        const ctx = chart.ctx;
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        chart.data.datasets[0].data.forEach((val, i) => {
-          const meta = chart.getDatasetMeta(0).data[i];
-          const x = meta.x + 8;
-          const y = meta.y;
-          ctx.fillStyle = julyTotals[i].unit === '坪山' ? T.psGreen : T.text;
-          ctx.font = '600 14px SF Pro Display, sans-serif';
-          ctx.fillText(val.toFixed(2) + '分', x, y);
-        });
-      }
-    }
-  }
-});
-
-// ===== Board Composition Table =====
-const stackColors = ['#42a5f5','#66bb6a','#ffa726','#ef5350','#ab47bc','#26c6da','#8d6e63','#78909c','#ec407a','#5c6bc0'];
-const boardBaseBonus = [{base:15,bonus:8.7},{base:16,bonus:0.5},{base:25,bonus:7.2},{base:7,bonus:1.3},{base:7,bonus:4.3},{base:14,bonus:8.2},{base:4,bonus:0.8},{base:8,bonus:0},{base:4,bonus:0},{base:0,bonus:7}];
-const psTotal7 = monthsTrend['7月']['坪山'].total;
-const compBody = document.getElementById('boardCompBody');
-boards.forEach((b, i) => {
-  const bb = boardBaseBonus[i];
-  const score = monthsTrend['7月']['坪山'].boards[b];
-  const pct = (score / psTotal7 * 100).toFixed(1);
-  const rate = bb.base + bb.bonus > 0 ? (score / (bb.base + bb.bonus) * 100).toFixed(0) : '-';
-  const rateNum = parseFloat(rate);
-  const rateColor = rateNum >= 80 ? 'var(--green)' : (rateNum >= 50 ? 'var(--yellow)' : 'var(--red)');
-  compBody.innerHTML += `<tr>
-    <td style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:3px;background:${stackColors[i]};display:inline-block"></span>${b}</td>
-    <td>${bb.base} + ${bb.bonus} = <strong>${(bb.base + bb.bonus).toFixed(1)}</strong></td>
-    <td style="font-weight:700">${score.toFixed(2)}</td>
-    <td><span style="color:${rateColor}">${rate}%</span></td>
-    <td><span style="color:var(--text2)">${pct}%</span></td>
-  </tr>`;
-});
-const totalBaseSum = boardBaseBonus.reduce((s,b) => s + b.base, 0);
-const totalBonusSum = boardBaseBonus.reduce((s,b) => s + b.bonus, 0);
-const totalMaxSum = totalBaseSum + totalBonusSum;
-const totalRate = (psTotal7 / totalMaxSum * 100).toFixed(0);
-compBody.innerHTML += `<tr style="border-top:2px solid var(--border);font-weight:700;color:var(--gold)">
-  <td>合计</td>
-  <td>${totalBaseSum} + ${totalBonusSum.toFixed(1)} = <strong>${totalMaxSum.toFixed(1)}</strong></td>
-  <td style="color:var(--gold)">${psTotal7.toFixed(2)}</td>
-  <td><span style="color:var(--gold)">${totalRate}%</span></td>
-  <td>100%</td>
-</tr>`;
-
-// ===== Board Rate Cards =====
-const rateGrid = document.getElementById('boardRateGrid');
-boardComp.forEach((bc, i) => {
-  const rate = bc.max_possible > 0 ? (bc.pingshan / bc.max_possible * 100) : 0;
-  const cls = rate >= 80 ? 'rate-high' : (rate >= 50 ? 'rate-mid' : 'rate-low');
-  const badgeCls = rate >= 80 ? 'badge-high' : (rate >= 50 ? 'badge-mid' : 'badge-low');
-  const badgeText = rate >= 80 ? '优秀' : (rate >= 50 ? '待提升' : '薄弱');
-  rateGrid.innerHTML += `<div class="board-card ${cls}">
-    <div class="name">${bc.board}</div>
-    <div class="score">${bc.pingshan.toFixed(1)}<span style="font-size:13px;color:var(--text2)">/${bc.max_possible}</span></div>
-    <div class="detail">排名 ${bc.rank}/9 · vs均值 ${bc.diff_mean > 0 ? '+' : ''}${bc.diff_mean.toFixed(1)}</div>
-    <span class="badge ${badgeCls}">${badgeText} ${rate.toFixed(0)}%</span>
-  </div>`;
-});
-
-// ===== CHART: Radar =====
-// Custom plugin to draw score + rate labels near data points
-const radarLabelPlugin = {
-  id: 'radarLabels',
-  afterDatasetsDraw(chart) {
-    const meta = chart.getDatasetMeta(0);
-    if (!meta || !meta.data) return;
-    const ctx = chart.ctx;
-    ctx.save();
-    ctx.font = 'bold 11px sans-serif';
-    ctx.textAlign = 'center';
-    meta.data.forEach((point, i) => {
-      const bc = boardComp[i];
-      const score = bc.pingshan.toFixed(1);
-      const rate = bc.max_possible > 0 ? (bc.pingshan / bc.max_possible * 100).toFixed(0) : 0;
-      const x = point.x;
-      const y = point.y;
-      // Position label slightly outward from the point
-      const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
-      const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
-      const dx = x - centerX;
-      const dy = y - centerY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const offset = 18;
-      const lx = x + (dx / dist) * offset;
-      const ly = y + (dy / dist) * offset;
-      // Background
-      const text = `${score}分 ${rate}%`;
-      const tw = ctx.measureText(text).width;
-      ctx.fillStyle = 'rgba(30,30,30,0.85)';
-      ctx.beginPath();
-      ctx.roundRect(lx - tw / 2 - 4, ly - 8, tw + 8, 16, 3);
-      ctx.fill();
-      // Text
-      ctx.fillStyle = rate >= 80 ? '#4caf50' : (rate >= 50 ? '#ffd600' : '#ff5252');
-      ctx.fillText(text, lx, ly + 4);
-    });
-    ctx.restore();
-  }
-};
-new Chart(document.getElementById('radarChart'), {
-  type: 'radar',
-  data: {
-    labels: boards.map(b => b.length > 6 ? b.substring(0,6)+'…' : b),
-    datasets: [{
-      label: '坪山得分率%',
-      data: boardComp.map(bc => bc.max_possible > 0 ? (bc.pingshan / bc.max_possible * 100).toFixed(1) : 0),
-      borderColor: '#00e676',
-      backgroundColor: 'rgba(0,230,118,.15)',
-      pointBackgroundColor: '#00e676',
-      pointRadius: 4,
-      borderWidth: 2
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    layout: { padding: 30 },
-    plugins: { legend: { labels: { color: T.text2 } } },
-    scales: { r: { ticks: { color: T.text2, backdropColor: 'transparent' }, grid: { color: T.grid }, angleLines: { color: T.grid }, pointLabels: { color: T.text, font: { size: 11 } }, min: 0, max: 110 } }
-  },
-  plugins: [radarLabelPlugin]
-});
-
-// ===== Detail Table with hierarchy =====
-const detailData = DATA.detail_all;
-const tbody = document.getElementById('detailTableBody');
-const parentKeys = new Set();
-const subKeys = new Set();
-Object.entries(detailData).forEach(([col, info]) => {
-  const name = info.name;
-  if (/^\d+\.\d/.test(name)) { subKeys.add(col); }
-  else if (/^\d+\.[^\d]/.test(name)) { parentKeys.add(col); }
-});
-const childrenMap = {};
-parentKeys.forEach(pk => { childrenMap[pk] = []; });
-subKeys.forEach(sk => {
-  const name = detailData[sk].name;
-  const m = name.match(/^(\d+)\./);
-  if (m) {
-    const prefix = m[1] + '.';
-    parentKeys.forEach(pk => {
-      if (detailData[pk].name.startsWith(prefix) && !subKeys.has(pk)) {
-        childrenMap[pk].push(sk);
       }
     });
   }
-});
-Object.entries(detailData).forEach(([col, info]) => {
-  const maxS = info.max_score;
-  const v4 = info.data['4月']?.['坪山'] || 0;
-  const v5 = info.data['5月']?.['坪山'] || 0;
-  const v6 = info.data['6月']?.['坪山'] || 0;
-  const v7 = info.data['7月']?.['坪山'] || 0;
-  const chg = v7 - v4;
-  const chg67 = v7 - v6;
-  let rateDisplay, rateColor;
-  if (maxS > 0) {
-    const rate = (v7 / maxS * 100).toFixed(0);
-    rateDisplay = `${rate}%`;
-    rateColor = rate >= 80 ? 'var(--green)' : (rate >= 50 ? 'var(--yellow)' : 'var(--red)');
-  } else if (v7 !== 0) {
-    rateDisplay = v7 > 0 ? `+${v7.toFixed(2)}` : v7.toFixed(2);
-    rateColor = v7 > 0 ? 'var(--green)' : 'var(--red)';
-  } else {
-    rateDisplay = '-';
-    rateColor = '#607d8b';
-  }
-  const chgClass = chg > 0.01 ? 'change-up' : (chg < -0.01 ? 'change-down' : '');
-  const chgText = chg > 0.01 ? `↑${chg.toFixed(2)}` : (chg < -0.01 ? `↓${Math.abs(chg).toFixed(2)}` : '-');
-  const chg67Class = chg67 > 0.01 ? 'change-up' : (chg67 < -0.01 ? 'change-down' : '');
-  const chg67Text = chg67 > 0.01 ? `↑${chg67.toFixed(2)}` : (chg67 < -0.01 ? `↓${Math.abs(chg67).toFixed(2)}` : '-');
-  const isParent = parentKeys.has(col);
-  const isSub = subKeys.has(col);
-  let rowStyle = '', nameStyle = '';
-  if (isParent) {
-    rowStyle = ' style="background:rgba(0,188,212,0.06)"';
-    nameStyle = 'font-weight:600;color:#4dd0e1';
-  } else if (isSub) {
-    nameStyle = 'padding-left:14px;font-size:11px;color:var(--text2)';
-  }
-  const displayName = info.name.length > 38 ? info.name.substring(0, 38) + '…' : info.name;
-  const maxDisplay = info.max_display || (maxS > 0 ? maxS : '-');
-  tbody.innerHTML += `<tr${rowStyle}>
-    <td style="${nameStyle}">${displayName}</td>
-    <td>${maxDisplay}</td>
-    <td>${v4.toFixed(2)}</td>
-    <td>${v5.toFixed(2)}</td>
-    <td>${v6.toFixed(2)}</td>
-    <td>${v7.toFixed(2)}</td>
-    <td class="${chg67Class}">${chg67Text}</td>
-    <td style="color:${rateColor}">${rateDisplay}</td>
-  </tr>`;
-});
-
-// ===== Highlights =====
-// Helper: build row HTML for improvements/declines tables
-function buildChangeRow(col, c, detailData, keyToDept, deptColorsWeak) {
-  const info = detailData[col];
-  const ms = info ? info.max_score : 0;
-  const maxDisplay = info ? (info.max_display || ms) : 0;
-  const v6 = c.v7 !== undefined ? c.v7 : 0;
-  const rate = ms > 0 ? (v6 / ms * 100).toFixed(2) : '-';
-  const rateNum = ms > 0 ? v6 / ms : 0;
-  const rateColor = rateNum >= 0.8 ? 'var(--green)' : (rateNum >= 0.5 ? 'var(--yellow)' : 'var(--red)');
-  const chgAbs = Math.abs(c.change67).toFixed(2);
-  const isUp = c.change67 > 0;
-  const chgClass = isUp ? 'change-up' : 'change-down';
-  const chgText = isUp ? `↑${chgAbs}` : `↓${chgAbs}`;
-  const dept = keyToDept[col] || '-';
-  const dc = deptColorsWeak[dept] || 'var(--text2)';
-  const displayName = c.name.length > 22 ? c.name.substring(0, 22) + '…' : c.name;
-  return `<td style="font-weight:500" title="${c.name}">${displayName}</td>
-    <td>${maxDisplay}</td>
-    <td style="font-weight:700;color:var(--ps-highlight)">${v6.toFixed(2)}</td>
-    <td style="color:${rateColor};font-weight:600">${rate}%</td>
-    <td class="${chgClass}" style="font-weight:600">${chgText}</td>
-    <td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;background:${dc}22;color:${dc};border:1px solid ${dc}40">${dept}</span></td>`;
-}
-
-// 进步最大 TOP5
-const topImpHead = document.getElementById('topImpHead');
-const topImpBody = document.getElementById('topImprovementsBody');
-topImpHead.innerHTML = '<th>指标名称</th><th>满分</th><th>7月得分</th><th>得分率</th><th>6→7月变化</th><th>责任单位</th>';
-const improvements = changes.filter(c => c.change > 0).slice(0, 5);
-improvements.forEach(c => {
-  topImpBody.innerHTML += `<tr>${buildChangeRow(c.key, c, detailData, keyToDept, deptColorsWeak)}</tr>`;
-});
-
-// 退步最大 TOP5
-const topDecHead = document.getElementById('topDecHead');
-const topDecBody = document.getElementById('topDeclinesBody');
-topDecHead.innerHTML = '<th>指标名称</th><th>满分</th><th>7月得分</th><th>得分率</th><th>6→7月变化</th><th>责任单位</th>';
-const declines = changes.filter(c => c.change < 0).slice(0, 5);
-if (declines.length > 0) {
-  declines.forEach(c => {
-    topDecBody.innerHTML += `<tr>${buildChangeRow(c.key, c, detailData, keyToDept, deptColorsWeak)}</tr>`;
-  });
-} else {
-  topDecBody.innerHTML = '<tr><td colspan="6" style="color:var(--text2)">暂无退步指标</td></tr>';
-}
-
-// 持续零分/低分隐患指标
-const zeroHead = document.getElementById('zeroHead');
-const zeroBody = document.getElementById('zeroBody');
-zeroHead.innerHTML = '<th>指标名称</th><th>原因</th><th>责任单位</th>';
-const zeroItems = Object.entries(detailData).filter(([col, info]) => {
-  if (typeof info.max_score !== 'number' || info.max_score <= 0) return false;
-  const v4 = info.data['4月']?.['坪山'] || 0;
-  const v5 = info.data['5月']?.['坪山'] || 0;
-  const v6 = info.data['6月']?.['坪山'] || 0;
-  const v7 = info.data['7月']?.['坪山'] || 0;
-  return Math.abs(v5) < 0.01 && Math.abs(v6) < 0.01 && Math.abs(v7) < 0.01;
-});
-if (zeroItems.length > 0) {
-  zeroItems.forEach(([col, info]) => {
-    const dept = keyToDept[col] || '-';
-    const dc = deptColorsWeak[dept] || 'var(--text2)';
-    const reason = `满分${info.max_score}，连续3月(5-7月)≈0分`;
-    const displayName = info.name.length > 28 ? info.name.substring(0, 28) + '…' : info.name;
-    zeroBody.innerHTML += `<tr>
-      <td style="font-weight:500" title="${info.name}"><span style="color:var(--red)">●</span> ${displayName}</td>
-      <td style="color:var(--text2)">${reason}</td>
-      <td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;background:${dc}22;color:${dc};border:1px solid ${dc}40">${dept}</span></td>
-    </tr>`;
-  });
-} else {
-  zeroBody.innerHTML = '<tr><td colspan="3" style="color:var(--text2)">暂无连续3月零分指标</td></tr>';
-}
-
-// ===== Comparison Table =====
-const compareBody = document.getElementById('compareTableBody');
-boardComp.forEach(bc => {
-  const rate = bc.max_possible > 0 ? (bc.pingshan / bc.max_possible * 100).toFixed(0) : 0;
-  const rankCls = bc.rank === 1 ? 'rank-1' : (bc.rank >= 7 ? 'rank-bottom' : '');
-  const diffCls = bc.diff_mean > 0 ? 'change-up' : 'change-down';
-  compareBody.innerHTML += `<tr class="${bc.rank === 1 ? 'ps-row' : ''}">
-    <td>${bc.board}</td>
-    <td>${bc.max_possible}</td>
-    <td style="font-weight:700">${bc.pingshan.toFixed(2)}</td>
-    <td>${bc.top_score.toFixed(2)} (${bc.top_unit})</td>
-    <td>${bc.mean.toFixed(2)}</td>
-    <td class="${diffCls}">${bc.diff_mean > 0 ? '+' : ''}${bc.diff_mean.toFixed(2)}</td>
-    <td class="${rankCls}">${bc.rank}/9</td>
-    <td>${rate}%</td>
-  </tr>`;
-});
-
-// ===== TABLE: Board Rank =====
-const rankBody = document.getElementById('rankTableBody');
-boardComp.forEach((bc, i) => {
-  const rate = (bc.pingshan / bc.max_possible * 100).toFixed(0);
-  const rankCls = bc.rank === 1 ? 'rank-1' : (bc.rank >= 7 ? 'rank-bottom' : '');
-  const rateColor = rate >= 80 ? 'var(--green)' : (rate >= 50 ? 'var(--yellow)' : 'var(--red)');
-  rankBody.innerHTML += `<tr class="${bc.rank === 1 ? 'ps-row' : ''}">
-    <td>${bc.board}</td>
-    <td>${bc.max_possible}</td>
-    <td style="font-weight:700">${bc.pingshan.toFixed(2)}</td>
-    <td class="${rankCls}">${bc.rank}/9</td>
-    <td style="color:${rateColor}">${rate}%</td>
-  </tr>`;
-});
-
-// ===== Heatmap =====
-const heatmapDiv = document.getElementById('heatmapContainer');
-let heatHTML = '<table><thead><tr><th>区局</th>';
-boardComp.forEach(bc => { heatHTML += `<th>${bc.board.substring(0,4)}</th>`; });
-heatHTML += '<th>总分</th></tr></thead><tbody>';
-units.forEach(u => {
-  const total = monthsTrend['7月'][u].total;
-  const isPS = u === '坪山';
-  heatHTML += `<tr${isPS ? ' style="background:rgba(0,230,118,.1)"' : ''}>`;
-  heatHTML += `<td${isPS ? ' style="color:var(--ps-highlight)"' : ''}>${u}</td>`;
-  boards.forEach((b, i) => {
-    const score = monthsTrend['7月'][u].boards[b];
-    const maxP = boardMax[i];
-    const rate = maxP > 0 ? score / maxP : 0;
-    let bg, textColor = '#fff';
-    if (rate >= 0.8) bg = `rgba(0,200,83,${0.3 + rate * 0.5})`;
-    else if (rate >= 0.5) bg = `rgba(255,193,7,${0.2 + rate * 0.3})`;
-    else bg = `rgba(255,82,82,${0.2 + (1-rate) * 0.3})`;
-    heatHTML += `<td style="background:${bg};color:${textColor};font-weight:${rate>=0.8?'700':'400'}">${score.toFixed(1)}</td>`;
-  });
-  heatHTML += `<td style="font-weight:700;${isPS?'color:var(--ps-highlight)':''}">${total.toFixed(1)}</td>`;
-  heatHTML += '</tr>';
-});
-heatHTML += '</tbody></table>';
-heatmapDiv.innerHTML = heatHTML;
-
-// ===== Gap Analysis =====
-const advDiv = document.getElementById('advantageIndicators');
-const chaseDiv = document.getElementById('chaseIndicators');
-boardComp.filter(bc => bc.rank <= 3).forEach(bc => {
-  advDiv.innerHTML += `<div class="item"><span>${bc.board}</span><span class="change-up">第${bc.rank}名 · +${bc.diff_mean > 0 ? bc.diff_mean.toFixed(1) : bc.pingshan.toFixed(1)}</span></div>`;
-});
-boardComp.filter(bc => bc.rank >= 6).forEach(bc => {
-  chaseDiv.innerHTML += `<div class="item"><span>${bc.board}</span><span class="change-down">第${bc.rank}名 · vs第1差${(bc.top_score - bc.pingshan).toFixed(1)}</span></div>`;
-});
-
-// ===== Weak Sub-Indicators (得分率最低的二级指标 - 表格形式) =====
-const weakHead = document.getElementById('weakSubHead');
-const weakBody = document.getElementById('weakSubBody');
-// keyToDept and deptColorsWeak already defined at top
-weakHead.innerHTML = '<th>指标名称</th><th>满分</th><th>坪山得分</th><th>得分率</th><th>全市排名</th><th>vs第1名</th><th>责任部门</th>';
-const weakItems = Object.entries(detailData)
-  .filter(([col, info]) => subKeys.has(col) && info.max_score > 0)
-  .map(([col, info]) => {
-    const v6 = info.data['7月']?.['坪山'] || 0;
-    const rate = info.max_score > 0 ? v6 / info.max_score : 0;
-    // Compute rank
-    const scores = units.map(u => ({ unit: u, score: info.data['7月']?.[u] || 0 }));
-    const sorted = [...scores].sort((a, b) => b.score - a.score);
-    const psRank = sorted.findIndex(s => s.unit === '坪山') + 1;
-    const topScore = sorted[0].score;
-    const gap = topScore - v6;
-    const dept = keyToDept[col] || '-';
-    return { col, name: info.name, max: info.max_score, maxDisplay: info.max_display || info.max_score, v6, rate, psRank, topScore, gap, dept };
-  })
-  .sort((a, b) => a.rate - b.rate)
-  .slice(0, 10);
-weakItems.forEach(item => {
-  const ratePct = (item.rate * 100).toFixed(2);
-  const rateColor = item.rate >= 0.8 ? 'var(--green)' : (item.rate >= 0.5 ? 'var(--yellow)' : 'var(--red)');
-  const rankCls = item.psRank <= 3 ? 'rank-1' : (item.psRank >= 7 ? 'rank-bottom' : '');
-  const gapStr = item.gap > 0.001 ? `-${item.gap.toFixed(2)}` : '0';
-  const gapColor = item.gap > 0.001 ? 'var(--red)' : 'var(--text2)';
-  const dc = deptColorsWeak[item.dept] || 'var(--text2)';
-  const displayName = item.name.length > 24 ? item.name.substring(0, 24) + '…' : item.name;
-  let rowHtml = `<td style="font-weight:500" title="${item.name}">${displayName}</td>`;
-  rowHtml += `<td>${item.maxDisplay}</td>`;
-  rowHtml += `<td style="font-weight:700;color:var(--ps-highlight)">${item.v6.toFixed(2)}</td>`;
-  rowHtml += `<td style="color:${rateColor};font-weight:600">${ratePct}%</td>`;
-  rowHtml += `<td class="${rankCls}">${item.psRank}/9</td>`;
-  rowHtml += `<td style="color:${gapColor};font-weight:600">${gapStr}</td>`;
-  rowHtml += `<td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;background:${dc}22;color:${dc};border:1px solid ${dc}40">${item.dept}</span></td>`;
-  weakBody.innerHTML += `<tr>${rowHtml}</tr>`;
-});
-
-// ===== Sub-Indicator Comparison Table (二级指标横向对比) =====
-const scHead = document.getElementById('subCompareHead');
-const scBody = document.getElementById('subCompareBody');
-// 坪山排第一，其他区局按原顺序
-const unitsWithPsFirst = ['坪山', ...units.filter(u => u !== '坪山')];
-let scHeadHtml = '<th>指标</th><th>责任部门</th><th>满分</th>';
-unitsWithPsFirst.forEach(u => { scHeadHtml += `<th>${u}</th>`; });
-scHeadHtml += '<th>排名</th><th>得分率</th>';
-scHead.innerHTML = scHeadHtml;
-Object.entries(detailData).forEach(([col, info]) => {
-  if (!subKeys.has(col)) return;
-  const maxS = info.max_score;
-  const maxDisplay = info.max_display || (maxS > 0 ? maxS : '-');
-  const scores = unitsWithPsFirst.map(u => ({ unit: u, score: info.data['7月']?.[u] || 0 }));
-  const sorted = [...scores].sort((a, b) => b.score - a.score);
-  const psRank = sorted.findIndex(s => s.unit === '坪山') + 1;
-  const psScore = scores.find(s => s.unit === '坪山').score;
-  const ratePct = maxS > 0 ? (psScore / maxS * 100).toFixed(2) + '%' : '-';
-  const rateNum = maxS > 0 ? psScore / maxS : 0;
-  const rateColor = rateNum >= 0.8 ? 'var(--green)' : (rateNum >= 0.5 ? 'var(--yellow)' : 'var(--red)');
-  const rankCls = psRank <= 3 ? 'rank-1' : (psRank >= 7 ? 'rank-bottom' : '');
-  const displayName = info.name.length > 28 ? info.name.substring(0, 28) + '…' : info.name;
-  const dept = keyToDept[col] || '-';
-  const dc = (typeof deptColorsWeak !== 'undefined' ? deptColorsWeak[dept] : null) || 'var(--text2)';
-  let rowHtml = `<td style="font-weight:500">${displayName}</td>`;
-  rowHtml += `<td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;background:${dc}22;color:${dc};border:1px solid ${dc}40">${dept}</span></td>`;
-  rowHtml += `<td>${maxDisplay}</td>`;
-  scores.forEach(s => {
-    const isPs = s.unit === '坪山';
-    const cellStyle = isPs ? ' style="font-weight:700;color:var(--ps-highlight)"' : '';
-    rowHtml += `<td${cellStyle}>${s.score.toFixed(2)}</td>`;
-  });
-  rowHtml += `<td class="${rankCls}">${psRank}/9</td>`;
-  rowHtml += `<td style="color:${rateColor}">${ratePct}</td>`;
-  scBody.innerHTML += `<tr>${rowHtml}</tr>`;
-});
-
-// ===== Board Trend Table =====
-const btBody = document.getElementById('boardTrendBody');
-boards.forEach((b, i) => {
-  const maxV = boardMax[i];
-  const v4 = monthsTrend['4月']['坪山'].boards[b];
-  const v5 = monthsTrend['5月']['坪山'].boards[b];
-  const v6 = monthsTrend['6月']['坪山'].boards[b];
-  const v7 = monthsTrend['7月']['坪山'].boards[b];
-  const chg = v7 - v4;
-  const rate = (v7 / maxV * 100).toFixed(0);
-  const trendCls = chg > 0.01 ? 'change-up' : (chg < -0.01 ? 'change-down' : '');
-  const trendTxt = chg > 0.01 ? '↑' + chg.toFixed(2) : (chg < -0.01 ? '↓' + Math.abs(chg).toFixed(2) : '→');
-  const rateColor = rate >= 80 ? 'var(--green)' : (rate >= 50 ? 'var(--yellow)' : 'var(--red)');
-  btBody.innerHTML += `<tr>
-    <td style="font-weight:500">${b}</td>
-    <td>${maxV}</td>
-    <td>${v4.toFixed(2)}</td>
-    <td>${v5.toFixed(2)}</td>
-    <td>${v6.toFixed(2)}</td>
-    <td>${v7.toFixed(2)}</td>
-    <td class="${trendCls}">${trendTxt}</td>
-    <td style="color:${rateColor}">${rate}%</td>
-  </tr>`;
-});
-
-// ===== TABLE: Gap (坪山 vs 各区局分差，含坪山列) =====
-const gapHead = document.getElementById('gapTableHead');
-const gapBody = document.getElementById('gapTableBody');
-let headHtml = '<th>板块</th>';
-units.forEach(u => { headHtml += `<th>${u}</th>`; });
-gapHead.innerHTML = headHtml;
-
-boardComp.forEach(bc => {
-  const psScore = bc.pingshan;
-  let rowHtml = `<td style="font-weight:500">${bc.board}</td>`;
-  units.forEach(u => {
-    if (u === '坪山') {
-      rowHtml += `<td style="color:var(--text2);font-weight:600">0</td>`;
-    } else {
-      const otherScore = monthsTrend['7月'][u].boards[bc.board];
-      const diff = (psScore - otherScore).toFixed(2);
-      const color = diff > 0.01 ? 'var(--green)' : (diff < -0.01 ? 'var(--red)' : 'var(--text2)');
-      const display = diff > 0.01 ? `+${diff}` : diff;
-      rowHtml += `<td style="color:${color}">${display}</td>`;
-    }
-  });
-  gapBody.innerHTML += `<tr>${rowHtml}</tr>`;
-});
-
-// ===== TAB 4: 各部门职责 =====
-const deptColors = {
-  '财务组': '#f59e0b',
-  '市场部': '#3b82f6',
-  '金融部': '#ef4444',
-  '邮务部': '#8b5cf6',
-  '运管部': '#06b6d4',
-  '寄递部': '#10b981',
-  '综合办': '#ec4899'
 };
-const deptOrder = ['市场部','金融部','邮务部','运管部','寄递部','财务组','综合办'];
+new Chart(document.getElementById('priceBar'),{type:'bar',data:{labels:D.price.labels,datasets:[{label:'销售额',data:D.price.rev,backgroundColor:'rgba(22,163,74,.7)',borderRadius:6,yAxisID:'y'},{label:'销量',data:D.price.qty,backgroundColor:'rgba(37,99,235,.7)',borderRadius:6,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label==='销售额'?'¥'+Math.round(c.parsed.y).toLocaleString():Math.round(c.parsed.y)+'件'}}},scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v).toLocaleString()}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'件'}}}}},[priceBarPlugin]);
 
-// Render department tags
-const tagContainer = document.getElementById('deptTagContainer');
-let activeDept = null;
-deptOrder.forEach(dept => {
-  const keys = deptMapping[dept] || [];
-  const btn = document.createElement('button');
-  btn.className = 'sub-tab-btn';
-  btn.style.cssText = `padding:8px 16px;font-size:13px;border-color:${deptColors[dept]}40;`;
-  btn.innerHTML = `${dept} <span style="opacity:0.6;font-size:11px;margin-left:4px;">(${keys.length}项)</span>`;
-  btn.onclick = () => showDept(dept);
-  tagContainer.appendChild(btn);
+// 工作日vs周末 → 两张独立柱状图
+new Chart(document.getElementById('weekdayRevChart'),{type:'bar',data:{labels:['工作日','周末'],datasets:[{data:[3680.16,3386.47],backgroundColor:['rgba(22,163,74,.7)','rgba(37,99,235,.7)'],borderRadius:8,barPercentage:0.5}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:28}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0f0'},beginAtZero:true,ticks:{callback:v=>'¥'+Math.round(v).toLocaleString()}}}},plugins:[{id:'wdRevLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);const ds=chart.data.datasets[0].data;meta.data.forEach((bar,idx)=>{const v=ds[idx];ctx.save();ctx.font='bold 12px PingFang SC';ctx.fillStyle=idx===0?'#16a34a':'#2563eb';ctx.textAlign='center';ctx.fillText('¥'+(isNaN(v)?'--':Math.round(v).toLocaleString()),bar.x,bar.y-8);ctx.restore()})}}]});
+
+new Chart(document.getElementById('weekdayOrdChart'),{type:'bar',data:{labels:['工作日','周末'],datasets:[{data:[108.0,113.2],backgroundColor:['rgba(22,163,74,.7)','rgba(37,99,235,.7)'],borderRadius:8,barPercentage:0.5}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:28}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(isNaN(c.parsed.y)?'--':Math.round(c.parsed.y)+'单')}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0f0'},beginAtZero:true,ticks:{callback:v=>v+'单'}}}},plugins:[{id:'wdOrdLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);const ds=chart.data.datasets[0].data;meta.data.forEach((bar,idx)=>{const v=ds[idx];ctx.save();ctx.font='bold 12px PingFang SC';ctx.fillStyle=idx===0?'#16a34a':'#2563eb';ctx.textAlign='center';ctx.fillText((isNaN(v)?'--':Math.round(v)+'单'),bar.x,bar.y-8);ctx.restore()})}}]});
+
+// ====== TAB 1 ======
+
+// 每日销售额趋势 → 过去14天
+const last14Idx=[0,1,2,3,4,5,7,8,9,10,11,12,14,15,16,17,18,19,21];
+const last14Labels=last14Idx.map(i=>D.daily.labels[i].replace('\n',''));
+const last14Rev=last14Idx.map(i=>D.daily.rev[i]);
+new Chart(document.getElementById('dailyRevChart'),{type:'line',data:{labels:last14Labels,datasets:[{label:'销售额',data:last14Rev,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.1)',fill:true,tension:.3,pointBackgroundColor:'#16a34a',pointRadius:5,pointHoverRadius:7}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}},datalabels:false},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v).toLocaleString()},beginAtZero:false}}},plugins:[{id:'revDataLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((pt,idx)=>{ctx.save();ctx.font='bold 10px PingFang SC';ctx.fillStyle='#16a34a';ctx.textAlign='center';ctx.fillText('¥'+Math.round(last14Rev[idx]).toLocaleString(),pt.x,pt.y-10);ctx.restore()})}}]});
+
+// 每日订单数 & 销量 - 过去14天曲线图
+const last14Ord=last14Idx.map(i=>D.daily.ord[i]);
+const last14Qty=last14Idx.map(i=>D.daily.qty[i]);
+new Chart(document.getElementById('dailyOrdChart'),{type:'line',data:{labels:last14Labels,datasets:[{label:'订单数',data:last14Ord,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.3,pointBackgroundColor:'#2563eb',pointRadius:4,yAxisID:'y'},{label:'销量',data:last14Qty,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.06)',fill:true,tension:.3,pointBackgroundColor:'#7c3aed',pointRadius:4,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:20}},plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{position:'left',grid:{color:'#f0f0f0'},title:{display:true,text:'订单数',font:{size:11}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'销量',font:{size:11}}}}}});
+
+
+// 时段分布 → 百分比占比
+const timeRevTotal=D.time.rev.reduce((a,b)=>a+b,0);
+const timeRevPct=D.time.rev.map(v=>(v/timeRevTotal*100));
+const timeQtyTotal=D.time.qty.reduce((a,b)=>a+b,0);
+const timeQtyPct=D.time.qty.map(v=>(v/timeQtyTotal*100));
+
+new Chart(document.getElementById('timeRevChart'),{type:'bar',data:{labels:D.time.labels,datasets:[{data:timeRevPct,backgroundColor:timeRevPct.map(v=>v>15?'rgba(239,68,68,.7)':v>10?'rgba(22,163,74,.7)':'rgba(37,99,235,.5)'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(1)+'%'}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>v+'%'}}}},plugins:[{id:'timeRevPctLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((bar,idx)=>{ctx.save();ctx.font='bold 10px PingFang SC';ctx.fillStyle='#1a6b3c';ctx.textAlign='center';ctx.fillText(timeRevPct[idx].toFixed(1)+'%',bar.x,bar.y-5);ctx.restore()})}}]});
+
+new Chart(document.getElementById('timeQtyChart'),{type:'bar',data:{labels:D.time.labels,datasets:[{data:timeQtyPct,backgroundColor:timeQtyPct.map(v=>v>15?'rgba(239,68,68,.7)':v>10?'rgba(22,163,74,.7)':'rgba(37,99,235,.5)'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(1)+'%'}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>v+'%'}}}},plugins:[{id:'timeQtyPctLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((bar,idx)=>{ctx.save();ctx.font='bold 10px PingFang SC';ctx.fillStyle='#4338ca';ctx.textAlign='center';ctx.fillText(timeQtyPct[idx].toFixed(1)+'%',bar.x,bar.y-5);ctx.restore()})}}]});
+
+// ====== TAB 2 ======
+
+// TOP 20
+new Chart(document.getElementById('top20Chart'),{type:'bar',data:{labels:D.top20.map(d=>d.name.substring(0,12)),datasets:[{data:D.top20.map(d=>d.rev),backgroundColor:D.top20.map((_,i)=>i<3?'rgba(22,163,74,.8)':'rgba(37,99,235,.5)'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.x).toLocaleString()+' ('+D.top20[c.dataIndex].pct+'%)'}}},scales:{x:{grid:{display:false},ticks:{display:false}},y:{grid:{display:false}}}},plugins:[{id:'top20Labels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((bar,idx)=>{ctx.save();ctx.font='11px PingFang SC';ctx.fillStyle='#374151';ctx.textAlign='left';ctx.fillText('¥'+Math.round(D.top20[idx].rev).toLocaleString(),bar.x+6,bar.y+4);ctx.restore()})}}]});
+
+let t20tb=document.getElementById('top20Table');
+D.top20.forEach((d,i)=>{
+  const rc=i<3?['r1','r2','r3'][i]:'r4';
+  const cc=d.cat==='热销'?'tag-green':d.cat==='集邮产品'?'tag-blue':d.cat==='函件产品'?'tag-red':d.cat==='明信片'?'tag-gold':'tag-blue';
+  t20tb.innerHTML+=`<tr><td><span class="rank ${rc}">${i+1}</span></td><td>${d.name}</td><td><span class="tag ${cc}">${d.cat}</span></td><td>¥${d.price}</td><td>${d.qty}</td><td>¥${Math.round(d.rev).toLocaleString()}</td><td>${d.pct}%</td></tr>`;
 });
 
-function showDept(dept) {
-  activeDept = dept;
-  // Update tag styles
-  tagContainer.querySelectorAll('.sub-tab-btn').forEach((b, i) => {
-    const d = deptOrder[i];
-    if (d === dept) {
-      b.style.background = deptColors[d];
-      b.style.color = '#fff';
-      b.style.borderColor = deptColors[d];
-      b.style.fontWeight = '600';
-    } else {
-      b.style.background = 'transparent';
-      b.style.color = 'var(--text2)';
-      b.style.borderColor = deptColors[d] + '40';
-      b.style.fontWeight = '400';
-    }
-  });
+// 品类详细数据
+let cdtb=document.getElementById('catDetailTable');
+D.cat.labels.forEach((c,i)=>{
+  const rv=D.cat.rev[i],qt=D.cat.qty[i];
+  cdtb.innerHTML+=`<tr><td>${c}</td><td>¥${Math.round(rv).toLocaleString()}</td><td>${qt}件</td><td>${(rv/totalRev*100).toFixed(1)}%</td><td>${(qt/totalQty*100).toFixed(1)}%</td><td>¥${qt>0?Math.round(rv/qt):'-'}</td></tr>`;
+});
 
-  const keys = deptMapping[dept] || [];
-  if (keys.length === 0) return;
+// ====== TAB 3: 验收进度 ======
+let ptb=document.getElementById('progressTable');
+let psum=0;
+const dailyData=[{d:'07/28',wd:'周二',r:4875.0,o:28,q:86,n:'🎉开业首日（含现金¥3,921）'},
+{d:'07/29',wd:'周三',r:5565.5,o:92,q:350,n:'🔥销售额峰值'},
+{d:'07/30',wd:'周四',r:3146.8,o:105,q:289,n:''},
+{d:'07/31',wd:'周五',r:5549.5,o:174,q:250,n:'📦订单最高'},
+{d:'08/01',wd:'周六',r:3899.7,o:135,q:259,n:'周末'},
+{d:'08/02',wd:'周日',r:2783.1,o:104,q:135,n:'周末'},
+{d:'08/03',wd:'周一',r:0.0,o:0,q:0,n:'闭馆'},
+{d:'08/04',wd:'周二',r:2706.5,o:101,q:149,n:''},
+{d:'08/05',wd:'周三',r:5087.9,o:130,q:217,n:''},
+{d:'08/06',wd:'周四',r:2898.0,o:110,q:191,n:''},
+{d:'08/07',wd:'周五',r:2747.4,o:103,q:155,n:''},
+{d:'08/08',wd:'周六',r:3364.2,o:109,q:158,n:'周末'},
+{d:'08/09',wd:'周日',r:4243.4,o:121,q:161,n:'周末'},
+{d:'08/10',wd:'周一',r:0.0,o:0,q:0,n:'闭馆'},
+{d:'08/11',wd:'周二',r:2271.2,o:90,q:141,n:''},
+{d:'08/12',wd:'周三',r:2459.8,o:113,q:148,n:''},
+{d:'08/13',wd:'周四',r:3412.9,o:111,q:169,n:''},
+{d:'08/14',wd:'周五',r:3138.1,o:114,q:157,n:''},
+{d:'08/15',wd:'周六',r:3909.1,o:140,q:186,n:'周末'},
+{d:'08/16',wd:'周日',r:2119.3,o:70,q:111,n:'周末'},
+{d:'08/17',wd:'周一',r:0.0,o:0,q:0,n:'闭馆'},
+{d:'08/18',wd:'周二',r:3983.5,o:133,q:208,n:''}];
 
-  // Compute summary stats from 7月 data
-  const latestData = monthsTrend['7月'] && monthsTrend['7月']['坪山'] ? monthsTrend['7月']['坪山'] : null;
-  let topInds = [], weakInds = [];
-
-  // Separate basic score (ms > 0) and bonus/deduction (ms <= 0)
-  let basicMax = 0, basicScore = 0, extraMax = 0, extraScore = 0;
-
-  // Build prefix map for parent-child dedup (avoid double-counting sub-indicators)
-  const _pfxMap = {};
-  keys.forEach(k => {
-    const ind = detailData[k];
-    if (!ind) return;
-    const m = ind.name.match(/^(\d+(?:\.\d+)*)/);
-    if (m) _pfxMap[m[1]] = { key: k, ms: ind.max_score || 0 };
-  });
-  // Detect non-numeric group parents
-  const _noPfx = [];
-  keys.forEach(k => {
-    const ind = detailData[k];
-    if (!ind) return;
-    if (!ind.name.match(/^(\d+(?:\.\d+)*)/)) _noPfx.push({ key: k, ms: ind.max_score || 0 });
-  });
-  const _skipKeys = new Set();
-  for (let i = 0; i < _noPfx.length; i++) {
-    if (_noPfx[i].ms <= 0) continue;
-    let cSum = 0, cCount = 0;
-    const cKeys = [];
-    for (let j = 0; j < _noPfx.length; j++) {
-      if (i === j) continue;
-      cSum += _noPfx[j].ms;
-      cKeys.push(_noPfx[j].key);
-      if (_noPfx[j].ms > 0) cCount++;
-    }
-    if (cCount >= 2 && Math.abs(cSum - _noPfx[i].ms) < 0.01) {
-      cKeys.forEach(ck => _skipKeys.add(ck));
-    }
-  }
-
-  keys.forEach(k => {
-    const ind = detailData[k];
-    if (!ind) return;
-    const ms = ind.max_score;
-    // Check numeric prefix parent-child
-    const m = ind.name.match(/^(\d+(?:\.\d+)*)/);
-    let skip = false;
-    if (m) {
-      const parts = m[1].split('.');
-      if (parts.length > 1) {
-        parts.pop();
-        const pPfx = parts.join('.');
-        if (_pfxMap[pPfx] && _pfxMap[pPfx].ms > 0) skip = true;
-      }
-    }
-    // Check non-numeric group parent
-    if (_skipKeys.has(k)) skip = true;
-    if (skip) return;
-    const d7 = ind.data && ind.data['7\u6708'] ? (ind.data['7\u6708']['\u576a\u5c71'] || 0) : 0;
-    if (ms > 0) {
-      basicMax += ms;
-      basicScore += d7;
-    } else {
-      extraScore += d7;
-    }
-    const d6raw = ind.data && ind.data['6\u6708'] ? ind.data['6\u6708']['\u576a\u5c71'] : null;
-    const d6 = d6raw !== null && d6raw !== undefined ? Math.round(d6raw * 100) / 100 : '-';
-    const score = typeof d6 === 'number' ? d6 : 0;
-    const rate = ms > 0 ? (score / ms * 100) : 0;
-    if (rate >= 90) topInds.push(ind.name);
-    if (rate < 60 && ms > 0) weakInds.push(ind.name);
-  });
-
-  const totalScore = basicScore + extraScore;
-  const totalMax = basicMax + extraMax;
-  const basicRate = basicMax > 0 ? (basicScore / basicMax * 100).toFixed(1) : '-';
-  const extraRate = extraMax > 0 ? (extraScore / extraMax * 100).toFixed(1) : (extraScore !== 0 ? (extraScore > 0 ? '+' : '') + extraScore.toFixed(2) : '0');
-  const overallRate = totalMax > 0 ? (totalScore / totalMax * 100).toFixed(1) : '-';
-  const basicRateNum = parseFloat(basicRate);
-  const basicRateColor = basicRate !== '-' ? (basicRateNum >= 80 ? 'var(--green)' : basicRateNum >= 60 ? 'var(--gold)' : 'var(--red)') : 'var(--text2)';
-  const extraRateColor = extraScore > 0.01 ? 'var(--green)' : (extraScore < -0.01 ? 'var(--red)' : 'var(--text2)');
-  const overallRateColor = overallRate !== '-' ? (parseFloat(overallRate) >= 80 ? 'var(--green)' : parseFloat(overallRate) >= 60 ? 'var(--gold)' : 'var(--red)') : 'var(--text2)';
-  const dc = deptColors[dept];
-
-  // Summary cards: \u57fa\u672c\u5206 / \u52a0\u6263\u5206 / \u603b\u5206
-  const summaryDiv = document.getElementById('deptSummaryCards');
-  summaryDiv.innerHTML = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
-    <div style="flex:1;min-width:140px;background:var(--card2);border-radius:8px;padding:14px 16px;border-top:3px solid ${dc};">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">\u57fa\u672c\u5206</div>
-      <div style="font-size:26px;font-weight:700;color:${basicRateColor}">${basicScore.toFixed(2)}</div>
-      <div style="font-size:12px;color:var(--text2);margin-top:2px;">\u6ee1\u5206 ${basicMax}</div>
-      <div style="font-size:13px;font-weight:600;color:${basicRateColor};margin-top:4px;">${basicRate}${basicRate !== '-' ? '%' : ''}</div>
-    </div>
-    <div style="flex:1;min-width:140px;background:var(--card2);border-radius:8px;padding:14px 16px;border-top:3px solid var(--yellow);">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">\u52a0\u6263\u5206</div>
-      <div style="font-size:26px;font-weight:700;color:${extraRateColor}">${extraScore >= 0 ? '+' : ''}${extraScore.toFixed(2)}</div>
-      <div style="font-size:12px;color:var(--text2);margin-top:2px;">\u5206\u503c ${extraMax}</div>
-      <div style="font-size:13px;font-weight:600;color:${extraRateColor};margin-top:4px;">${extraRate}${extraRate !== '-' && !isNaN(parseFloat(extraRate)) ? '%' : ''}</div>
-    </div>
-    <div style="flex:1;min-width:140px;background:var(--card2);border-radius:8px;padding:14px 16px;border-top:3px solid var(--gold);">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">\u603b\u5206</div>
-      <div style="font-size:26px;font-weight:700;color:${overallRateColor}">${totalScore.toFixed(2)}</div>
-      <div style="font-size:12px;color:var(--text2);margin-top:2px;">\u6ee1\u5206 ${totalMax}</div>
-      <div style="font-size:13px;font-weight:600;color:${overallRateColor};margin-top:4px;">${overallRate}${overallRate !== '-' ? '%' : ''}</div>
-    </div>
-  </div>`;
-
-  // Detail table
-  const head = document.getElementById('deptIndHead');
-  head.innerHTML = '<th>\u5e8f\u53f7</th><th>\u6307\u6807\u540d\u79f0</th><th>\u6ee1\u5206</th><th>4\u6708\u5f97\u5206</th><th>5\u6708\u5f97\u5206</th><th>6\u6708\u5f97\u5206</th><th>7\u6708\u5f97\u5206</th><th>7\u6708\u5f97\u5206\u7387</th><th>6\u21927\u6708\u53d8\u5316</th><th>\u8d8b\u52bf</th>';
-
-  const body = document.getElementById('deptIndBody');
-  body.innerHTML = '';
-  keys.forEach((k, idx) => {
-    const ind = detailData[k];
-    if (!ind) return;
-    const name = ind.name;
-    const maxD = ind.max_display;
-    const ms = ind.max_score;
-    const d4raw = ind.data && ind.data['4\u6708'] ? ind.data['4\u6708']['\u576a\u5c71'] : null;
-    const d4 = d4raw !== null && d4raw !== undefined ? Math.round(d4raw * 100) / 100 : '-';
-    const d5raw = ind.data && ind.data['5\u6708'] ? ind.data['5\u6708']['\u576a\u5c71'] : null;
-    const d5 = d5raw !== null && d5raw !== undefined ? Math.round(d5raw * 100) / 100 : '-';
-    const d6raw = ind.data && ind.data['6\u6708'] ? ind.data['6\u6708']['\u576a\u5c71'] : null;
-    const d6 = d6raw !== null && d6raw !== undefined ? Math.round(d6raw * 100) / 100 : '-';
-    const d7raw = ind.data && ind.data['7\u6708'] ? ind.data['7\u6708']['\u576a\u5c71'] : null;
-    const d7 = d7raw !== null && d7raw !== undefined ? Math.round(d7raw * 100) / 100 : '-';
-    const rate7 = (ms > 0 && typeof d7 === 'number') ? (d7 / ms * 100).toFixed(2) : '-';
-    const rateColor = rate7 === '-' ? 'var(--text2)' : (parseFloat(rate7) >= 90 ? 'var(--green)' : parseFloat(rate7) >= 60 ? 'var(--gold)' : 'var(--red)');
-    
-    // 6\u21927\u6708\u53d8\u5316
-    let chg67 = '';
-    if (typeof d6 === 'number' && typeof d7 === 'number') {
-      const diff = d7 - d6;
-      if (diff > 0.01) chg67 = '<span style="color:var(--green)">\u2191' + diff.toFixed(2) + '</span>';
-      else if (diff < -0.01) chg67 = '<span style="color:var(--red)">\u2193' + Math.abs(diff).toFixed(2) + '</span>';
-      else chg67 = '<span style="color:var(--text2)">\u2192</span>';
-    }
-
-    // Trend: compare 4\u21927
-    let trend = '';
-    if (typeof d4 === 'number' && typeof d7 === 'number') {
-      if (d7 > d4) trend = '<span style="color:var(--green)">\u2191</span>';
-      else if (d7 < d4) trend = '<span style="color:var(--red)">\u2193</span>';
-      else trend = '<span style="color:var(--text2)">\u2192</span>';
-    }
-
-    body.innerHTML += `<tr>
-      <td>${idx + 1}</td>
-      <td style="font-weight:500">${name}</td>
-      <td>${maxD}</td>
-      <td>${d4}</td>
-      <td>${d5}</td>
-      <td>${d6}</td>
-      <td style="font-weight:600">${d7}</td>
-      <td style="color:${rateColor};font-weight:600">${rate7}${rate7 !== '-' ? '%' : ''}</td>
-      <td>${chg67}</td>
-      <td>${trend}</td>
-    </tr>`;
-  });
-
-  // Summary row: A + B = C
-  const basicScoreStr = basicScore.toFixed(2);
-  const extraScoreStr = (extraScore >= 0 ? '+' + extraScore.toFixed(2) : extraScore.toFixed(2));
-  const totalScoreStr = totalScore.toFixed(2);
-  body.innerHTML += `<tr style="border-top:3px double var(--border);background:var(--card2);font-weight:700;">
-    <td colspan="2" style="text-align:right;padding-right:12px;font-size:13px;color:var(--text);">\u5f97\u5206\u6c47\u603b</td>
-    <td colspan="9" style="text-align:center;font-size:15px;">
-      <span style="color:${basicRateColor}">\u57fa\u672c\u5206 ${basicScoreStr}</span>
-      <span style="color:var(--text2);margin:0 8px;">+</span>
-      <span style="color:${extraRateColor}">\u52a0\u6263\u5206 ${extraScoreStr}</span>
-      <span style="color:var(--text2);margin:0 8px;">=</span>
-      <span style="color:${overallRateColor}">\u603b\u5206 ${totalScoreStr}</span>
-      <span style="color:var(--text2);margin-left:16px;font-size:12px;">\uff08\u5f97\u5206\u7387 ${overallRate}${overallRate !== '-' ? '%' : ''}\uff09</span>
-    </td>
-  </tr>`;
-}
-
-// Auto-select first department
-showDept('市场部');
+dailyData.forEach((r,i)=>{
+  psum+=r.r;
+  const avg=Math.round(psum/(i+1));
+  const trend=r.r>avg?'📈':r.r===0?'--':'📉';
+  const cls=r.o===0?' style="background:#f3f4f6"':'';
+  ptb.innerHTML+=`<tr${cls}><td>${r.d} ${r.wd}</td><td>¥${Math.round(r.r).toLocaleString()}</td><td>¥${Math.round(psum).toLocaleString()}</td><td>¥${avg.toLocaleString()}</td><td>${trend}</td></tr>`;
+});
 </script>
 </body>
 </html>
