@@ -180,11 +180,11 @@ tr:last-child td{border-bottom:none}
 <!-- TAB 0: 总体概览 -->
 <div class="panel active" id="p0">
 <div class="kpi-grid">
-  <div class="kpi green"><div class="label">💰 累计销售额</div><div class="value">7.33<span class="unit">万元</span></div><div class="note">营业21天累计（含开业现金¥3,921）</div></div>
-  <div class="kpi blue"><div class="label">📅 当日销售额</div><div class="value">2,917<span class="unit">元</span></div><div class="note">日均 ¥3,492（8/20）</div></div>
-  <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">110<span class="unit">单</span></div><div class="note">21天总2,309单</div></div>
-  <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">183<span class="unit">件</span></div><div class="note">21天总3,846件</div></div>
-  <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥31.76</div><div class="note">平均每单金额</div></div>
+  <div class="kpi green"><div class="label">💰 累计销售额</div><div class="value">7.60<span class="unit">万元</span></div><div class="note">营业22天累计（含开业现金¥3,921）</div></div>
+  <div class="kpi blue"><div class="label">📅 当日销售额</div><div class="value">2,647<span class="unit">元</span></div><div class="note">日均 ¥3,454（8/21）</div></div>
+  <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">110<span class="unit">单</span></div><div class="note">22天总2,422单</div></div>
+  <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">182<span class="unit">件</span></div><div class="note">22天总3,996件</div></div>
+  <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥31.37</div><div class="note">平均每单金额</div></div>
   <div class="kpi red"><div class="label">⚖️ 件单比</div><div class="value">1.7<span class="unit">件/单</span></div><div class="note">平均每单件数</div></div>
 </div>
 
@@ -228,7 +228,7 @@ tr:last-child td{border-bottom:none}
 <div class="card">
   <div class="card-title"><span class="icon">📈</span>全部营业日销售额趋势</div>
   <div class="chart-box" style="height:320px"><canvas id="dailyRevChart"></canvas></div>
-  <div class="analysis"><strong>📊 趋势分析：</strong>全部21个营业日（07/28-08/20，排除3天闭馆）日均销售额¥3,492，峰值¥5,665（07/29），整体波动区间¥2,119-¥5,665。</div>
+  <div class="analysis"><strong>📊 趋势分析：</strong>全部22个营业日（07/28-08/21，排除3天闭馆）日均销售额¥3,454，峰值¥5,666（07/29），整体波动区间¥2,119-¥5,666。</div>
 </div>
 
 <div class="card">
@@ -273,8 +273,8 @@ tr:last-child td{border-bottom:none}
   <div class="card-title"><span class="icon">📋</span>收入进度跟踪</div>
   
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px">
-    <div class="kpi green"><div class="label">📊 累计销售额</div><div class="value">¥73,338</div><div class="note">营业21天（含开业现金¥3,921）</div></div>
-    <div class="kpi blue"><div class="label">📅 日均销售额</div><div class="value">¥3,492</div><div class="note">21个营业日平均（含开业现金）</div></div>
+    <div class="kpi green"><div class="label">📊 累计销售额</div><div class="value">¥75,986</div><div class="note">营业22天（含开业现金¥3,921）</div></div>
+    <div class="kpi blue"><div class="label">📅 日均销售额</div><div class="value">¥3,454</div><div class="note">22个营业日平均（含开业现金）</div></div>
   </div>
 
   <div class="card" style="background:linear-gradient(135deg,#f0faf3,#e8f5ec);border:1px solid #bbf7d0;margin-bottom:18px">
@@ -283,11 +283,11 @@ tr:last-child td{border-bottom:none}
       <div class="progress-target-card">
         <div class="pt-label">下半年目标</div>
         <div class="pt-value" style="color:var(--primary)">¥300,000</div>
-        <div class="pt-note">已完 ¥73,338（24.4%）</div>
+        <div class="pt-note">已完 ¥75,986（25.3%）</div>
       </div>
       <div class="progress-target-card">
         <div class="pt-label">剩余目标</div>
-        <div class="pt-value" style="color:var(--accent)">¥226,662</div>
+        <div class="pt-value" style="color:var(--accent)">¥224,014</div>
         <div class="pt-note">8/21 - 12/31</div>
       </div>
       <div class="progress-target-card">
@@ -358,8 +358,8 @@ const invCatStats={"明信片": {"count": 26, "stock": 1154}, "函件产品": {"
 const invZero=[{"name": "酷洛米明信片套装", "cat": "明信片"}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品"}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品"}, {"name": "深圳邮礼-深圳", "cat": "函件产品"}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品"}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品"}, {"name": "中国娃娃集戳本", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品"}, {"name": "邮票/散票80分", "cat": "集邮产品"}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品"}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品"}, {"name": "《中国恐龙》本票册", "cat": "集邮产品"}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品"}, {"name": "JY邮政大货车", "cat": "中邮文创"}, {"name": "中国恐龙", "cat": "中邮文创"}, {"name": "《黑神话：悟空》联名邮品珍藏款一《扰雾飞云》", "cat": "集邮产品"}];
 const invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#10b981','中邮文创':'#ef4444'};
 // 18天营业期各商品累计销量（来自销售数据）
-const salesQty={"深圳自然博物馆明信片/单枚":1133,"空白盖戳明信片":939,"《北京中轴线》立体笔记本":237,"《国宝日记》立体笔记本":218,"印章本（深圳漫游记）":187,"十二花神（荷花）":114,"《2027深圳旅游风光明信片套装盒》公园之城":101,"小号人民邮政托特包":101,"《动物世界》立体笔记本":99,"《民族娃娃》立体笔记本":61,"《通关文牒》立体笔记本":52,"JY三轮车":33,"十二生肖水晶":32,"唐宫夜宴集戳本":32,"《寻龙赐福》集戳本（新）":30,"邮票/散票1.2元":25,"JY邮政小飞机":23,"二十四节气撕拉盲卡":20,"卡皮巴拉豪华版收藏卡-豚学之旅":20,"十二花神（桂花）":19,"JY邮政大货车":17,"JY面包车":15,"《深圳旅游风光明信片套装盒》碧海蓝天":14,"《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装":13,"深圳邮礼-深圳":12};
-const OPERATING_DAYS=21;
+const salesQty={"深圳自然博物馆明信片/单枚":1193,"空白盖戳明信片":964,"《北京中轴线》立体笔记本":245,"《国宝日记》立体笔记本":227,"印章本（深圳漫游记）":187,"十二花神（荷花）":116,"《动物世界》立体笔记本":108,"《2027深圳旅游风光明信片套装盒》公园之城":101,"小号人民邮政托特包":101,"《民族娃娃》立体笔记本":64,"《通关文牒》立体笔记本":53,"JY三轮车":33,"十二生肖水晶":32,"唐宫夜宴集戳本":32,"《寻龙赐福》集戳本（新）":30,"JY邮政小飞机":27,"邮票/散票1.2元":27,"十二花神（桂花）":21,"二十四节气撕拉盲卡":20,"卡皮巴拉豪华版收藏卡-豚学之旅":20,"JY邮政大货车":17,"JY面包车":15,"《深圳旅游风光明信片套装盒》碧海蓝天":14,"《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装":14,"深圳邮礼-深圳":12,"金榜题名时集戳折子":14,"《国家野生保护动物（I级）（三）》邮册":12,"《卡皮巴拉》水果物语毛绒挂件盲盒":11,"十二花神（榴花）":10};
+const OPERATING_DAYS=22;
 
 // Zero stock list
 let zhtml='';
@@ -467,14 +467,14 @@ document.querySelector('.inv-filter').classList.add('active');
 </div>
 
 <script>
-const totalRev=73338.39;
-const totalQty=3846;
+const totalRev=75985.79;
+const totalQty=3996;
 const D={
-  daily:{labels:["07/28\n开业", "07/29", "07/30", "07/31", "08/01", "08/02", "08/03\n闭馆", "08/04", "08/05", "08/06", "08/07", "08/08", "08/09", "08/10\n闭馆", "08/11", "08/12", "08/13", "08/14", "08/15", "08/16", "08/17\n闭馆", "08/18", "08/19", "08/20"],rev:[4875.0, 5565.5, 3146.8, 5549.5, 3899.7, 2783.1, 0.0, 2706.5, 5087.9, 2898.0, 2747.4, 3364.2, 4243.4, 0.0, 2271.2, 2459.8, 3412.9, 3138.1, 3909.1, 2119.3, 0.0, 3983.5, 2260.2, 2917.3],ord:[28, 92, 105, 174, 135, 104, 0, 101, 130, 110, 103, 109, 121, 0, 90, 113, 111, 114, 140, 70, 0, 133, 103, 123],qty:[86, 350, 289, 250, 259, 135, 0, 149, 217, 191, 155, 158, 161, 0, 141, 148, 169, 157, 186, 111, 0, 208, 168, 158]},
-  cat:{labels:["热销产品", "集邮产品", "函件产品", "中邮文创", "明信片"],rev:[39549.58, 12421.1, 6595.5, 6024.11, 4826.61],qty:[2874, 207, 216, 207, 342]},
-  price:{labels:["¥0-10", "¥10-20", "¥20-30", "¥30-40", "¥40-50", "¥50-100", "¥100-200", "¥200+"],rev:[11442.89, 2368.89, 4717.42, 33488.2, 1746.2, 7008.0, 5694.0, 1210.0],qty:[2307, 148, 214, 874, 38, 103, 33, 3]},
-  time:{labels:["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],rev:[1046.8, 5158.6, 6866.0, 8872.4, 6995.4, 9413.8, 9180.5, 5814.9, 6390.9, 1207.58],qty:[49, 219, 386, 479, 440, 521, 434, 386, 357, 80]},
-  top20:[{"name": "《国宝日记》立体笔记本", "cat": "热销", "price": 39.9, "qty": 218, "rev": 8698.2, "pct": 11.9}, {"name": "《北京中轴线》立体笔记本", "cat": "热销", "price": 31.4, "qty": 237, "rev": 7445.22, "pct": 10.2}, {"name": "印章本（深圳漫游记）", "cat": "热销", "price": 36.0, "qty": 187, "rev": 6732.0, "pct": 9.2}, {"name": "深圳自然博物馆明信片/单枚", "cat": "热销", "price": 5.0, "qty": 1133, "rev": 5665.0, "pct": 7.7}, {"name": "空白盖戳明信片", "cat": "热销", "price": 4.9, "qty": 939, "rev": 4625.16, "pct": 6.3}, {"name": "《动物世界》立体笔记本", "cat": "热销", "price": 39.9, "qty": 99, "rev": 3950.1, "pct": 5.4}, {"name": "《民族娃娃》立体笔记本", "cat": "热销", "price": 39.9, "qty": 61, "rev": 2433.9, "pct": 3.3}, {"name": "《通关文牒》立体笔记本", "cat": "热销", "price": 39.9, "qty": 52, "rev": 2074.8, "pct": 2.8}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "price": 198.0, "qty": 10, "rev": 1980.0, "pct": 2.7}, {"name": "《2027深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "price": 16.4, "qty": 101, "rev": 1655.39, "pct": 2.3}, {"name": "JY邮政小飞机", "cat": "中邮文创", "price": 58.0, "qty": 23, "rev": 1334.0, "pct": 1.8}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "price": 39.9, "qty": 32, "rev": 1276.8, "pct": 1.7}, {"name": "JY邮政大货车", "cat": "中邮文创", "price": 68.0, "qty": 17, "rev": 1156.0, "pct": 1.6}, {"name": "《天文现象》版票册", "cat": "集邮产品", "price": 188.0, "qty": 6, "rev": 1128.0, "pct": 1.5}, {"name": "JY三轮车", "cat": "中邮文创", "price": 33.0, "qty": 33, "rev": 1089.0, "pct": 1.5}, {"name": "JY邮文创自行车", "cat": "中邮文创", "price": 95.0, "qty": 10, "rev": 950.0, "pct": 1.3}, {"name": "《寻龙赐福》集戳本（新）", "cat": "集邮产品", "price": 27.0, "qty": 30, "rev": 810.0, "pct": 1.1}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "price": 398.0, "qty": 2, "rev": 796.0, "pct": 1.1}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "price": 69.0, "qty": 10, "rev": 690.0, "pct": 0.9}, {"name": "JY面包车", "cat": "中邮文创", "price": 45.0, "qty": 15, "rev": 675.0, "pct": 0.9}]
+  daily:{labels:["07/28\n开业", "07/29", "07/30", "07/31", "08/01", "08/02", "08/03\n闭馆", "08/04", "08/05", "08/06", "08/07", "08/08", "08/09", "08/10\n闭馆", "08/11", "08/12", "08/13", "08/14", "08/15", "08/16", "08/17\n闭馆", "08/18", "08/19", "08/20", "08/21"],rev:[4875.0, 5565.5, 3146.8, 5549.5, 3899.7, 2783.1, 0.0, 2706.5, 5087.9, 2898.0, 2747.4, 3364.2, 4243.4, 0.0, 2271.2, 2459.8, 3412.9, 3138.1, 3909.1, 2119.3, 0.0, 3983.5, 2260.2, 2917.3, 2647.4],ord:[28, 92, 105, 174, 135, 104, 0, 101, 130, 110, 103, 109, 121, 0, 90, 113, 111, 114, 140, 70, 0, 133, 103, 123, 113],qty:[86, 350, 289, 250, 259, 135, 0, 149, 217, 191, 155, 158, 161, 0, 141, 148, 169, 157, 186, 111, 0, 208, 168, 158, 150]},
+  cat:{labels:["热销产品", "集邮产品", "函件产品", "中邮文创", "明信片"],rev:[41156.68, 12786.5, 6774.4, 6256.11, 5090.61],qty:[2988, 219, 222, 211, 356]},
+  price:{labels:["¥0-10", "¥10-20", "¥20-30", "¥30-40", "¥40-50", "¥50-100", "¥100-200", "¥200+"],rev:[12749.97, 3515.07, 4596.34, 35858.3, 2563.0, 6923.0, 5500.0, 1164.0],qty:[2519, 204, 196, 934, 54, 98, 32, 3]},
+  time:{labels:["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],rev:[1388.0, 5955.9, 8709.6, 11052.1, 8190.0, 11395.1, 10110.9, 7183.4, 6760.7, 1318.6],qty:[60, 267, 456, 617, 537, 631, 501, 446, 393, 88]},
+  top20:[{"name": "《国宝日记》立体笔记本", "cat": "热销", "price": 39.9, "qty": 227, "rev": 9057.3, "pct": 11.9}, {"name": "《北京中轴线》立体笔记本", "cat": "热销", "price": 31.7, "qty": 245, "rev": 7764.42, "pct": 10.2}, {"name": "印章本（深圳漫游记）", "cat": "热销", "price": 36.0, "qty": 187, "rev": 6732.0, "pct": 8.9}, {"name": "深圳自然博物馆明信片/单枚", "cat": "热销", "price": 5.0, "qty": 1193, "rev": 5965.0, "pct": 7.9}, {"name": "空白盖戳明信片", "cat": "热销", "price": 5.0, "qty": 964, "rev": 4775.16, "pct": 6.3}, {"name": "《动物世界》立体笔记本", "cat": "热销", "price": 39.9, "qty": 108, "rev": 4309.2, "pct": 5.7}, {"name": "《民族娃娃》立体笔记本", "cat": "热销", "price": 39.9, "qty": 64, "rev": 2553.6, "pct": 3.4}, {"name": "《通关文牒》立体笔记本", "cat": "热销", "price": 39.9, "qty": 53, "rev": 2114.7, "pct": 2.8}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "price": 198.0, "qty": 10, "rev": 1980.0, "pct": 2.6}, {"name": "《2027深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "price": 16.4, "qty": 101, "rev": 1655.39, "pct": 2.2}, {"name": "JY邮政小飞机", "cat": "中邮文创", "price": 58.0, "qty": 27, "rev": 1566.0, "pct": 2.1}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "price": 39.9, "qty": 32, "rev": 1276.8, "pct": 1.7}, {"name": "JY邮政大货车", "cat": "中邮文创", "price": 68.0, "qty": 17, "rev": 1156.0, "pct": 1.5}, {"name": "《天文现象》版票册", "cat": "集邮产品", "price": 188.0, "qty": 6, "rev": 1128.0, "pct": 1.5}, {"name": "JY三轮车", "cat": "中邮文创", "price": 33.0, "qty": 33, "rev": 1089.0, "pct": 1.4}, {"name": "JY邮文创自行车", "cat": "中邮文创", "price": 95.0, "qty": 10, "rev": 950.0, "pct": 1.3}, {"name": "《寻龙赐福》集戳本（新）", "cat": "集邮产品", "price": 27.0, "qty": 30, "rev": 810.0, "pct": 1.1}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "price": 398.0, "qty": 2, "rev": 796.0, "pct": 1.0}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "price": 69.0, "qty": 10, "rev": 690.0, "pct": 0.9}, {"name": "JY面包车", "cat": "中邮文创", "price": 45.0, "qty": 15, "rev": 675.0, "pct": 0.9}]
 };
 
 const C={mix:['#16a34a','#2563eb','#d97706','#ef4444','#7c3aed','#0d9488']};
@@ -527,7 +527,7 @@ new Chart(document.getElementById('weekdayOrdChart'),{type:'bar',data:{labels:['
 // ====== TAB 1 ======
 
 // 每日销售额趋势 → 过去14天
-const last14Idx=[0,1,2,3,4,5,7,8,9,10,11,12,14,15,16,17,18,19,21,22];
+const last14Idx=[1,2,3,4,5,7,8,9,10,11,12,14,15,16,17,18,19,21,22,24];
 const last14Labels=last14Idx.map(i=>D.daily.labels[i].replace('\n',''));
 const last14Rev=last14Idx.map(i=>D.daily.rev[i]);
 new Chart(document.getElementById('dailyRevChart'),{type:'line',data:{labels:last14Labels,datasets:[{label:'销售额',data:last14Rev,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.1)',fill:true,tension:.3,pointBackgroundColor:'#16a34a',pointRadius:5,pointHoverRadius:7}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'¥'+Math.round(c.parsed.y).toLocaleString()}},datalabels:false},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'#f0f0f0'},ticks:{callback:v=>'¥'+Math.round(v).toLocaleString()},beginAtZero:false}}},plugins:[{id:'revDataLabels',afterDatasetsDraw(chart){const ctx=chart.ctx;const meta=chart.getDatasetMeta(0);meta.data.forEach((pt,idx)=>{ctx.save();ctx.font='bold 10px PingFang SC';ctx.fillStyle='#16a34a';ctx.textAlign='center';ctx.fillText('¥'+Math.round(last14Rev[idx]).toLocaleString(),pt.x,pt.y-10);ctx.restore()})}}]});
