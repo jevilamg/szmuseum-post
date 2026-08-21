@@ -234,7 +234,7 @@ tr:last-child td{border-bottom:none}
 <div class="card">
   <div class="card-title"><span class="icon">📊</span>每日订单数 & 销量</div>
   <div class="chart-box" style="height:320px"><canvas id="dailyOrdChart"></canvas></div>
-  <div class="analysis"><strong>📦 订单分析：</strong>7/31（周五）订单数最高达174单。进入8月后订单稳定在90-140单/天，8/18（周二）133单、8/20（周四）123单为近期表现。销量随订单同步波动，客单价整体趋稳。</div>
+  <div class="analysis"><strong>📦 订单分析：</strong>7/31（周五）订单数最高达174单。进入8月后订单稳定在90-140单/天，8/18（周二）133单、8/21（周五）113单为近期表现。销量随订单同步波动，客单价整体趋稳。</div>
 </div>
 
 <div class="card">
@@ -593,7 +593,8 @@ const dailyData=[{d:'07/28',wd:'周二',r:4875.0,o:28,q:86,n:'🎉开业首日�
 {d:'08/17',wd:'周一',r:0.0,o:0,q:0,n:'闭馆'},
 {d:'08/18',wd:'周二',r:3983.5,o:133,q:208,n:''},
   {d:'08/19',wd:'周三',r:2260.2,o:103,q:168,n:''},
-{d:'08/20',wd:'周四',r:2917.3,o:123,q:158,n:''}];
+{d:'08/20',wd:'周四',r:2917.3,o:123,q:158,n:''},
+{d:'08/21',wd:'周五',r:2647.4,o:113,q:150,n:''}];
 
 dailyData.forEach((r,i)=>{
   psum+=r.r;
