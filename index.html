@@ -163,7 +163,7 @@ tr:last-child td{border-bottom:none}
   <div class="sub">坪山局 · 主题邮局经营分析</div>
   <div class="meta">
     <div class="badge">📅 开业日期：2026年7月28日</div>
-    <div class="badge">📊 数据截止：2026年9月2日</div>
+    <div class="badge">📊 数据截止：2026年9月6日</div>
     <div class="badge">📍 坪山区燕子湖片区</div>
     <div class="badge">🗓️ 累计¥113,631（含开业现金¥3,921）</div>
   </div>
@@ -181,10 +181,10 @@ tr:last-child td{border-bottom:none}
 <div class="panel active" id="p0">
 <div class="kpi-grid">
   <div class="kpi green"><div class="label">💰 累计销售额</div><div class="value">11.36<span class="unit">万元</span></div><div class="note">营业36天累计（含开业现金¥3,921）</div></div>
-  <div class="kpi blue"><div class="label">📅 当日销售额</div><div class="value">188<span class="unit">元</span></div><div class="note">日均 ¥3,251（2026/09/02）</div></div>
-  <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">104<span class="unit">单</span></div><div class="note">32天总3334单</div></div>
-  <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">166<span class="unit">件</span></div><div class="note">32天总5320件</div></div>
-  <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥31.21</div><div class="note">平均每单金额</div></div>
+  <div class="kpi blue"><div class="label">📅 当日销售额</div><div class="value">3,689<span class="unit">元</span></div><div class="note">日均 ¥3,156（2026/09/06）</div></div>
+  <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">99<span class="unit">单</span></div><div class="note">36天总3,577单</div></div>
+  <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">157<span class="unit">件</span></div><div class="note">36天总5,664件</div></div>
+  <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥31.47</div><div class="note">平均每单金额</div></div>
   <div class="kpi red"><div class="label">⚖️ 件单比</div><div class="value">1.6<span class="unit">件/单</span></div><div class="note">平均每单件数</div></div>
 </div>
 
@@ -318,17 +318,17 @@ tr:last-child td{border-bottom:none}
 <!-- TAB 4: 库存管理 -->
 <div class="panel" id="p4">
 <div class="card">
-  <div class="card-title"><span class="icon">📦</span>库存概览 <span style="font-size:12px;color:var(--text3);font-weight:400;margin-left:8px">数据截止：2026-08-23</span></div>
+  <div class="card-title"><span class="icon">📦</span>库存概览 <span style="font-size:12px;color:var(--text3);font-weight:400;margin-left:8px">数据截止：2026-09-06（按销售推算）</span></div>
   <div class="kpi-grid">
     <div class="kpi"><div class="kpi-val" style="color:#6366f1">142</div><div class="kpi-label">商品SKU数</div></div>
-    <div class="kpi"><div class="kpi-val" style="color:#10b981">3,801</div><div class="kpi-label">总库存量</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#10b981">893</div><div class="kpi-label">总库存量</div></div>
     <div class="kpi"><div class="kpi-val" style="color:#f59e0b">4</div><div class="kpi-label">商品品类</div></div>
-    <div class="kpi"><div class="kpi-val" style="color:#ef4444">21</div><div class="kpi-label">缺货商品</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#ef4444">62</div><div class="kpi-label">缺货商品</div></div>
   </div>
 </div>
 
 <div class="card">
-  <div class="card-title"><span class="icon">⚠️</span>缺货预警（21项）</div>
+  <div class="card-title"><span class="icon">⚠️</span>缺货预警（62项）</div>
   <div id="zeroStockList" style="max-height:240px;overflow-y:auto"></div>
 </div>
 
@@ -353,8 +353,8 @@ tr:last-child td{border-bottom:none}
 
 <script>
 // Inventory data
-const invItems=[{"name": "《中国恐龙》本票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《黑神话：悟空》联名邮品珍藏款一《扰雾飞云》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "中国娃娃集戳本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "中国恐龙", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "十二生肖互动冰箱贴", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "十二生肖水晶", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "印章本（深圳漫游记）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "深圳邮礼-深圳", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "绿野寻踪明信片恰帕狗", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "财神到", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮票/散票80分", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "酷洛米明信片套装", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《一起向未来》（国际吉祥版）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中华人民成立七十周年》邮册（全国）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中国石窟》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《卡皮巴拉》水果物语毛绒挂件盲盒", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《辉煌中国》庆祝改革开放四十周年邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《黑神话：悟空》联名邮品珍藏款三《行沾清味》", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "瑞和满堂2026", "cat": "明信片", "unit": "份", "stock": 0}, {"name": "JY三轮车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《中国剪纸 中国年》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《中国年》票钞珍藏册(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《亚洲文明》文化册（全国）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《唯美之邑》环境日邮票邮册（邮票联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《国家野生保护动物（I级）（三）》邮册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《奇思天问》整版邮册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《莫高窟》整版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《西游记（四）》版票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《雪舞迎春》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《静待花开》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "十二花神（蜀葵）", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（史迪奇）", "cat": "函件产品", "unit": "份", "stock": 1}, {"name": "遂古之初邮册", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "JY邮政大货车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《不忘初心 牢记使命》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《文韵刘芳》邮册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《精准扶贫》大版册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《黑神话：悟空》联名邮品珍藏款二《徐声韵长》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《黑神话：悟空》联名邮品珍藏款五《修制垢身》", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "“午阿哥勇骐”《丙午年》生肖邮票毛绒公仔", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《中国现代文学家》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《国家公园》版票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《猛禽二》特种邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《金石华彩》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《黑神话：悟空》联名邮品珍藏款四《思虑成妄》", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "川藏青藏公路建成通车65周年整版票册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "艰苦岁月长征手绘故事册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（小熊维尼）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《哪吒之魔童闹海》电影角色透光明信片", "cat": "中邮文创", "unit": "套", "stock": 5}, {"name": "《笔尖山水》邮册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "中华人民共和国第十五届运动会城市纪念集章本", "cat": "集邮产品", "unit": "件", "stock": 0}, {"name": "抗日战争暨世界反法西斯战争胜利80周年阅兵纪念", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "王者荣耀打工人", "cat": "集邮产品", "unit": "件", "stock": 0}, {"name": "邮箱模型", "cat": "中邮文创", "unit": "件", "stock": 5}, {"name": "《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "马上有钱摆件马横款", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《虎（文物）》整版票册（全国）", "cat": "集邮产品", "unit": "套", "stock": 6}, {"name": "《龙马精神》生肖邮票珍藏镜框（大尺寸）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "深圳有礼—荷兰小镇", "cat": "函件产品", "unit": "份", "stock": 4}, {"name": "邮筒积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 2}, {"name": "B.Duck小黄鸭邮差明信片", "cat": "明信片", "unit": "套", "stock": 6}, {"name": "《外交为民》专题卡书", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《大耳狗20周年》限定版纪念邮折", "cat": "函件产品", "unit": "份", "stock": 1}, {"name": "《芍药》大版册", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《马肥家润》我不是胖虎非遗金箔春节礼盒", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "日进斗金", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "红楼梦四票封卡书", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "财神到", "cat": "集邮产品", "unit": "件", "stock": 2}, {"name": "JY老邮筒", "cat": "中邮文创", "unit": "个", "stock": 10}, {"name": "《八骏图》不二马大叔联名亚克力摇摇乐（邮政联名）", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天地有五岳》邮册", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天文现象》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《深圳旅游风光明信片套装盒》建筑之美", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《蓝卯卯》B款15cm(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "《中流砥柱》邮册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《深圳旅游风光明信片套装盒》碧海蓝天", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《科技创新（二）》大版册", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "马上有钱钥匙扣", "cat": "函件产品", "unit": "份", "stock": 4}, {"name": "JY邮筒模型", "cat": "中邮文创", "unit": "个", "stock": 8}, {"name": "《世界自然遗产—中国南方喀斯特》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "十二花神（荷花）", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡红", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "金榜题名时集戳本（乙己吉祥年）", "cat": "集邮产品", "unit": "件", "stock": 14}, {"name": "金榜题名镜框摆件", "cat": "函件产品", "unit": "份", "stock": 3}, {"name": "JY面包车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》湖光山色", "cat": "明信片", "unit": "套", "stock": 7}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡蓝", "cat": "集邮产品", "unit": "套", "stock": 15}, {"name": "《三国的星空》水墨款明信片套装", "cat": "明信片", "unit": "套", "stock": 11}, {"name": "《哪吒之魔童闹海》排排坐迷你公仔", "cat": "函件产品", "unit": "份", "stock": 11}, {"name": "《昆虫（二）》邮票精装风琴折", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "一盅两件冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 13}, {"name": "邮政主题异形片", "cat": "函件产品", "unit": "份", "stock": 9}, {"name": "JY邮政小飞机", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》历史人文", "cat": "明信片", "unit": "套", "stock": 9}, {"name": "JY邮文创自行车", "cat": "中邮文创", "unit": "个", "stock": 5}, {"name": "《丝绸之路文物（一）》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《山水如画》版票册", "cat": "集邮产品", "unit": "套", "stock": 17}, {"name": "早茶必点异形片套装", "cat": "函件产品", "unit": "份", "stock": 16}, {"name": "水滚茶靓冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "状元帽镜框摆件", "cat": "函件产品", "unit": "份", "stock": 15}, {"name": "电影《哪吒之魔童闹海》特殊版式个性化邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 17}, {"name": "端午传统民俗，节日", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "《三国的星空》人物款明信片套装", "cat": "明信片", "unit": "套", "stock": 17}, {"name": "《丝绸之路文物（二》版票册", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《哪吒之魔童闹海》电影票根冰箱贴套装", "cat": "函件产品", "unit": "份", "stock": 18}, {"name": "《太行山》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "《又见繁华》珍藏套装（社会联合）", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "电影《哪吒之魔童闹海》个性化邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "《国宝日记》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《姑苏繁华图》版票册", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "《遇见博物馆》古线装（新）", "cat": "函件产品", "unit": "份", "stock": 17}, {"name": "中国神话传说", "cat": "明信片", "unit": "套", "stock": 18}, {"name": "十二花神（桂花）", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "《鸿雁寄相思》邮册", "cat": "集邮产品", "unit": "套", "stock": 28}, {"name": "唐宋八大家", "cat": "明信片", "unit": "套", "stock": 27}, {"name": "果然幸运", "cat": "明信片", "unit": "套", "stock": 23}, {"name": "《中国古镇（四）》大版册", "cat": "集邮产品", "unit": "套", "stock": 28}, {"name": "《中国篆刻》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《鸽》整版票折", "cat": "集邮产品", "unit": "套", "stock": 25}, {"name": "经典时刻2025阅兵纪念风琴折", "cat": "集邮产品", "unit": "套", "stock": 30}, {"name": "《北京中轴线》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迎南而上明信片", "cat": "明信片", "unit": "份", "stock": 17}, {"name": "十二花神（榴花）", "cat": "明信片", "unit": "套", "stock": 22}, {"name": "十二花神盖戳", "cat": "明信片", "unit": "套", "stock": 38}, {"name": "《动物世界》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮票/散票1.2元", "cat": "集邮产品", "unit": "套", "stock": 24}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 11}, {"name": "《民族娃娃》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 90}, {"name": "空白盖戳明信片", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "深圳自然博物馆明信片/单枚", "cat": "明信片", "unit": "套", "stock": 0}];
-const invCatStats={"集邮产品": {"count": 76, "stock": 524}, "函件产品": {"count": 30, "stock": 202}, "中邮文创": {"count": 10, "stock": 33}, "明信片": {"count": 26, "stock": 260}};
+const invItems=[{"name": "《中国恐龙》本票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《黑神话：悟空》联名邮品珍藏款一《扰雾飞云》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "中国娃娃集戳本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "中国恐龙", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "十二生肖互动冰箱贴", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "十二生肖水晶", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "印章本（深圳漫游记）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "深圳邮礼-深圳", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "绿野寻踪明信片恰帕狗", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "财神到", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮票/散票80分", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "酷洛米明信片套装", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《一起向未来》（国际吉祥版）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中华人民成立七十周年》邮册（全国）", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中国石窟》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《卡皮巴拉》水果物语毛绒挂件盲盒", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《辉煌中国》庆祝改革开放四十周年邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《黑神话：悟空》联名邮品珍藏款三《行沾清味》", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "瑞和满堂2026", "cat": "明信片", "unit": "份", "stock": 0}, {"name": "JY三轮车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《中国剪纸 中国年》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《中国年》票钞珍藏册(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《亚洲文明》文化册（全国）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《唯美之邑》环境日邮票邮册（邮票联合）", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《国家野生保护动物（I级）（三）》邮册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《奇思天问》整版邮册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《莫高窟》整版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《西游记（四）》版票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《雪舞迎春》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《静待花开》版票册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "十二花神（蜀葵）", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（史迪奇）", "cat": "函件产品", "unit": "份", "stock": 1}, {"name": "遂古之初邮册", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "JY邮政大货车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《不忘初心 牢记使命》票封卡书", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《文韵刘芳》邮册（邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《精准扶贫》大版册", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "《黑神话：悟空》联名邮品珍藏款二《徐声韵长》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《黑神话：悟空》联名邮品珍藏款五《修制垢身》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "“午阿哥勇骐”《丙午年》生肖邮票毛绒公仔", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《中国现代文学家》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "《国家公园》版票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《猛禽二》特种邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《金石华彩》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 1}, {"name": "《黑神话：悟空》联名邮品珍藏款四《思虑成妄》", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "川藏青藏公路建成通车65周年整版票册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "艰苦岁月长征手绘故事册", "cat": "集邮产品", "unit": "套", "stock": 4}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（小熊维尼）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《哪吒之魔童闹海》电影角色透光明信片", "cat": "中邮文创", "unit": "套", "stock": 5}, {"name": "《笔尖山水》邮册", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "中华人民共和国第十五届运动会城市纪念集章本", "cat": "集邮产品", "unit": "件", "stock": 0}, {"name": "抗日战争暨世界反法西斯战争胜利80周年阅兵纪念", "cat": "集邮产品", "unit": "套", "stock": 3}, {"name": "王者荣耀打工人", "cat": "集邮产品", "unit": "件", "stock": 0}, {"name": "邮箱模型", "cat": "中邮文创", "unit": "件", "stock": 5}, {"name": "《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "马上有钱摆件马横款", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《虎（文物）》整版票册（全国）", "cat": "集邮产品", "unit": "套", "stock": 5}, {"name": "《龙马精神》生肖邮票珍藏镜框（大尺寸）", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "深圳有礼—荷兰小镇", "cat": "函件产品", "unit": "份", "stock": 4}, {"name": "邮筒积木明信片套装（新）", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "B.Duck小黄鸭邮差明信片", "cat": "明信片", "unit": "套", "stock": 6}, {"name": "《外交为民》专题卡书", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《大耳狗20周年》限定版纪念邮折", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《芍药》大版册", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《马肥家润》我不是胖虎非遗金箔春节礼盒", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "日进斗金", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "红楼梦四票封卡书", "cat": "集邮产品", "unit": "套", "stock": 9}, {"name": "财神到", "cat": "集邮产品", "unit": "件", "stock": 0}, {"name": "JY老邮筒", "cat": "中邮文创", "unit": "个", "stock": 10}, {"name": "《八骏图》不二马大叔联名亚克力摇摇乐（邮政联名）", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天地有五岳》邮册", "cat": "集邮产品", "unit": "套", "stock": 10}, {"name": "《天文现象》版票册", "cat": "集邮产品", "unit": "套", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》建筑之美", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《蓝卯卯》B款15cm(邮政联合）", "cat": "集邮产品", "unit": "套", "stock": 8}, {"name": "《中流砥柱》邮册", "cat": "集邮产品", "unit": "套", "stock": 2}, {"name": "《深圳旅游风光明信片套装盒》碧海蓝天", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《科技创新（二）》大版册", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "马上有钱钥匙扣", "cat": "函件产品", "unit": "份", "stock": 4}, {"name": "JY邮筒模型", "cat": "中邮文创", "unit": "个", "stock": 8}, {"name": "《世界自然遗产—中国南方喀斯特》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 11}, {"name": "十二花神（荷花）", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡红", "cat": "集邮产品", "unit": "套", "stock": 14}, {"name": "金榜题名时集戳本（乙己吉祥年）", "cat": "集邮产品", "unit": "件", "stock": 14}, {"name": "金榜题名镜框摆件", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "JY面包车", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》湖光山色", "cat": "明信片", "unit": "套", "stock": 6}, {"name": "电影《哪吒之魔童闹海》人物个性化邮票图卡蓝", "cat": "集邮产品", "unit": "套", "stock": 15}, {"name": "《三国的星空》水墨款明信片套装", "cat": "明信片", "unit": "套", "stock": 10}, {"name": "《哪吒之魔童闹海》排排坐迷你公仔", "cat": "函件产品", "unit": "份", "stock": 9}, {"name": "《昆虫（二）》邮票精装风琴折", "cat": "集邮产品", "unit": "套", "stock": 13}, {"name": "一盅两件冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 13}, {"name": "邮政主题异形片", "cat": "函件产品", "unit": "份", "stock": 7}, {"name": "JY邮政小飞机", "cat": "中邮文创", "unit": "个", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》历史人文", "cat": "明信片", "unit": "套", "stock": 6}, {"name": "JY邮文创自行车", "cat": "中邮文创", "unit": "个", "stock": 2}, {"name": "《丝绸之路文物（一）》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 18}, {"name": "《山水如画》版票册", "cat": "集邮产品", "unit": "套", "stock": 17}, {"name": "早茶必点异形片套装", "cat": "函件产品", "unit": "份", "stock": 16}, {"name": "水滚茶靓冰箱贴明信片套装", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "状元帽镜框摆件", "cat": "函件产品", "unit": "份", "stock": 14}, {"name": "电影《哪吒之魔童闹海》特殊版式个性化邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 17}, {"name": "端午传统民俗，节日", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "《三国的星空》人物款明信片套装", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "《丝绸之路文物（二》版票册", "cat": "集邮产品", "unit": "套", "stock": 17}, {"name": "《哪吒之魔童闹海》电影票根冰箱贴套装", "cat": "函件产品", "unit": "份", "stock": 18}, {"name": "《太行山》邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "《又见繁华》珍藏套装（社会联合）", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "电影《哪吒之魔童闹海》个性化邮票珍藏", "cat": "集邮产品", "unit": "套", "stock": 20}, {"name": "《国宝日记》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《姑苏繁华图》版票册", "cat": "集邮产品", "unit": "套", "stock": 19}, {"name": "《遇见博物馆》古线装（新）", "cat": "函件产品", "unit": "份", "stock": 11}, {"name": "中国神话传说", "cat": "明信片", "unit": "套", "stock": 16}, {"name": "十二花神（桂花）", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "《深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "《鸿雁寄相思》邮册", "cat": "集邮产品", "unit": "套", "stock": 28}, {"name": "唐宋八大家", "cat": "明信片", "unit": "套", "stock": 27}, {"name": "果然幸运", "cat": "明信片", "unit": "套", "stock": 20}, {"name": "《中国古镇（四）》大版册", "cat": "集邮产品", "unit": "套", "stock": 27}, {"name": "《中国篆刻》邮票珍藏册", "cat": "集邮产品", "unit": "套", "stock": 29}, {"name": "《鸽》整版票折", "cat": "集邮产品", "unit": "套", "stock": 22}, {"name": "经典时刻2025阅兵纪念风琴折", "cat": "集邮产品", "unit": "套", "stock": 30}, {"name": "《北京中轴线》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "迎南而上明信片", "cat": "明信片", "unit": "份", "stock": 11}, {"name": "十二花神（榴花）", "cat": "明信片", "unit": "套", "stock": 19}, {"name": "十二花神盖戳", "cat": "明信片", "unit": "套", "stock": 38}, {"name": "《动物世界》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "邮票/散票1.2元", "cat": "集邮产品", "unit": "套", "stock": 12}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 0}, {"name": "《民族娃娃》立体笔记本", "cat": "函件产品", "unit": "份", "stock": 49}, {"name": "空白盖戳明信片", "cat": "明信片", "unit": "套", "stock": 0}, {"name": "深圳自然博物馆明信片/单枚", "cat": "明信片", "unit": "套", "stock": 0}];
+const invCatStats={"集邮产品": {"count": 76, "stock": 491}, "函件产品": {"count": 30, "stock": 133}, "中邮文创": {"count": 10, "stock": 30}, "明信片": {"count": 26, "stock": 239}};
 const invZero=[{"name": "《中国恐龙》本票册", "cat": "集邮产品"}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品"}, {"name": "《寻龙赐福》集戳本（新）", "cat": "函件产品"}, {"name": "《王者荣耀10周年》欢庆主题集戳本（邮政联合）", "cat": "集邮产品"}, {"name": "《西游漫记》绘本故事集", "cat": "集邮产品"}, {"name": "《黑神话：悟空》联名邮品珍藏款一《扰雾飞云》", "cat": "集邮产品"}, {"name": "中国娃娃集戳本", "cat": "函件产品"}, {"name": "中国恐龙", "cat": "中邮文创"}, {"name": "二十四节气撕拉盲卡", "cat": "函件产品"}, {"name": "十二生肖互动冰箱贴", "cat": "集邮产品"}, {"name": "十二生肖水晶", "cat": "集邮产品"}, {"name": "卡皮巴拉豪华版收藏卡-豚学之旅", "cat": "函件产品"}, {"name": "印章本（深圳漫游记）", "cat": "函件产品"}, {"name": "深圳邮礼-深圳", "cat": "函件产品"}, {"name": "绿野寻踪明信片恰帕狗", "cat": "明信片"}, {"name": "财神到", "cat": "集邮产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（三眼仔）", "cat": "函件产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（草莓熊）", "cat": "函件产品"}, {"name": "邮局街景积木明信片套装（新）", "cat": "函件产品"}, {"name": "邮票/散票80分", "cat": "集邮产品"}, {"name": "酷洛米明信片套装", "cat": "明信片"}, {"name": "《中国石窟》邮票珍藏册", "cat": "集邮产品"}, {"name": "《卡皮巴拉》水果物语毛绒挂件盲盒", "cat": "函件产品"}, {"name": "瑞和满堂2026", "cat": "明信片"}, {"name": "JY三轮车", "cat": "中邮文创"}, {"name": "《亚洲文明》文化册（全国）", "cat": "集邮产品"}, {"name": "《国家野生保护动物（I级）（三）》邮册", "cat": "集邮产品"}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品"}, {"name": "《西游记（四）》版票册", "cat": "集邮产品"}, {"name": "《雪舞迎春》票封卡书", "cat": "集邮产品"}, {"name": "十二花神（蜀葵）", "cat": "明信片"}, {"name": "唐宫夜宴集戳本", "cat": "函件产品"}, {"name": "JY邮政大货车", "cat": "中邮文创"}, {"name": "《黑神话：悟空》联名邮品珍藏款二《徐声韵长》", "cat": "集邮产品"}, {"name": "《国家公园》版票册", "cat": "集邮产品"}, {"name": "《猛禽二》特种邮票珍藏", "cat": "集邮产品"}, {"name": "迪士尼松松系列缤纷马卡龙冰箱贴（小熊维尼）", "cat": "函件产品"}, {"name": "中华人民共和国第十五届运动会城市纪念集章本", "cat": "集邮产品"}, {"name": "王者荣耀打工人", "cat": "集邮产品"}, {"name": "《蜡笔小新：我们的恐龙世界》徽章抽抽乐明信片套装", "cat": "明信片"}, {"name": "马上有钱摆件马横款", "cat": "函件产品"}, {"name": "《龙马精神》生肖邮票珍藏镜框（大尺寸）", "cat": "集邮产品"}, {"name": "日进斗金", "cat": "集邮产品"}, {"name": "《深圳旅游风光明信片套装盒》建筑之美", "cat": "明信片"}, {"name": "《深圳旅游风光明信片套装盒》碧海蓝天", "cat": "明信片"}, {"name": "十二花神（荷花）", "cat": "明信片"}, {"name": "JY面包车", "cat": "中邮文创"}, {"name": "JY邮政小飞机", "cat": "中邮文创"}, {"name": "《国宝日记》立体笔记本", "cat": "函件产品"}, {"name": "十二花神（桂花）", "cat": "明信片"}, {"name": "《北京中轴线》立体笔记本", "cat": "函件产品"}, {"name": "《动物世界》立体笔记本", "cat": "函件产品"}, {"name": "空白盖戳明信片", "cat": "明信片"}, {"name": "深圳自然博物馆明信片/单枚", "cat": "明信片"}];
 const invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#10b981','中邮文创':'#ef4444'};
 // 18天营业期各商品累计销量（来自销售数据）
@@ -461,7 +461,7 @@ document.querySelector('.inv-filter').classList.add('active');
 
 <div class="footer">
   <div>📮 深圳自然博物馆主题邮局 · 数据看板 v6.0</div>
-  <div>数据范围：2026.07.28 - 2026.08.25 ｜ 营业时间 9:00-18:00（周一闭馆）</div>
+  <div>数据范围：2026.07.28 - 2026.09.06 ｜ 营业时间 9:00-18:00（周一闭馆）</div>
   <div>📍 坪山区燕子湖片区 ｜ 数据来源：POS系统</div>
 </div>
 </div>
@@ -678,56 +678,56 @@ const D={
       "name": "《国宝日记》立体笔记本",
       "cat": "热销",
       "price": 40,
-      "qty": 320,
-      "rev": 12768.0,
-      "pct": 11.2
+      "qty": 318,
+      "rev": 12688.2,
+      "pct": 11.3
     },
     {
       "name": "《北京中轴线》立体笔记本",
       "cat": "热销",
       "price": 34,
-      "qty": 363,
-      "rev": 12414.84,
+      "qty": 358,
+      "rev": 12273.12,
       "pct": 10.9
     },
     {
       "name": "印章本（深圳漫游记）",
       "cat": "热销",
       "price": 36,
-      "qty": 301,
-      "rev": 10836.0,
+      "qty": 298,
+      "rev": 10728.0,
       "pct": 9.5
     },
     {
       "name": "深圳自然博物馆明信片/单枚",
       "cat": "热销",
       "price": 5,
-      "qty": 1716,
-      "rev": 8580.0,
+      "qty": 1712,
+      "rev": 8560.0,
       "pct": 7.6
     },
     {
       "name": "《动物世界》立体笔记本",
       "cat": "热销",
       "price": 40,
-      "qty": 207,
-      "rev": 8259.3,
+      "qty": 205,
+      "rev": 8179.5,
       "pct": 7.3
     },
     {
       "name": "空白盖戳明信片",
       "cat": "热销",
       "price": 5,
-      "qty": 1271,
-      "rev": 6595.34,
+      "qty": 1249,
+      "rev": 6485.16,
       "pct": 5.8
     },
     {
       "name": "《民族娃娃》立体笔记本",
       "cat": "热销",
       "price": 40,
-      "qty": 121,
-      "rev": 4827.9,
+      "qty": 118,
+      "rev": 4708.2,
       "pct": 4.2
     },
     {
@@ -744,7 +744,7 @@ const D={
       "price": 58,
       "qty": 46,
       "rev": 2668.0,
-      "pct": 2.3
+      "pct": 2.4
     },
     {
       "name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）",
@@ -752,7 +752,7 @@ const D={
       "price": 198,
       "qty": 10,
       "rev": 1980.0,
-      "pct": 1.7
+      "pct": 1.8
     },
     {
       "name": "JY三轮车",
@@ -763,19 +763,19 @@ const D={
       "pct": 1.7
     },
     {
-      "name": "JY邮政大货车",
-      "cat": "中邮文创",
-      "price": 68,
-      "qty": 26,
-      "rev": 1768.0,
-      "pct": 1.6
-    },
-    {
       "name": "《2027深圳旅游风光明信片套装盒》公园之城",
       "cat": "明信片",
       "price": 16,
-      "qty": 104,
-      "rev": 1705.07,
+      "qty": 101,
+      "rev": 1655.39,
+      "pct": 1.5
+    },
+    {
+      "name": "JY邮政大货车",
+      "cat": "中邮文创",
+      "price": 68,
+      "qty": 24,
+      "rev": 1632.0,
       "pct": 1.5
     },
     {
@@ -803,19 +803,19 @@ const D={
       "pct": 1.2
     },
     {
-      "name": "JY面包车",
-      "cat": "中邮文创",
-      "price": 45,
-      "qty": 31,
-      "rev": 1395.0,
-      "pct": 1.2
-    },
-    {
       "name": "财神到",
       "cat": "集邮产品",
       "price": 198,
       "qty": 7,
       "rev": 1386.0,
+      "pct": 1.2
+    },
+    {
+      "name": "JY面包车",
+      "cat": "中邮文创",
+      "price": 45,
+      "qty": 30,
+      "rev": 1350.0,
       "pct": 1.2
     },
     {
@@ -827,11 +827,11 @@ const D={
       "pct": 1.1
     },
     {
-      "name": "金榜题名时集戳折子",
+      "name": "《中流砥柱》邮册",
       "cat": "集邮产品",
-      "price": 28,
-      "qty": 43,
-      "rev": 1204.0,
+      "price": 198,
+      "qty": 6,
+      "rev": 1188.0,
       "pct": 1.1
     }
   ],
