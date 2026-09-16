@@ -181,7 +181,7 @@ tr:last-child td{border-bottom:none}
 <div class="panel active" id="p0">
 <div class="kpi-grid">
   <div class="kpi green"><div class="label">💰 累计销售额</div><div class="value">11.94<span class="unit">万元</span></div><div class="note">营业42天累计（含开业现金¥3,921）</div></div>
-  <div class="kpi blue"><div class="label">📅 日均销售额</div><div class="value">2,842<span class="unit">元</span></div><div class="note">日均 ¥2,842（2026/09/16）</div></div>
+  <div class="kpi blue"><div class="label">📅 当日销售额</div><div class="value">400.70<span class="unit">元</span></div><div class="note">2026/09/16 当日营收</div></div>
   <div class="kpi gold"><div class="label">🧾 日均订单数</div><div class="value">90<span class="unit">单</span></div><div class="note">42天总3793单</div></div>
   <div class="kpi teal"><div class="label">📦 日均销售件数</div><div class="value">142<span class="unit">件</span></div><div class="note">42天总5956件</div></div>
   <div class="kpi purple"><div class="label">💎 客单价</div><div class="value">¥31.47</div><div class="note">平均每单金额</div></div>
@@ -467,13 +467,13 @@ document.querySelector('.inv-filter').classList.add('active');
 </div>
 
 <script>
+function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',j===i)});document.querySelectorAll('.panel').forEach((p,j)=>{p.classList.toggle('active',j===i)});setTimeout(()=>window.dispatchEvent(new Event('resize')),50)}
+try{
 const totalRev=119377.2;
 const totalQty=5956;
 const D={"daily": {labels: ["07/28", "07/29", "07/30", "07/31", "08/01", "08/02", "08/04", "08/05", "08/06", "08/07", "08/08", "08/09", "08/11", "08/12", "08/13", "08/14", "08/15", "08/16", "08/18", "08/19", "08/20", "08/21", "08/22", "08/23", "08/25", "08/26", "08/27", "08/28", "08/29", "08/30", "09/01", "09/02", "09/03", "09/04", "09/05", "09/06", "09/10", "09/11", "09/12", "09/13", "09/15", "09/16"], "rev": [953.5, 5565.5, 3146.8, 5549.5, 3899.7, 2783.1, 2706.5, 5087.9, 2898.0, 2747.4, 3364.2, 4243.4, 2271.2, 2459.8, 3412.9, 3138.1, 3909.1, 2119.3, 3983.5, 2260.2, 2917.3, 2647.4, 2892.9, 3522.2, 4066.0, 3646.9, 4444.5, 2732.7, 3367.1, 4867.4, 2253.3, 188.7, 511.2, 1052.4, 3252.2, 3689.1, 874.6, 491.4, 2353.9, 2370.7, 388.0, 347.7], "ord": [28, 92, 105, 174, 135, 104, 101, 130, 110, 103, 109, 121, 90, 113, 111, 114, 140, 70, 133, 103, 123, 113, 120, 108, 135, 108, 119, 85, 97, 105, 21, 14, 14, 19, 105, 105, 25, 17, 67, 80, 12, 15], "qty": [86, 350, 289, 250, 259, 135, 149, 217, 191, 155, 158, 161, 141, 148, 169, 157, 186, 111, 208, 168, 158, 150, 193, 162, 193, 130, 163, 141, 128, 148, 48, 18, 26, 36, 135, 147, 44, 28, 87, 95, 15, 23]}, "cat": {labels: ["热销", "集邮产品", "函件产品", "中邮文创", "明信片"], "rev": [66979.88, 23391.3, 11747.7, 10783.11, 6475.21], "qty": [4463, 405, 362, 302, 424]}, "price": {labels: ["0-10", "10-30", "30-50", "50-100", "100-200", "200+"], "rev": [18106.0, 10650.0, 66048.0, 12807.0, 10518.0, 2328.0], "qty": [3533, 520, 1709, 187, 63, 6]}, "top20": [{"name": "《国宝日记》立体笔记本", "cat": "热销", "price": 40, "qty": 340, "rev": 13566.0, "pct": 11.4}, {"name": "《北京中轴线》立体笔记本", "cat": "热销", "price": 34, "qty": 364, "rev": 12512.52, "pct": 10.5}, {"name": "印章本（深圳漫游记）", "cat": "热销", "price": 36, "qty": 323, "rev": 11628.0, "pct": 9.7}, {"name": "深圳自然博物馆明信片/单枚", "cat": "热销", "price": 5, "qty": 1792, "rev": 8960.0, "pct": 7.5}, {"name": "《动物世界》立体笔记本", "cat": "热销", "price": 40, "qty": 214, "rev": 8538.6, "pct": 7.2}, {"name": "空白盖戳明信片", "cat": "热销", "price": 5, "qty": 1306, "rev": 6827.16, "pct": 5.7}, {"name": "《民族娃娃》立体笔记本", "cat": "热销", "price": 40, "qty": 124, "rev": 4947.6, "pct": 4.1}, {"name": "《通关文牒》立体笔记本", "cat": "函件产品", "price": 40, "qty": 101, "rev": 4029.9, "pct": 3.4}, {"name": "JY邮政小飞机", "cat": "中邮文创", "price": 58, "qty": 46, "rev": 2668.0, "pct": 2.2}, {"name": "JY三轮车", "cat": "中邮文创", "price": 33, "qty": 65, "rev": 2145.0, "pct": 1.8}, {"name": "《大美河山 华夏遗珍》世界自然遗产票币珍藏册（邮政联合）", "cat": "集邮产品", "price": 198, "qty": 10, "rev": 1980.0, "pct": 1.7}, {"name": "JY邮政大货车", "cat": "中邮文创", "price": 68, "qty": 29, "rev": 1972.0, "pct": 1.7}, {"name": "《天文现象》版票册", "cat": "集邮产品", "price": 188, "qty": 9, "rev": 1692.0, "pct": 1.4}, {"name": "《2027深圳旅游风光明信片套装盒》公园之城", "cat": "明信片", "price": 16, "qty": 101, "rev": 1655.39, "pct": 1.4}, {"name": "《大美华夏 世界遗产》专题册", "cat": "集邮产品", "price": 398, "qty": 4, "rev": 1592.0, "pct": 1.3}, {"name": "财神到", "cat": "集邮产品", "price": 198, "qty": 8, "rev": 1584.0, "pct": 1.3}, {"name": "JY邮文创自行车", "cat": "中邮文创", "price": 95, "qty": 16, "rev": 1520.0, "pct": 1.3}, {"name": "唐宫夜宴集戳本", "cat": "函件产品", "price": 40, "qty": 38, "rev": 1516.2, "pct": 1.3}, {"name": "JY面包车", "cat": "中邮文创", "price": 45, "qty": 33, "rev": 1485.0, "pct": 1.2}, {"name": "金榜题名时集戳折子", "cat": "集邮产品", "price": 28, "qty": 50, "rev": 1400.0, "pct": 1.2}]], "time": {labels: ["上午", "下午", "傍晚"], "rev": [24461.4, 81861.2, 13054.6], "qty": [1113, 4157, 686]}};
 
 const C={mix:['#16a34a','#2563eb','#d97706','#ef4444','#7c3aed','#0d9488']};
-
-function sw(i){document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',j===i)});document.querySelectorAll('.panel').forEach((p,j)=>{p.classList.toggle('active',j===i)});setTimeout(()=>window.dispatchEvent(new Event('resize')),50)}
 
 // ====== TAB 0 ======
 
@@ -573,6 +573,7 @@ dailyData.forEach((r,i)=>{
   const cls=r.o===0?' style="background:#f3f4f6"':'';
   ptb.innerHTML+=`<tr${cls}><td>${r.d} ${r.wd}</td><td>¥${Math.round(r.r).toLocaleString()}</td><td>¥${Math.round(psum).toLocaleString()}</td><td>¥${avg.toLocaleString()}</td><td>${trend}</td></tr>`;
 });
+}catch(e){console.error('Chart init error:',e)}
 </script>
 </body>
 </html>
