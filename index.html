@@ -690,15 +690,18 @@ var invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#1
 
 // Daily revenue trend (horizontal bars with scroll)
 (function(){
+  var WD=['日','一','二','三','四','五','六'];
+  function getWd(ds){var p=ds.split('/');return '周'+WD[new Date(2026,parseInt(p[0])-1,parseInt(p[1])).getDay()]};
   var maxRev=Math.max.apply(null,dailyData.map(function(d){return d.r}));
   var html='<div class="css-trend-grid">';
   dailyData.forEach(function(d){
+    var wd=getWd(d.d);
     var pct=(d.r/maxRev*100).toFixed(1);
     var color=d.r>4000?'#16a34a':d.r>3000?'#22c55e':d.r>2000?'#3b82f6':'#94a3b8';
-    var icon=d.r>maxRev*0.8?'🔥':d.r>maxRev*0.5?'📈':d.r>maxRev*0.2?'📊':'📉';
+    var icon=d.r>maxRev*0.8?'':d.r>maxRev*0.5?'📈':d.r>maxRev*0.2?'📊':'📉';
     var note=d.n?' <span style="font-size:9px;color:var(--accent)">'+d.n+'</span>':'';
     html+='<div class="css-trend-row">';
-    html+='<div class="t-date">'+d.d+' '+d.wd+note+'</div>';
+    html+='<div class="t-date">'+d.d+' '+wd+note+'</div>';
     html+='<div class="t-bar-wrap"><div class="t-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
     html+='<div class="t-val">¥'+Math.round(d.r).toLocaleString()+'</div>';
     html+='<div class="t-icon">'+icon+'</div>';
@@ -710,17 +713,20 @@ var invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#1
 
 // Daily orders & qty
 (function(){
+  var WD=['日','一','二','三','四','五','六'];
+  function getWd(ds){var p=ds.split('/');return '周'+WD[new Date(2026,parseInt(p[0])-1,parseInt(p[1])).getDay()]};
   var maxOrd=Math.max.apply(null,dailyData.map(function(d){return d.o}));
   var maxQty=Math.max.apply(null,dailyData.map(function(d){return d.q}));
   var maxV=Math.max(maxOrd,maxQty);
   var html='<div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>订单数</div><div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>销量</div></div>';
   html+='<div class="css-trend-grid">';
   dailyData.forEach(function(d){
+    var wd=getWd(d.d);
     var pctO=(d.o/maxV*100).toFixed(1);
     var pctQ=(d.q/maxV*100).toFixed(1);
     var note=d.n?' <span style="font-size:9px;color:var(--accent)">'+d.n+'</span>':'';
     html+='<div style="margin-bottom:2px">';
-    html+='<div style="font-size:10px;color:var(--text2);margin-bottom:1px">'+d.d+' '+d.wd+note+'</div>';
+    html+='<div style="font-size:10px;color:var(--text2);margin-bottom:1px">'+d.d+' '+wd+note+'</div>';
     html+='<div style="display:flex;gap:3px;align-items:center">';
     html+='<div style="width:40px;font-size:10px;text-align:right;font-weight:600;color:#2563eb">'+d.o+'单</div>';
     html+='<div style="flex:1;background:#f1f5f0;border-radius:3px;height:10px;overflow:hidden"><div style="height:100%;width:'+pctO+'%;background:#2563eb;border-radius:3px"></div></div>';
@@ -799,6 +805,8 @@ var invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#1
 
 // Progress table
 (function(){
+  var WD=['日','一','二','三','四','五','六'];
+  function getWd(ds){var p=ds.split('/');return '周'+WD[new Date(2026,parseInt(p[0])-1,parseInt(p[1])).getDay()]};
   var tb=document.getElementById('progressTable');
   var html='';
   var psum=0;
@@ -806,7 +814,7 @@ var invColors={'明信片':'#6366f1','函件产品':'#f59e0b','集邮产品':'#1
     psum+=r.r;
     var avg=Math.round(psum/(i+1));
     var trend=r.r>avg?'📈':r.r===0?'--':'📉';
-    html+='<tr><td>'+r.d+' '+r.wd+'</td><td>¥'+Math.round(r.r).toLocaleString()+'</td><td>¥'+Math.round(psum).toLocaleString()+'</td><td>¥'+avg.toLocaleString()+'</td><td>'+trend+'</td></tr>';
+    html+='<tr><td>'+r.d+' '+getWd(r.d)+'</td><td>¥'+Math.round(r.r).toLocaleString()+'</td><td>¥'+Math.round(psum).toLocaleString()+'</td><td>¥'+avg.toLocaleString()+'</td><td>'+trend+'</td></tr>';
   });
   tb.innerHTML=html;
 })();
